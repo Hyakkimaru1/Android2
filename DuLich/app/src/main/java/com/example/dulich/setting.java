@@ -110,10 +110,10 @@ public class setting extends Fragment {
                                 JSONObject jsonObject = new JSONObject(bodyLogin);
                                 editor = preferences.edit();
                                 editor.putString( "isLogIn",jsonObject.getString( "token") );
-                                Toast.makeText( getContext(),jsonObject.getString( "token"),Toast.LENGTH_SHORT).show();
-                                Log.i("DATA DATA", jsonObject.getString( "token"));
-                                Log.i("DATA DATA", jsonObject.getString( "token"));
-                                Log.i("DATA DATA", jsonObject.getString( "token"));
+                                Toast.makeText( getContext(), "Đăng nhập thành công",Toast.LENGTH_SHORT).show();
+                            //    Log.i("DATA DATA", jsonObject.getString( "token"));
+                            //    Log.i("DATA DATA", jsonObject.getString( "token"));
+                            //    Log.i("DATA DATA", jsonObject.getString( "token"));
 
                                 Fragment fragment = new listTours();
                                 FragmentTransaction fr = getFragmentManager().beginTransaction();

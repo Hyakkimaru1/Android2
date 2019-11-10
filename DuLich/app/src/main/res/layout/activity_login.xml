@@ -74,7 +74,7 @@
         app:layout_constraintTop_toBottomOf="@+id/title_password" />
 
     <Button
-        android:id="@+id/login"
+        android:id="@+id/logIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
@@ -82,7 +82,6 @@
         android:layout_marginTop="30dp"
         android:layout_marginBottom="0dp"
         android:background="@drawable/border_radius"
-        android:enabled="false"
         android:textColor="#ffffff"
         android:text="@string/signin"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -114,29 +113,27 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="Forgot password?"
-        android:layout_below="@+id/login"
+        android:layout_below="@+id/logIn"
         android:layout_alignParentStart="true"
         android:layout_marginStart="10dp"
         android:textColor="@color/colorMain"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login" />
+        app:layout_constraintTop_toBottomOf="@+id/logIn" />
 
     <TextView
         android:id="@+id/signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/login"
+        android:layout_below="@+id/logIn"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="198dp"
-        android:layout_marginEnd="10dp"
-        android:layout_toEndOf="@+id/forgot"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="12dp"
         android:text="@string/signup"
         android:textColor="@color/colorMain"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/forgot"
-        app:layout_constraintTop_toBottomOf="@+id/login" />
+        app:layout_constraintTop_toBottomOf="@+id/logIn" />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"

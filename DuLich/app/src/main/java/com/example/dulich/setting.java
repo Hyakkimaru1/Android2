@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,8 +36,16 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import android.widget.Toast;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -46,20 +55,102 @@ public class setting extends Fragment {
     GoogleSignInClient mGoogleSignInClient;
     SignInButton signInButton;
     Button login;
-
+    TextView signUp;
+    TextView username;
+    TextView password;
     private static final String TAG = setting.class.getSimpleName();
     CallbackManager callbackManager;
     LoginButton fbLoginButton;
-
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_login,container,false) ;
 
         signInButton = view.findViewById(R.id.sign_in_button);
-        login = view.findViewById(R.id.login);
+        login = view.findViewById(R.id.logIn);
+        username = view.findViewById( R.id.username );
+        password = view.findViewById( R.id.password );
+        preferences = this.getActivity().getSharedPreferences("isLogin", Context.MODE_PRIVATE);
+        editor = preferences.edit();
+        //Chuyen qua man hinh dang ky
+        signUp = view.findViewById( R.id.signup );
+        signUp.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = new register();
+                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                fr.replace(R.id.frame_container,fragment);
+                fr.addToBackStack(null);
+                fr.commit();
+            }
+        } );
 
         getActivity().getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
+        login.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Call<ResponseBody> call = RetrofitClient
+                        .getInstance()
+                        .getApi()
+                        .logInUser(username.getText().toString(),password.getText().toString());
+
+                call.enqueue( new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+
+                        if (response.code()==200) {
+                            String bodyLogin = null;
+                            try {
+                                bodyLogin = response.body().string();
+                                try {
+                                JSONObject jsonObject = new JSONObject(bodyLogin);
+                                editor = preferences.edit();
+                                editor.putString( "isLogIn",jsonObject.getString( "token") );
+                                Toast.makeText( getContext(),jsonObject.getString( "token"),Toast.LENGTH_SHORT).show();
+                                Log.i("DATA DATA", jsonObject.getString( "token"));
+                                Log.i("DATA DATA", jsonObject.getString( "token"));
+                                Log.i("DATA DATA", jsonObject.getString( "token"));
+
+                                Fragment fragment = new listTours();
+                                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                                fr.replace(R.id.frame_container,fragment);
+                                fr.commit();
+                                } catch (JSONException e) {
+                                        e.printStackTrace();
+                                }
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                        else if (response.code()==400)
+                        {
+
+                            Toast.makeText( getContext(), "Missing email/phone or password", Toast.LENGTH_LONG ).show();
+                        }
+                        else
+                        {
+
+                            Toast.makeText( getContext(), "Wrong email/phone or password", Toast.LENGTH_LONG ).show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                        Toast.makeText( getContext(),t.getMessage(),Toast.LENGTH_LONG ).show();
+                    }
+                } );
+
+            }
+        } );
 
         //fb
         callbackManager = CallbackManager.Factory.create();
@@ -88,6 +179,8 @@ public class setting extends Fragment {
             }
         });
 
+
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -108,7 +201,6 @@ public class setting extends Fragment {
         } );
         return view;
     }
-
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();

@@ -25,16 +25,14 @@ public class fragmentUser extends Fragment {
     int RC_SIGN_IN = 001;
     GoogleSignInClient mGoogleSignInClient;
     SignInButton signInButton;
-    Button login;
+ //   Button login;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_login,container,false) ;
 
         signInButton = view.findViewById(R.id.sign_in_button);
-        login = view.findViewById(R.id.login);
-
-
+  //      login = view.findViewById(R.id.logIn);
 
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

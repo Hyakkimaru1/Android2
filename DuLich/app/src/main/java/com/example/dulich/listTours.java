@@ -36,7 +36,7 @@ public class listTours extends Fragment {
         getActivity().runOnUiThread( new Runnable() {
             @Override
             public void run() {
-                new readJson().execute( "http://35.197.153.192:3000/user/login/" );
+             //   new readJson().execute( "http://35.197.153.192:3000/user/login/" );
             }
         } );
 

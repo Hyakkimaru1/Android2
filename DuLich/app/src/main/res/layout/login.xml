@@ -11,14 +11,14 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="33dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="21dp"
         android:text="FULL NAME" />
 
     <EditText
         android:id="@+id/ETfullName"
         android:layout_width="382dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_below="@+id/TVfullName"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
@@ -39,14 +39,14 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="15dp"
         android:text="EMAIL" />
 
     <EditText
         android:id="@+id/ETemail"
         android:layout_width="382dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_below="@+id/TVemail"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
@@ -67,14 +67,14 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="17dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="18dp"
         android:text="PHONE" />
 
     <EditText
         android:id="@+id/ETphone"
         android:layout_width="382dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_below="@+id/TVphone"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
@@ -95,14 +95,14 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="20dp"
         android:text="PASSWORD" />
 
     <EditText
         android:id="@+id/ETpassword"
         android:layout_width="382dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_below="@+id/TVpassword"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
@@ -123,14 +123,14 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="20dp"
         android:text="CONFIRM PASSWORD" />
 
     <EditText
         android:id="@+id/ETconfirmpw"
         android:layout_width="382dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_below="@+id/TVconfirmpw"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
@@ -146,12 +146,12 @@
     <Button
         android:id="@+id/BTsignup"
         android:layout_width="wrap_content"
-        android:layout_height="49dp"
+        android:layout_height="55dp"
         android:layout_below="@+id/ETconfirmpw"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="43dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="14dp"
         android:background="@drawable/signupbt"
         android:backgroundTint="#35BBAE"

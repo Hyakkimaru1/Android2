@@ -76,7 +76,9 @@ public class MyAdapter extends ArrayAdapter<aTour> implements Filterable {
             group.setText(String.valueOf( p.getAdults() +p.getChilds()));
 
             ImageView imageView = (ImageView)v.findViewById( R.id.mainPic);
-            Picasso.get().load(p.getAvatar()).into(imageView);
+            if (!p.getAvatar().equals(""))
+                Picasso.get().load(p.getAvatar()).into(imageView);
+
 
         }
         return v;

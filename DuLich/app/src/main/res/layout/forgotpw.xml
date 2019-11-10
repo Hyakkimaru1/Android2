@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="63dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
+        android:text="Select which contact details should we use to reset your password."
+        android:textColor="#999191"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/viasms"
+        android:layout_width="170dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/viasms"
+        android:drawableStart="@drawable/ic_sms"
+        android:elevation="10dp"
+        android:foregroundTint="#B8B8B8"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:shadowColor="#FFB8B8B8"
+        android:shadowDx="10"
+        android:shadowDy="10"
+        android:shadowRadius="10"
+        android:text="Via sms"
+        android:textColor="#999191" />
+
+    <Button
+        android:id="@+id/viaemail"
+        android:layout_width="170dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/viaemail"
+        android:drawableStart="@drawable/ic_email"
+        android:elevation="10dp"
+        android:foregroundTint="#B8B8B8"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:shadowColor="#FFB8B8B8"
+        android:shadowDx="10"
+        android:shadowDy="10"
+        android:shadowRadius="10"
+        android:text="Via email"
+        android:textColor="#999191" />
+
+
+    <EditText
+        android:id="@+id/ETphone"
+        android:layout_width="367dp"
+        android:layout_height="43dp"
+        android:layout_below="@+id/viasms"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="39dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/radiusbutton"
+        android:ems="10"
+        android:hint="Enter your phone number"
+        android:inputType="textPersonName"
+        android:paddingStart="30px"
+        android:paddingEnd="20px"
+        android:textAlignment="viewStart" />
+
+    <Button
+        android:id="@+id/BTsave"
+        android:layout_width="wrap_content"
+        android:layout_height="42dp"
+        android:layout_below="@+id/ETphone"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="125dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="124dp"
+        android:background="@drawable/signupbt"
+        android:backgroundTint="#35BBAE"
+        android:text="summit"
+        android:textColor="#EAEBEB"
+        android:textStyle="bold" />
+
+</RelativeLayout>

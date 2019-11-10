@@ -58,7 +58,7 @@ public class listTours extends Fragment {
         if (!token.equals(""))
         {
             Map<String, String> params = new HashMap<>();
-            params.put("rowPerPage","10");
+            params.put("rowPerPage","185");
             params.put("pageNum","1");
             Call<ResponseBody> call = RetrofitClient
                     .getInstance()

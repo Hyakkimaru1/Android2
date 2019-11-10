@@ -159,19 +159,21 @@ public class setting extends Fragment {
                         @Override
                         public void onCompleted(final JSONObject me, GraphResponse response) {
                             if (me != null) {
-                                Log.i("Login: ", me.optString("name"));
-                                Log.i("ID: ", me.optString("id"));
+                             //   Log.i("Login: ", me.optString("name"));
+                             //   Log.i("ID: ", me.optString("id"));
 
-                                //Toast.makeText(setting.this, "Name: " + me.optString("name"), LENGTH_SHORT).show();
-                                //Toast.makeText(setting.this, "ID: " + me.optString("id"), LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Name: " + me.optString("name"), Toast.LENGTH_SHORT).show();
+                               // Toast.makeText(getContext(), "ID: " + me.optString("id"), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
-
+            //Xử lý facebook
             Bundle parameters = new Bundle();
             parameters.putString("fields", "id,name,link");
             request.setParameters(parameters);
             request.executeAsync();
+
+
         }
     }
 }

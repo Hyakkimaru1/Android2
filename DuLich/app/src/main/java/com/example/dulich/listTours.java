@@ -58,7 +58,7 @@ public class listTours extends Fragment {
         if (!token.equals(""))
         {
             Map<String, String> params = new HashMap<>();
-            params.put("rowPerPage","185");
+            params.put("rowPerPage","8000");
             params.put("pageNum","1");
             Call<ResponseBody> call = RetrofitClient
                     .getInstance()
@@ -72,15 +72,16 @@ public class listTours extends Fragment {
                         String bodyListTour = null;
                         try {
                             bodyListTour = response.body().string();
-                         //   Log.i("JSON", bodyListTour.toString());
+
                             JSONObject tourData = new JSONObject(bodyListTour);
+                            Log.i("JSON",tourData.getString("total"));
                             tours.setText( tourData.getString("total"));
                             JSONArray responseArray = tourData.getJSONArray("tours");
                             if (responseArray.length() > 0) {
                                 for (int i = 0; i < responseArray.length(); i++) {
                                     JSONObject jb = responseArray.getJSONObject( i );
                                     noteList.add( new aTour( jb.getInt( "id" ), jb.getInt( "status" ), jb.getString( "name" ), jb.getLong( "minCost" ),
-                                            jb.getLong( "maxCost" ), jb.getLong( "startDate" ), jb.getLong( "endDate" ), jb.getInt( "adults" ),
+                                            jb.getLong( "maxCost" ), jb.getString( "startDate" ), jb.getString( "endDate" ), jb.getInt( "adults" ),
                                             jb.getInt( "childs" ), jb.getBoolean( "isPrivate" ), jb.getString( "avatar" ) ) );
                                 }
                                 myAdapter = new MyAdapter( getContext(), R.layout.item_layout, noteList );

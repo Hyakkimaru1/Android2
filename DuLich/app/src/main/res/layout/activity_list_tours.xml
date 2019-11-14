@@ -82,6 +82,7 @@
                 <ListView
                     android:id="@+id/listTours"
                     android:layout_width="match_parent"
+                    android:dividerHeight="15dp"
                     android:layout_height="match_parent" />
             </LinearLayout>
 

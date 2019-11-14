@@ -7,14 +7,14 @@ public class aTour {
     String  name;
     long minCost;
     long maxCost;
-    long  startDate;
-    long endDate;
+    String  startDate;
+    String endDate;
     int adults;
     int childs;
     boolean  isPrivate;
     String avatar;
 
-    public aTour(int id, int status, String name, long minCost, long maxCost, long startDate, long endDate, int adults, int childs, boolean isPrivate, String avatar) {
+    public aTour(int id, int status, String name, long minCost, long maxCost, String startDate, String endDate, int adults, int childs, boolean isPrivate, String avatar) {
         this.id = id;
         this.status = status;
         this.name = name;
@@ -68,19 +68,19 @@ public class aTour {
         this.maxCost = maxCost;
     }
 
-    public long getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(long startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public long getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(long endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 

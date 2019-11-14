@@ -59,13 +59,13 @@ public class MyAdapter extends ArrayAdapter<aTour> implements Filterable {
             place.setText( p.getName());
 
             TextView calendar = (TextView) v.findViewById( R.id.calendar );
-            Date d = new Date(p.getStartDate());
+            Date d = new Date(Long.parseLong(  p.getStartDate()));
             SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
             calendar.setText( sdf.format( d ));
 
             TextView endDate = (TextView) v.findViewById( R.id.endDate );
-            d = new Date(p.getEndDate());
+            d = new Date(Long.parseLong( p.getEndDate() ));
             endDate.setText( sdf.format( d ) );
 
             TextView priceMin = (TextView) v.findViewById( R.id.priceMin );

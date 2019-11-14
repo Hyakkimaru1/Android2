@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,15 +58,28 @@ public class MyAdapter extends ArrayAdapter<aTour> implements Filterable {
         if (p!=null) {
             TextView place = (TextView) v.findViewById( R.id.place );
             place.setText( p.getName());
-
             TextView calendar = (TextView) v.findViewById( R.id.calendar );
-            Date d = new Date(Long.parseLong(  p.getStartDate()));
+            Date d = null;
+            if (p.getStartDate().equals( "null" ))
+            {
+                    d = new Date(0);
+            }
+            else {
+                d = new Date(Long.parseLong(  p.getStartDate()));
+            }
             SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
             calendar.setText( sdf.format( d ));
 
             TextView endDate = (TextView) v.findViewById( R.id.endDate );
-            d = new Date(Long.parseLong( p.getEndDate() ));
+            if (p.getStartDate().equals( "null" ))
+            {
+                d = new Date(0);
+            }
+            else {
+                d = new Date(Long.parseLong( p.getEndDate()));
+            }
+
             endDate.setText( sdf.format( d ) );
 
             TextView priceMin = (TextView) v.findViewById( R.id.priceMin );

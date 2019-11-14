@@ -74,7 +74,7 @@ public class listTours extends Fragment {
                             bodyListTour = response.body().string();
 
                             JSONObject tourData = new JSONObject(bodyListTour);
-                            Log.i("JSON",tourData.getString("total"));
+                           // Log.i("JSON",tourData.getString("total"));
                             tours.setText( tourData.getString("total"));
                             JSONArray responseArray = tourData.getJSONArray("tours");
                             if (responseArray.length() > 0) {
@@ -83,6 +83,7 @@ public class listTours extends Fragment {
                                     noteList.add( new aTour( jb.getInt( "id" ), jb.getInt( "status" ), jb.getString( "name" ), jb.getLong( "minCost" ),
                                             jb.getLong( "maxCost" ), jb.getString( "startDate" ), jb.getString( "endDate" ), jb.getInt( "adults" ),
                                             jb.getInt( "childs" ), jb.getBoolean( "isPrivate" ), jb.getString( "avatar" ) ) );
+
                                 }
                                 myAdapter = new MyAdapter( getContext(), R.layout.item_layout, noteList );
                                 listView.setAdapter( myAdapter );

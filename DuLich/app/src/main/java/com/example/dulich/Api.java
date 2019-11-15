@@ -37,4 +37,11 @@ public interface Api {
             @QueryMap Map<String,String> params
             );
 
+    @FormUrlEncoded
+    @POST("user/login/by-google")
+    Call<ResponseBody> logInByGG(
+            @Field("accessToken") String accessToken
+
+    );
+
 }

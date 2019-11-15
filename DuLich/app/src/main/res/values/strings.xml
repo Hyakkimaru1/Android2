@@ -16,5 +16,6 @@
     <string name="signup">Sign up</string>
     <string name="facebook_app_id">763854984088757</string>
     <string name="fb_login_protocol_scheme">fb763854984088757</string>
+    <string name="server_client_id">482142359913-jm4tgljits44siu2jem5ir2c5nl19js5.apps.googleusercontent.com</string>
 
 </resources>

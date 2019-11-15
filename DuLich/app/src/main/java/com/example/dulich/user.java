@@ -30,7 +30,7 @@ public class user extends Fragment {
 
         textView = view.findViewById( R.id.name );
         imageView=view.findViewById(R.id.avatar);
-        textView.setText( preferences.getString( "Email","") );
+        textView.setText( preferences.getString( "fullName","") );
         if (!preferences.getString( "avatar","" ).equals(""))
             Picasso.get().load( preferences.getString( "avatar","" )).into( imageView );
         return view;

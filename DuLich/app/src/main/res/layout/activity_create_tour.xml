@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/buttonCreate"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_below="@+id/checkBox"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/signupbt"
+        android:backgroundTint="#35BBAE"
+        android:text="Create"
+        android:textColor="#EAEBEB"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/editTextMinC"
+        android:layout_width="171dp"
+        android:layout_height="43dp"
+        android:layout_below="@+id/textViewMinC"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/radiusbutton"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:paddingStart="30px"
+        android:text="0"
+        android:textAlignment="viewStart" />
+
+    <TextView
+        android:id="@+id/textViewMinC"
+        android:layout_width="107dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextAdult"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="Min Cost" />
+
+    <TextView
+        android:id="@+id/textViewMaxC"
+        android:layout_width="111dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextChildren"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="96dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="74dp"
+        android:layout_toEndOf="@+id/textViewAdult"
+        android:text="Max Cost" />
+
+    <EditText
+        android:id="@+id/editTextMaxC"
+        android:layout_width="171dp"
+        android:layout_height="43dp"
+        android:layout_below="@+id/textViewMaxC"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="22dp"
+        android:layout_toEndOf="@+id/editTextAdult"
+        android:background="@drawable/radiusbutton"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:paddingStart="30px"
+        android:text="0"
+        android:textAlignment="viewStart" />
+
+    <EditText
+        android:id="@+id/editTextTourName"
+        android:layout_width="152dp"
+        android:layout_height="45dp"
+        android:layout_below="@+id/TextViewTourName"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="18dp"
+        android:background="@drawable/radiusbutton"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:paddingStart="30px"
+        android:textAlignment="viewStart" />
+
+    <EditText
+        android:id="@+id/editTextStartday"
+        android:layout_width="129dp"
+        android:layout_height="41dp"
+        android:layout_below="@+id/textViewStartday"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/radiustext"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:paddingStart="30px"
+        android:textAlignment="viewStart" />
+
+    <EditText
+        android:id="@+id/editTextEndday"
+        android:layout_width="127dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/textViewStartday"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/imageButton4"
+        android:background="@drawable/radiustext"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:paddingStart="30px"
+        android:textAlignment="viewStart" />
+
+    <TextView
+        android:id="@+id/TextViewTourName"
+        android:layout_width="375dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="21dp"
+        android:text="Tour name" />
+
+    <TextView
+        android:id="@+id/textViewAdult"
+        android:layout_width="107dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextStartday"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="Adult" />
+
+    <TextView
+        android:id="@+id/textViewChildren"
+        android:layout_width="111dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextStartday"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="98dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="72dp"
+        android:layout_toEndOf="@+id/textViewAdult"
+        android:text="Children" />
+
+    <TextView
+        android:id="@+id/textViewEndday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextTourName"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="144dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginEnd="85dp"
+        android:layout_toEndOf="@+id/textViewStartday"
+        android:text="End day" />
+
+    <TextView
+        android:id="@+id/textViewStartday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextTourName"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="Start day" />
+
+    <ImageButton
+        android:id="@+id/imageButton4"
+        android:layout_width="39dp"
+        android:layout_height="38dp"
+        android:layout_below="@+id/textViewStartday"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="11dp"
+        android:layout_toEndOf="@+id/editTextStartday"
+        android:background="#FFFFFF"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/calendar" />
+
+    <ImageButton
+        android:id="@+id/imageButton5"
+        android:layout_width="39dp"
+        android:layout_height="38dp"
+        android:layout_below="@+id/textViewEndday"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="14dp"
+        android:layout_toEndOf="@+id/editTextEndday"
+        android:background="#FFFFFF"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/calendar" />
+
+    <EditText
+        android:id="@+id/editTextAdult"
+        android:layout_width="171dp"
+        android:layout_height="43dp"
+        android:layout_below="@+id/textViewAdult"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/radiusbutton"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:paddingStart="30px"
+        android:text="0"
+        android:textAlignment="viewStart" />
+
+    <EditText
+        android:id="@+id/editTextChildren"
+        android:layout_width="171dp"
+        android:layout_height="43dp"
+        android:layout_below="@+id/textViewAdult"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="29dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_toEndOf="@+id/editTextAdult"
+        android:background="@drawable/radiusbutton"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:paddingStart="30px"
+        android:text="0"
+        android:textAlignment="viewStart" />
+
+    <TextView
+        android:id="@+id/textViewChooseImage"
+        android:layout_width="262dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/editTextMinC"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/radiusbutton"
+        android:paddingStart="15dp"
+        android:paddingTop="13dp"
+        android:text="Choose your image                                    +"
+        android:textAlignment="viewStart"
+        android:textSize="18sp" />
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewChooseImage"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="23dp"
+        android:text="This is your private trip?" />
+
+</RelativeLayout>

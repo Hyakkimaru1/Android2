@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,16 +44,35 @@ public class listTours extends Fragment {
     MyAdapter myAdapter;
     SharedPreferences preferences;
     TextView tours;
+    FloatingActionButton buttonAddTour;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_list_tours,container,false);
         listView =(ListView) view.findViewById( R.id.listTours);
+        buttonAddTour = view.findViewById(R.id.button_input);
+
+        buttonAddTour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new createTour();
+                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                fr.replace(R.id.frame_container,fragment);
+                fr.addToBackStack(null);
+                fr.commit();
+            }
+        });
+
+
 
         preferences = this.getActivity().getSharedPreferences("isLogin", Context.MODE_PRIVATE);
         tours= view.findViewById( R.id.tours );
         readJson();
         return view;
+
+
+
+
     }
 
     void readJson(){

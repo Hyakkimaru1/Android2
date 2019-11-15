@@ -41,7 +41,12 @@ public interface Api {
     @POST("user/login/by-google")
     Call<ResponseBody> logInByGG(
             @Field("accessToken") String accessToken
+    );
 
+    @FormUrlEncoded
+    @POST("user/login/by-facebook")
+    Call<ResponseBody> logInByFB(
+            @Field("accessToken") String accessToken
     );
 
 }

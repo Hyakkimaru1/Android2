@@ -69,7 +69,7 @@ public class register extends Fragment {
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             if (response.code()==200) {
 
-                                    Toast.makeText( getContext(),"Đăng ký thành công",Toast.LENGTH_SHORT).show();
+                                Toast.makeText( getContext(),"Đăng ký thành công",Toast.LENGTH_SHORT).show();
                                 getFragmentManager().popBackStack();
                                 }
 
@@ -104,7 +104,7 @@ public class register extends Fragment {
 
         return false;
     }
-    //Send theo kieu Json thuan
+    //Send theo kieu Json
     /*
     public void sendPost() {
         Thread thread = new Thread(new Runnable() {

@@ -166,9 +166,53 @@ public class setting extends Fragment {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // App code
-               Log.i( "Login Facebook success.",loginResult.getAccessToken().toString() );
+               Log.i( "Login Facebook success.",loginResult.getAccessToken().getToken());
               //  Toast.makeText( getContext(), "Login FB thành công", Toast.LENGTH_SHORT ).show();
-                getFbInfo();
+                Call<ResponseBody> call = RetrofitClient
+                        .getInstance()
+                        .getApi()
+                        .logInByFB(loginResult.getAccessToken().getToken());
+                call.enqueue( new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.code()==200)
+                        {
+                            try {
+                                String bodyFB = response.body().string();
+                                JSONObject jsonObject = new JSONObject(bodyFB);
+                                editor = preferences.edit();
+                               // editor.putString( "avatar",jsonObject.getString("avatar"));
+                                editor.putString( "fullName",jsonObject.getString("userId"));
+                                editor.putString( "token",jsonObject.getString( "token" ));
+                                editor.putBoolean( "isLogIn",true );
+                                editor.commit();
+                                Fragment fragment = new user();
+                                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                                fr.replace(R.id.frame_container,fragment);
+                                fr.commit();
+                                Toast.makeText( getContext(), "Đăng nhập thành công",Toast.LENGTH_SHORT).show();
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else if( response.code()==400)
+                        {
+                            Toast.makeText( getContext(), "Login by facebook failed",Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText( getContext(), "Error update or insert user",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText( getContext(),t.getMessage(),Toast.LENGTH_LONG ).show();
+                    }
+                } );
+               // getFbInfo();
             }
 
             @Override
@@ -344,9 +388,7 @@ public class setting extends Fragment {
             request.setParameters(parameters);
             request.executeAsync();
 
-
         }
     }
-
 
 }

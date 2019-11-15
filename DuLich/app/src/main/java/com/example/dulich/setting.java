@@ -186,11 +186,13 @@ public class setting extends Fragment {
 
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.server_client_id))
                 .requestEmail()
                 .build();
 
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient( (MainActivity)getActivity(), gso);
+
         signInButton = view.findViewById(R.id.sign_in_button);
         signInButton.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -218,6 +220,7 @@ public class setting extends Fragment {
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
+
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -227,19 +230,17 @@ public class setting extends Fragment {
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
-            SharedPreferences preferences = this.getActivity().getSharedPreferences("isLogin", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean( "isLogIn",true );
-            if (account.getPhotoUrl()!=null)
-                editor.putString( "avatar",account.getPhotoUrl().toString());
-            editor.putString( "Email",account.getEmail());
-            editor.commit();
-            Fragment fragment = new user();
-            FragmentTransaction fr = getFragmentManager().beginTransaction();
-            fr.replace(R.id.frame_container,fragment);
-            fr.commit();
+            GoogleSignInAccount  account = GoogleSignIn.getLastSignedInAccount(getActivity());
+            if(account==null)
+                account = completedTask.getResult(ApiException.class);
+
+            Toast.makeText( getContext(), "Login by google failed 1", Toast.LENGTH_LONG ).show();
+            String token = account.getIdToken();
+
+
+            Toast.makeText(getContext(), token, Toast.LENGTH_SHORT).show();
+            getGGToken(token);
 
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
@@ -248,6 +249,68 @@ public class setting extends Fragment {
         }
     }
 
+    private void getGGToken( String token){
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .logInByGG(token);
+
+        call.enqueue( new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+
+                if (response.code()==200) {
+                    String bodyLogin = null;
+                    try {
+                        bodyLogin = response.body().string();
+                        try {
+                            JSONObject jsonObject = new JSONObject(bodyLogin);
+                            editor = preferences.edit();
+                            editor.putString( "avatar",jsonObject.getString("avatar"));
+                            editor.putString( "fullName",jsonObject.getString("fullName"));
+                            editor.putString("token", jsonObject.getString("token"));
+                            editor.commit();
+                            Toast.makeText( getContext(), "Đăng nhập thành công",Toast.LENGTH_SHORT).show();
+                            //    Log.i("DATA DATA", jsonObject.getString( "token"));
+                            //    Log.i("DATA DATA", jsonObject.getString( "token"));
+                            //    Log.i("DATA DATA", jsonObject.getString( "token"));
+
+                            Fragment fragment = new user();
+                            FragmentTransaction fr = getFragmentManager().beginTransaction();
+                            fr.replace(R.id.frame_container,fragment);
+                            fr.commit();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                else if (response.code()==400)
+                {
+
+                    Toast.makeText( getContext(), "Login by google failed", Toast.LENGTH_LONG ).show();
+                }
+                else
+                {
+
+                    Toast.makeText( getContext(), "Error update or insert user", Toast.LENGTH_LONG ).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                Toast.makeText( getContext(),t.getMessage(),Toast.LENGTH_LONG ).show();
+            }
+        } );
+
+    }
     //fb
     private void getFbInfo() {
         if (AccessToken.getCurrentAccessToken() != null) {

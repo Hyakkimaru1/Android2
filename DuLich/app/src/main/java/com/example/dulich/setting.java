@@ -63,6 +63,7 @@ public class setting extends Fragment {
     LoginButton fbLoginButton;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -157,29 +158,27 @@ public class setting extends Fragment {
         } );
 
         //fb
-        callbackManager = CallbackManager.Factory.create();
-        fbLoginButton = view.findViewById(R.id.login_button);
+        callbackManager =  CallbackManager.Factory.create();
+        fbLoginButton = (LoginButton)view.findViewById(R.id.login_button);
+        fbLoginButton.setFragment(this);
         //fb
         fbLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.d(TAG, "======Facebook login success======");
-                Log.d(TAG, "Facebook Access Token: " + loginResult.getAccessToken().getToken());
-                //Toast.makeText(setting.this, "Login Facebook success.",LENGTH_SHORT).show();
-
+                // App code
+               Log.i( "Login Facebook success.",loginResult.getAccessToken().toString() );
+              //  Toast.makeText( getContext(), "Login FB thành công", Toast.LENGTH_SHORT ).show();
                 getFbInfo();
             }
 
             @Override
             public void onCancel() {
-                //Toast.makeText(setting.this, "Login Facebook cancelled.", LENGTH_SHORT).show();
+                // App code
             }
 
             @Override
-            public void onError(FacebookException error) {
-                Log.e(TAG, "======Facebook login error======");
-                Log.e(TAG, "Error: " + error.toString());
-                //Toast.makeText(setting.this, "Login Facebook error.", LENGTH_SHORT).show();
+            public void onError(FacebookException exception) {
+                // App code
             }
         });
 
@@ -223,14 +222,15 @@ public class setting extends Fragment {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
-            SharedPreferences preferences = this.getActivity().getSharedPreferences("isLogin", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
+
             editor.putBoolean( "isLogIn",true );
             if (account.getPhotoUrl()!=null)
                 editor.putString( "avatar",account.getPhotoUrl().toString());
@@ -250,17 +250,28 @@ public class setting extends Fragment {
 
     //fb
     private void getFbInfo() {
+
         if (AccessToken.getCurrentAccessToken() != null) {
             GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
                     new GraphRequest.GraphJSONObjectCallback() {
                         @Override
                         public void onCompleted(final JSONObject me, GraphResponse response) {
-                            if (me != null) {
-                             //   Log.i("Login: ", me.optString("name"));
-                             //   Log.i("ID: ", me.optString("id"));
 
-                                Toast.makeText(getContext(), "Name: " + me.optString("name"), Toast.LENGTH_SHORT).show();
-                               // Toast.makeText(getContext(), "ID: " + me.optString("id"), Toast.LENGTH_SHORT).show();
+                            if (me != null) {
+
+                                editor.putBoolean( "isLogIn",true );
+                                try {
+                                    //editor.putString( "avatar", me.getString(""));
+                                    editor.putString( "Email", me.getString( "name" ));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                editor.commit();
+                                Fragment fragment = new user();
+                                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                                fr.replace(R.id.frame_container,fragment);
+                                fr.commit();
                             }
                         }
                     });

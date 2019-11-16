@@ -74,15 +74,16 @@
         android:textAlignment="viewStart" />
 
     <EditText
-        android:id="@+id/editTextDeparture"
+        android:id="@+id/editTextTourname"
         android:layout_width="152dp"
         android:layout_height="45dp"
-        android:layout_below="@+id/TextViewDeparture"
+        android:layout_below="@+id/TextViewTourname"
         android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="18dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="53dp"
+        android:layout_marginEnd="20dp"
         android:background="@drawable/radiusbutton"
         android:ems="10"
         android:inputType="textPersonName"
@@ -122,7 +123,7 @@
         android:textAlignment="viewStart" />
 
     <TextView
-        android:id="@+id/TextViewDeparture"
+        android:id="@+id/TextViewTourname"
         android:layout_width="375dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -159,7 +160,7 @@
         android:id="@+id/textViewEndday"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editTextDeparture"
+        android:layout_below="@+id/editTextTourname"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="144dp"
         android:layout_marginTop="22dp"
@@ -171,7 +172,7 @@
         android:id="@+id/textViewStartday"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editTextDeparture"
+        android:layout_below="@+id/editTextTourname"
         android:layout_alignParentStart="true"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
@@ -252,14 +253,14 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="296dp"
-        android:layout_height="197dp"
+        android:layout_width="wrap_content"
+        android:layout_height="111dp"
         android:layout_below="@+id/textViewChooseImage"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="43dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="54dp"
+        android:layout_marginEnd="90dp"
         app:srcCompat="@drawable/com_facebook_button_like_icon_selected" />
 
 </RelativeLayout>

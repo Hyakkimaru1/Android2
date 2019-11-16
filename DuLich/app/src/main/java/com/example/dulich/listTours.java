@@ -1,6 +1,7 @@
 package com.example.dulich;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -55,11 +56,8 @@ public class listTours extends Fragment {
         buttonAddTour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = new createTour();
-                FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.frame_container,fragment);
-                fr.addToBackStack(null);
-                fr.commit();
+                Intent intent = new Intent(getActivity(), createTourActivity.class);
+                startActivity(intent);
             }
         });
 

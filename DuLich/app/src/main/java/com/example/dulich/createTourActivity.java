@@ -6,11 +6,10 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 public class createTourActivity extends AppCompatActivity {
     Button create;
-    Button next;
+
     EditText tourName;
     EditText startDay;
     EditText endDay;
@@ -19,8 +18,7 @@ public class createTourActivity extends AppCompatActivity {
     EditText minC;
     EditText maxC;
     ImageView img;
-    EditText departure;
-    EditText destinate;
+
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -32,7 +30,7 @@ public class createTourActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         setContentView(R.layout.activity_create_tour);
-    next = findViewById(R.id.buttonNext);
+    create = findViewById(R.id.buttonCreate);
     tourName = findViewById(R.id.editTextTourname);
     startDay = findViewById(R.id.editTextStartday);
     endDay = findViewById(R.id.editTextEndday);

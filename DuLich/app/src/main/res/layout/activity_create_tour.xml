@@ -4,7 +4,7 @@
     android:layout_width="match_parent" android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/buttonNext"
+        android:id="@+id/CreateTour"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
         android:layout_below="@+id/imageView"
@@ -15,7 +15,7 @@
         android:layout_marginEnd="19dp"
         android:background="@drawable/signupbt"
         android:backgroundTint="#35BBAE"
-        android:text="Next >>"
+        android:text="CREATE"
         android:textColor="#EAEBEB"
         android:textStyle="bold" />
 

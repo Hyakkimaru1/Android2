@@ -2,7 +2,6 @@ package com.example.dulich;
 
 import java.util.Map;
 
-import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -47,6 +46,26 @@ public interface Api {
     @POST("user/login/by-facebook")
     Call<ResponseBody> logInByFB(
             @Field("accessToken") String accessToken
+    );
+
+    @FormUrlEncoded
+    @POST("user/login/by-facebook")
+    Call<ResponseBody> createTour(
+            @Header("Authorization") String accessToken,
+            @Field( "name" ) String name,
+            @Field("startDate") long startDate,
+            @Field( "endDate" ) long endDate,
+            //@Field("sourceLat") long sourceLat,
+            //@Field( "sourceLong" ) long sourceLong,
+            //@Field("desLat") long desLat,
+            //@Field( "desLong" ) long desLong,
+            //@Field( "isPrivate" ) boolean isPrivate,
+            @Field( "adults" ) int  adults,
+            @Field( "childs" ) int  childs,
+            @Field( "minCost" ) long minCost,
+            @Field( "maxCost" ) long maxCost
+            //@Field("avatar") String avatar
+
     );
 
 }

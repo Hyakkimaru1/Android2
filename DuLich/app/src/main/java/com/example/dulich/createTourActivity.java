@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+<<<<<<< HEAD
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,9 +23,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+
+import android.widget.ImageView;
+
 public class createTourActivity extends AppCompatActivity {
-   // Button create;
     Button creatTour;
+
     EditText tourName;
     EditText startDay;
     EditText endDay;
@@ -32,11 +36,13 @@ public class createTourActivity extends AppCompatActivity {
     EditText children;
     EditText minC;
     EditText maxC;
-   // ImageView img;
+    // ImageView img;
     EditText departure;
     EditText destinate;
     SharedPreferences preferences;
     String token;
+
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();

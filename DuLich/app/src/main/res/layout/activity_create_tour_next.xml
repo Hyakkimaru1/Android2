@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/editTextDeparture"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_below="@+id/TextViewTourname"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/radiusbutton"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:paddingStart="30px"
+        android:textAlignment="viewStart" />
+
+    <EditText
+        android:id="@+id/editTextDestinate"
+        android:layout_width="260dp"
+        android:layout_height="48dp"
+        android:layout_below="@+id/textViewDestinationPlace"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/radiusbutton"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:paddingStart="30px"
+        android:textAlignment="viewStart" />
+
+    <TextView
+        android:id="@+id/TextViewTourname"
+        android:layout_width="375dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="21dp"
+        android:text="Point of departure" />
+
+    <TextView
+        android:id="@+id/textViewDestinationPlace"
+        android:layout_width="375dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextDeparture"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="22dp"
+        android:text="Destination place" />
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextDestinate"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="21dp"
+        android:layout_marginTop="23dp"
+        android:layout_marginEnd="16dp"
+        android:text="This is your private trip?" />
+
+    <ImageButton
+        android:id="@+id/imageButtonDeparture"
+        android:layout_width="41dp"
+        android:layout_height="36dp"
+        android:layout_below="@+id/TextViewTourname"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="28dp"
+        android:layout_toEndOf="@+id/editTextDeparture"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/map" />
+
+    <ImageButton
+        android:id="@+id/imageButtonDestinate"
+        android:layout_width="41dp"
+        android:layout_height="36dp"
+        android:layout_below="@+id/textViewDestinationPlace"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="28dp"
+        android:layout_toEndOf="@+id/editTextDeparture"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/map" />
+
+    <Button
+        android:id="@+id/buttonCreate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/checkBox"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="21dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="22dp"
+        android:background="@drawable/signupbt"
+        android:backgroundTint="#35BBAE"
+        android:text="create"
+        android:textColor="#EAEBEB"
+        android:textStyle="bold" />
+
+</RelativeLayout>

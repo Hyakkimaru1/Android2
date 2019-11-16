@@ -16,7 +16,7 @@
         android:text="This is your private trip?" />
 
     <Button
-        android:id="@+id/buttonCreate"
+        android:id="@+id/CreateTour"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
         android:layout_below="@+id/checkBox"
@@ -27,7 +27,7 @@
         android:layout_marginEnd="19dp"
         android:background="@drawable/signupbt"
         android:backgroundTint="#35BBAE"
-        android:text="Create"
+        android:text="CREATE"
         android:textColor="#EAEBEB"
         android:textStyle="bold" />
 

@@ -3,13 +3,10 @@ package com.example.dulich;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,7 +14,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -25,11 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,6 +37,7 @@ public class listTours extends Fragment {
     MyAdapter myAdapter;
     SharedPreferences preferences;
     TextView tours;
+    String token;
     FloatingActionButton buttonAddTour;
     @Nullable
     @Override
@@ -52,10 +45,16 @@ public class listTours extends Fragment {
         View view = inflater.inflate(R.layout.activity_list_tours,container,false);
         listView =(ListView) view.findViewById( R.id.listTours);
         buttonAddTour = view.findViewById(R.id.button_input);
-
+        preferences = this.getActivity().getSharedPreferences("isLogin", Context.MODE_PRIVATE);
+        token = preferences.getString( "token","" );
         buttonAddTour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (token.equals( "" ))
+                {
+                    Toast.makeText( getContext(),"Vui lòng đăng nhập",Toast.LENGTH_SHORT ).show();
+                    return;
+                }
                 Intent intent = new Intent(getActivity(), createTourActivity.class);
                 startActivity(intent);
             }
@@ -63,7 +62,7 @@ public class listTours extends Fragment {
 
 
 
-        preferences = this.getActivity().getSharedPreferences("isLogin", Context.MODE_PRIVATE);
+
         tours= view.findViewById( R.id.tours );
         readJson();
         return view;
@@ -74,7 +73,6 @@ public class listTours extends Fragment {
     }
 
     void readJson(){
-        String token = preferences.getString( "token","" );
         if (!token.equals(""))
         {
             Map<String, String> params = new HashMap<>();

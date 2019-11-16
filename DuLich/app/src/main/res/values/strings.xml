@@ -20,4 +20,16 @@
     <string name="apikey">AIzaSyC-BFseKgG8WtyMum6BrAAloj1XG5uFq5w</string>
     <string name="title_activity_maps">Map</string>
 
+    <string name="city_prompt">Choose a city</string>
+    <string-array name="city_arrays">
+        <item>Hồ Chí Minh</item>
+        <item>Hà Nội</item>
+    </string-array>
+
+    <string name="service_type_prompt">Choose a service type</string>
+    <string-array name="service_type_arrays">
+        <item>Restaurant</item>
+        <item>...</item>
+    </string-array>
+
 </resources>

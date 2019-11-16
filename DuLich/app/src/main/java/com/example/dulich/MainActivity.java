@@ -3,6 +3,7 @@ package com.example.dulich;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setCustomView(R.layout.titlebar);
         textView = findViewById(R.id.titleBar);
         textView.setText("Travel Assistant");
-        /*
+
         //check xem tai khoan da duoc dang nhap hay chua
         sharedPreferences = getSharedPreferences("isLogin",MODE_PRIVATE);
 
@@ -37,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         //Thay doi fragment
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new listTours()).commit();
 
-         */
 
     }
     private BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {

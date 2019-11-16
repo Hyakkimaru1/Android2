@@ -45,6 +45,7 @@ public class listTours extends Fragment {
         View view = inflater.inflate(R.layout.activity_list_tours,container,false);
         listView =(ListView) view.findViewById( R.id.listTours);
         buttonAddTour = view.findViewById(R.id.button_input);
+        preferences = this.getActivity().getSharedPreferences("isLogin", Context.MODE_PRIVATE);
         token = preferences.getString( "token","" );
         buttonAddTour.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +62,7 @@ public class listTours extends Fragment {
 
 
 
-        preferences = this.getActivity().getSharedPreferences("isLogin", Context.MODE_PRIVATE);
+
         tours= view.findViewById( R.id.tours );
         readJson();
         return view;

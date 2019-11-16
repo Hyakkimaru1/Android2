@@ -49,7 +49,7 @@ public interface Api {
     );
 
     @FormUrlEncoded
-    @POST("user/login/by-facebook")
+    @POST("tour/create")
     Call<ResponseBody> createTour(
             @Header("Authorization") String accessToken,
             @Field( "name" ) String name,
@@ -59,7 +59,7 @@ public interface Api {
             //@Field( "sourceLong" ) long sourceLong,
             //@Field("desLat") long desLat,
             //@Field( "desLong" ) long desLong,
-            //@Field( "isPrivate" ) boolean isPrivate,
+            @Field( "isPrivate" ) boolean isPrivate,
             @Field( "adults" ) int  adults,
             @Field( "childs" ) int  childs,
             @Field( "minCost" ) long minCost,

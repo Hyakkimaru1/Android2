@@ -1,10 +1,15 @@
 package com.example.dulich;
 
+import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +20,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import okhttp3.ResponseBody;
@@ -33,11 +39,14 @@ public class createTourActivity extends AppCompatActivity {
     EditText minC;
     EditText maxC;
     // ImageView img;
-    EditText departure;
-    EditText destinate;
+    ImageButton start;
+    ImageButton end;
     SharedPreferences preferences;
     String token;
-
+    EditText departure;
+    EditText destinate;
+    CheckBox check;
+    SimpleDateFormat simpleDateFormat;
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -49,6 +58,7 @@ public class createTourActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         setContentView(R.layout.activity_create_tour);
+        preferences = getSharedPreferences("isLogin", Context.MODE_PRIVATE);
         token = preferences.getString( "token","" );
         creatTour = findViewById(R.id.CreateTour );
         tourName = findViewById(R.id.editTextTourname);
@@ -58,6 +68,24 @@ public class createTourActivity extends AppCompatActivity {
         children = findViewById(R.id.editTextChildren);
         minC = findViewById(R.id.editTextMinC);
         maxC = findViewById(R.id.editTextMaxC);
+        start = findViewById(R.id.imageButtonStartTime);
+        end = findViewById(R.id.imageButtonEndTime);
+        check = findViewById(R.id.checkBox);
+
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Start();
+            }
+        });
+        end.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                End();
+            }
+        });
+
+
         //img = findViewById(R.id.imageView);
 
         creatTour.setOnClickListener( new View.OnClickListener() {
@@ -84,7 +112,7 @@ public class createTourActivity extends AppCompatActivity {
                     Call<ResponseBody> call = RetrofitClient
                             .getInstance()
                             .getApi()
-                            .createTour(token,tourName.getText().toString(),sStartDay,sEndDay, Integer.parseInt(adult.getText().toString()),
+                            .createTour(token,tourName.getText().toString(),sStartDay,sEndDay,check.isChecked(), Integer.parseInt(adult.getText().toString()),
                                     Integer.parseInt( children.getText().toString() ), Long.parseLong( minC.getText().toString() ),
                                     Long.parseLong( maxC.getText().toString() ) );
 
@@ -129,15 +157,55 @@ public class createTourActivity extends AppCompatActivity {
 
 
     }
+    private void Start(){
+        final Calendar calendar = Calendar.getInstance();
+        int ngay = calendar.get(Calendar.DATE);
+        int thang = calendar.get(Calendar.MONTH);
+        int nam = calendar.get(Calendar.YEAR);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                calendar.set(year,month,dayOfMonth);
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                startDay.setText(simpleDateFormat.format(calendar.getTime()));
+            }
+        }, nam,thang,ngay);
+        datePickerDialog.show();
+    }
+
+    private void End(){
+        final Calendar calendar = Calendar.getInstance();
+        int ngay = calendar.get(Calendar.DATE);
+        int thang = calendar.get(Calendar.MONTH);
+        int nam = calendar.get(Calendar.YEAR);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                calendar.set(year,month,dayOfMonth);
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                endDay.setText(simpleDateFormat.format(calendar.getTime()));
+            }
+        }, nam,thang,ngay);
+        datePickerDialog.show();
+    }
 
     private boolean CheckData()
     {
         if (tourName.getText().toString().isEmpty()||startDay.getText().toString().isEmpty()
                 ||endDay.getText().toString().isEmpty() || adult.getText().toString().isEmpty()
                 ||children.getText().toString().isEmpty()||minC.getText().toString().isEmpty()
-                || maxC.getText().toString().isEmpty())
+                || maxC.getText().toString().isEmpty() )
         {
             Toast.makeText( this, "Vui lòng không để trống thông tin",Toast.LENGTH_SHORT ).show();
+            return false;
+        }
+        if (Integer.parseInt(adult.getText().toString()) < 0 ||
+            Integer.parseInt(children.getText().toString()) < 0 || Integer.parseInt(maxC.getText().toString()) < 0
+            || Integer.parseInt(minC.getText().toString()) < 0)
+        {
+            Toast.makeText( this, "Vui lòng không nhập số âm",Toast.LENGTH_SHORT ).show();
             return false;
         }
         if (token.equals( "" ))

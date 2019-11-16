@@ -5,10 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 public class createTourActivity extends AppCompatActivity {
     Button create;
+    ImageButton start;
+    ImageButton end;
+
 
     EditText tourName;
     EditText startDay;
@@ -39,6 +43,11 @@ public class createTourActivity extends AppCompatActivity {
     minC = findViewById(R.id.editTextMinC);
     maxC = findViewById(R.id.editTextMaxC);
     img = findViewById(R.id.imageView);
+    start = findViewById(R.id.imageButtonStartTime);
+    end = findViewById(R.id.imageButtonEndTime);
+
+
+
 
 
     }

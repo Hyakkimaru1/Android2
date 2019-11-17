@@ -1,6 +1,7 @@
 package com.example.dulich;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,7 +14,9 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,7 +41,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -59,6 +64,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private EditText searchText;
     MarkerOptions markerOptions;
     LatLng latLng;
+
+    ImageButton arrive;
+    ImageButton leave;
+    EditText edtArrive;
+    EditText edtLeave;
 
     EditText editTextStopPoint;
     EditText editTextAddress;
@@ -84,6 +94,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         editTextSelectDay = findViewById(R.id.editTextSelectDay);
         editTextTimeArrive = findViewById(R.id.editTextTimeArrive);
         editTextSelectDayLeave = findViewById(R.id.editTextSelectDayLeave);
+
+        arrive = findViewById(R.id.imageButtonStartTime);
+        leave = findViewById(R.id.imageButtonTimeLeave);
+        edtArrive = findViewById(R.id.editTextSelectDay);
+        edtLeave = findViewById(R.id.editTextSelectDayLeave);
+
+        arrive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Start();
+            }
+        });
+
+        leave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                End();
+            }
+        });
 
         searchText = findViewById( R.id.Search );
 
@@ -273,11 +302,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public boolean onMarkerClick(Marker marker) {
                 Toast.makeText( MapsActivity.this, marker.getTitle(),Toast.LENGTH_SHORT).show();
-                    Dialog dialog = new Dialog( MapsActivity.this );
-                    dialog.setTitle( "Stop point" );
-                    dialog.setCancelable( false );
-                    dialog.setContentView( R.layout.activity_form_stop_point );
-                    dialog.show();
+                    RelativeLayout relativeLayout = findViewById(R.id.formStopPoint);
+                    relativeLayout.setVisibility(View.VISIBLE);
+                    RelativeLayout relativeLayout1 =findViewById(R.id.mapLayout);
+                    relativeLayout1.setAlpha(0.1f);
                 return false;
             }
         } );
@@ -334,5 +362,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         //Check private or public
         return true;
+    }
+
+    private void Start(){
+        final Calendar calendar = Calendar.getInstance();
+        int ngay = calendar.get(Calendar.DATE);
+        int thang = calendar.get(Calendar.MONTH);
+        int nam = calendar.get(Calendar.YEAR);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                calendar.set(year,month,dayOfMonth);
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                edtArrive.setText(simpleDateFormat.format(calendar.getTime()));
+            }
+        }, nam,thang,ngay);
+        datePickerDialog.show();
+    }
+
+    private void End(){
+        final Calendar calendar = Calendar.getInstance();
+        int ngay = calendar.get(Calendar.DATE);
+        int thang = calendar.get(Calendar.MONTH);
+        int nam = calendar.get(Calendar.YEAR);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                calendar.set(year,month,dayOfMonth);
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                edtLeave.setText(simpleDateFormat.format(calendar.getTime()));
+            }
+        }, nam,thang,ngay);
+        datePickerDialog.show();
     }
 }

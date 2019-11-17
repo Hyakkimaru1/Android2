@@ -39,6 +39,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -79,6 +80,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     EditText editTextMinC;
     EditText editTextMaxC;
 
+    FloatingActionButton makeStopPoint;
+
     int Radius = 1000;
 
     @Override
@@ -99,6 +102,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         leave = findViewById(R.id.imageButtonTimeLeave);
         edtArrive = findViewById(R.id.editTextSelectDay);
         edtLeave = findViewById(R.id.editTextSelectDayLeave);
+
+        makeStopPoint = findViewById(R.id.makeStopPoint);
+
+        makeStopPoint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
+
 
         arrive.setOnClickListener(new View.OnClickListener() {
             @Override

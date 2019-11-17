@@ -57,7 +57,12 @@
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="14dp"
+            android:background="@android:color/white"
+            android:visibility="invisible">
 
             <EditText
                 android:id="@+id/editTextStopPoint"
@@ -281,7 +286,7 @@
                 app:srcCompat="@drawable/calendar" />
 
             <Spinner
-                android:id="@+id/spinner1"
+                android:id="@+id/province"
                 android:layout_width="350dp"
                 android:layout_height="40dp"
                 android:layout_below="@+id/TextVievProvince"
@@ -294,7 +299,7 @@
                 android:prompt="@string/city_prompt" />
 
             <Spinner
-                android:id="@+id/spinner2"
+                android:id="@+id/serviceType"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_below="@+id/TextViewServiceType"
@@ -311,7 +316,7 @@
     </RelativeLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/makeStopPoint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"

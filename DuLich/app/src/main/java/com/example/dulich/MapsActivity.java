@@ -146,6 +146,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
             rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
             rlp.setMargins(0, 1500, 180, 0);
+
         }
 
     }
@@ -188,6 +189,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             buildGoogleApiClient();
                         }
                         mMap.setMyLocationEnabled( true );
+
                     }
                 }
                 else

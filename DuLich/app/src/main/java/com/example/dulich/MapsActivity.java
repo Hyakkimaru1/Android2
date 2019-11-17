@@ -13,8 +13,10 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,12 +64,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     EditText editTextStopPoint;
     EditText editTextAddress;
-    EditText editTextTimeLeave;
-    EditText editTextSelectDayLeave;
+    Spinner serviceType;
+    Spinner province;
     EditText editTextTimeArrive;
     EditText editTextSelectDay;
-    EditText editTextMinC;
+    EditText editTextTimeLeave;
+    EditText editTextSelectDayLeave;
+    EditText editTextMinC ;
     EditText editTextMaxC;
+
 
     int Radius = 1000;
 
@@ -76,14 +81,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_maps );
 
-        editTextStopPoint = findViewById(R.id.editTextStopPoint);
-        editTextAddress = findViewById(R.id.editTextAddress);
-        editTextTimeLeave = findViewById(R.id.editTextTimeLeave);
-        editTextMinC = findViewById(R.id.editTextMinC);
-        editTextMaxC = findViewById(R.id.editTextMaxC);
-        editTextSelectDay = findViewById(R.id.editTextSelectDay);
-        editTextTimeArrive = findViewById(R.id.editTextTimeArrive);
-        editTextSelectDayLeave = findViewById(R.id.editTextSelectDayLeave);
 
         searchText = findViewById( R.id.Search );
 
@@ -121,6 +118,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void geoLocate() {
+        mMap.clear();
         String searchString = searchText.getText().toString();
 
         Geocoder geocoder = new Geocoder( MapsActivity.this );
@@ -137,11 +135,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Address address = list.get( 0 );
             double latitude = address.getLatitude();
             double longitude = address.getLongitude();
-         //   findPlaceNearly( latitude,longitude );
+            findPlaceNearly( latitude,longitude );
             markerOptions = new MarkerOptions();
             latLng = new LatLng( address.getLatitude(),address.getLongitude() );
             markerOptions.position( latLng );
-            markerOptions.title( "Vị trí cần tìm" );
+            markerOptions.title( searchString );
             markerOptions.icon( BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED) );
             currentUserLocationMarker = mMap.addMarker( markerOptions );
             // Add a marker in current location and move the camera
@@ -263,7 +261,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         findPlaceNearly(latitude,longitude);
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position( latLng );
-        markerOptions.title( "Vị trí hiện tại" );
+        markerOptions.title("Vị trí hiện tại");
         markerOptions.icon( BitmapDescriptorFactory.defaultMarker() );
 
         currentUserLocationMarker = mMap.addMarker( markerOptions );
@@ -273,11 +271,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public boolean onMarkerClick(Marker marker) {
                 Toast.makeText( MapsActivity.this, marker.getTitle(),Toast.LENGTH_SHORT).show();
-                    Dialog dialog = new Dialog( MapsActivity.this );
+                    final Dialog dialog = new Dialog( MapsActivity.this );
                     dialog.setTitle( "Stop point" );
                     dialog.setCancelable( false );
                     dialog.setContentView( R.layout.activity_form_stop_point );
+                    EditText editTextStopPoint = dialog.findViewById( R.id.editTextStopPoint );
+                    EditText editTextAddress = dialog.findViewById( R.id.editTextAddress );
+                    Spinner serviceType = dialog.findViewById( R.id.serviceType );
+                    Spinner province = dialog.findViewById( R.id.province );
+                    EditText editTextTimeArrive = dialog.findViewById( R.id.editTextTimeArrive );
+                    EditText editTextSelectDay = dialog.findViewById( R.id.editTextSelectDay );
+                    EditText editTextTimeLeave = dialog.findViewById( R.id.editTextTimeLeave );
+                    EditText editTextSelectDayLeave = dialog.findViewById( R.id.editTextSelectDayLeave );
+                    EditText editTextMinC = dialog.findViewById(R.id.editTextMinC);
+                    EditText editTextMaxC = dialog.findViewById(R.id.editTextMaxC);
+                    Button button_x = dialog.findViewById( R.id.button_x );
+                    editTextStopPoint.setText( marker.getTitle());
+                    Address address = getNameMarker( marker.getPosition().latitude,marker.getPosition().longitude );
+                    editTextAddress.setText( address.getAddressLine( 0 ) );
                     dialog.show();
+                    button_x.setOnClickListener( new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.cancel();
+                        }
+                    } );
                 return false;
             }
         } );
@@ -323,16 +341,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 ||editTextTimeArrive.getText().toString().isEmpty()||editTextSelectDay.getText().toString().isEmpty()
                 || editTextTimeLeave.getText().toString().isEmpty() || editTextSelectDayLeave.getText().toString().isEmpty() )
         {
-            Toast.makeText( this, "Vui lòng không để trống thông tin",Toast.LENGTH_SHORT ).show();
+            Toast.makeText( MapsActivity.this, "Vui lòng không để trống thông tin",Toast.LENGTH_SHORT ).show();
             return false;
         }
         if (Integer.parseInt(editTextMaxC.getText().toString()) < 0 ||
                 Integer.parseInt(editTextMinC.getText().toString()) < 0 )
         {
-            Toast.makeText( this, "Vui lòng không nhập số âm",Toast.LENGTH_SHORT ).show();
+            Toast.makeText( MapsActivity.this, "Vui lòng không nhập số âm",Toast.LENGTH_SHORT ).show();
             return false;
         }
-        //Check private or public
         return true;
+        //Check private or public
+    }
+
+    private Address getNameMarker(double lat,double lng) {
+
+        Geocoder geocoder = new Geocoder( MapsActivity.this );
+        Address address= null;
+        List<Address> list = new ArrayList<>(  );
+        try
+        {
+            list = geocoder.getFromLocation( lat,lng,2 );
+
+        } catch (IOException e){
+            Log.e( "TAG","geoLocate: IOException "+e.getMessage() );
+        }
+
+        if (list.size()>0){
+             address = list.get( 0 );
+
+        }
+        return address;
     }
 }

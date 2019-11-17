@@ -62,7 +62,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginTop="14dp"
             android:background="@android:color/white"
-            android:visibility="invisible">
+            >
 
             <EditText
                 android:id="@+id/editTextStopPoint"

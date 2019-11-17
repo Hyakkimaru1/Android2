@@ -20,15 +20,15 @@
         android:text="calendar"
         android:textColor="@android:color/black" />
 
-    <ImageView
-        android:id="@+id/mainPicSP"
-        android:layout_width="match_parent"
-        android:layout_height="125dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="0dp"
-        app:srcCompat="@drawable/person" />
+        <ImageView
+            android:id="@+id/mainPicSP"
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="0dp"
+            android:src="@drawable/person" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -38,7 +38,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="21dp"
         android:layout_marginTop="10dp"
-        app:srcCompat="@drawable/name" />
+        android:src="@drawable/name" />
 
     <ImageView
         android:id="@+id/imageView4"
@@ -48,7 +48,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="21dp"
         android:layout_marginTop="2dp"
-        app:srcCompat="@drawable/calendar" />
+        android:src="@drawable/calendar" />
 
     <ImageView
         android:id="@+id/imageView5"
@@ -58,7 +58,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="21dp"
         android:layout_marginTop="2dp"
-        app:srcCompat="@drawable/place" />
+        android:src="@drawable/place" />
 
     <ImageView
         android:id="@+id/imageView6"
@@ -70,7 +70,7 @@
         android:layout_marginStart="21dp"
         android:layout_marginTop="2dp"
         android:layout_marginBottom="5dp"
-        app:srcCompat="@drawable/price" />
+        android:src="@drawable/price" />
 
     <TextView
         android:id="@+id/priceMinSP"
@@ -129,7 +129,9 @@
         android:layout_marginStart="60dp"
         android:layout_marginTop="8dp"
         android:text="place"
+        android:inputType="text"
         android:textSize="18dp"
+        android:maxLines="1"
         android:textColor="@android:color/black"
         android:textStyle="bold" />
 

@@ -2,6 +2,7 @@ package com.example.dulich;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -27,6 +28,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class createTourActivity extends AppCompatActivity {
     Button creatTour;
@@ -126,7 +129,13 @@ public class createTourActivity extends AppCompatActivity {
 
                                     JSONObject tourData = new JSONObject(bodyTourCreate);
                                     // Log.i("JSON",tourData.getString("total"));
+
+
                                     Toast.makeText( createTourActivity.this, "Tạo tour thành công",Toast.LENGTH_SHORT ).show();
+                                    Intent intent = new Intent(getBaseContext(), MapsActivity.class);
+                                    int message = tourData.getInt( "id" );
+                                    intent.putExtra(EXTRA_MESSAGE, message);
+                                    startActivity(intent);
                                 } catch (IOException e) {
                                     e.printStackTrace();
 

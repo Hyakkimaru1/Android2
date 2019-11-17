@@ -1,12 +1,7 @@
 package com.example.dulich;
 
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +14,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.squareup.picasso.Picasso;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 
 public class MyAdapter extends ArrayAdapter<aTour> implements Filterable {
@@ -83,9 +82,9 @@ public class MyAdapter extends ArrayAdapter<aTour> implements Filterable {
             endDate.setText( sdf.format( d ) );
 
             TextView priceMin = (TextView) v.findViewById( R.id.priceMin );
-            priceMin.setText( String.valueOf( p.getMinCost()));
+            priceMin.setText(p.getMinCost());
             TextView priceMax = (TextView) v.findViewById( R.id.priceMax );
-            priceMax.setText( String.valueOf( p.getMaxCost()));
+            priceMax.setText(  p.getMaxCost());
             TextView group = (TextView) v.findViewById( R.id.group );
             group.setText(String.valueOf( p.getAdults() +p.getChilds()));
 

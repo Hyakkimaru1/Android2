@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -115,7 +116,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         makeStopPoint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (noteList.size()>0) {
+                    final LinearLayout linearLayout = findViewById( R.id.listSP );
+                    linearLayout.setVisibility( View.VISIBLE );
+                    final RelativeLayout relativeLayout1 = findViewById( R.id.mapLayout );
+                    relativeLayout1.setAlpha( 0.1f );
+                    Button endListSP = findViewById( R.id.endListSP );
+                    endListSP.setOnClickListener( new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            relativeLayout1.setAlpha( 1f );
+                            linearLayout.setVisibility( View.INVISIBLE );
+                        }
+                    } );
+                }
+                else {
+                    Toast.makeText( MapsActivity.this,"Please make a stop point",Toast.LENGTH_SHORT ).show();
+                }
             }
         });
 
@@ -308,7 +325,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             currentUserLocationMarker.remove();
         }
 
-        Toast.makeText( this,location.getLatitude()+"  "+location.getLongitude(),Toast.LENGTH_SHORT ).show();
         latLng = new LatLng( location.getLatitude(),location.getLongitude() );
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
@@ -364,10 +380,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     e.printStackTrace();
                                 }
                                 noteList.add( new stopPoint( editTextStopPoint.getText().toString(),editTextAddress.getText().toString(),
-                                        1,address.getLatitude(),address.getLongitude(),dateTime.getTime(),dateTime2.getTime(),1,
+                                        1,address.getLatitude(),address.getLongitude(),54441556456456L,416548454151L,1,
                                         Integer.parseInt( editTextMinC.getText().toString() ),Integer.parseInt( editTextMaxC.getText().toString() )) );
-                                myAdapter = new Stop_Point_Adapter( MapsActivity.this,0,noteList );
+                                myAdapter = new Stop_Point_Adapter( MapsActivity.this,R.layout.item_stoppoint_layout,noteList );
                                 listView.setAdapter( myAdapter );
+                                relativeLayout.setVisibility(View.INVISIBLE);
+                                relativeLayout1.setAlpha(1f);
+                                Toast.makeText( MapsActivity.this,"Đăng ký thành công",Toast.LENGTH_SHORT ).show();
                             }
                     }
                 } );

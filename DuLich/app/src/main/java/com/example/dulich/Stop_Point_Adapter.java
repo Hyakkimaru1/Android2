@@ -12,13 +12,13 @@ import androidx.annotation.NonNull;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class Stop_Point_Adapter extends ArrayAdapter<stopPoint> {
     ArrayList<stopPoint> noteList;
 
-    public Stop_Point_Adapter(@NonNull Context context, int resource, @NonNull List<stopPoint> objects) {
+    public Stop_Point_Adapter(@NonNull Context context, int resource, @NonNull ArrayList<stopPoint> objects) {
         super( context, resource, objects );
+        noteList = objects;
     }
 
     @Override
@@ -31,8 +31,7 @@ public class Stop_Point_Adapter extends ArrayAdapter<stopPoint> {
         // TODO Auto-generated method stub
         View v = convertView;
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        v = inflater.inflate(R.layout.activity_maps, null);
-
+        v = inflater.inflate(R.layout.item_stoppoint_layout, null);
         stopPoint p =getItem( position );
         if (p!=null) {
 

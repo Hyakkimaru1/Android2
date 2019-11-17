@@ -5,8 +5,8 @@ public class aTour {
     int id;
     int status;
     String  name;
-    long minCost;
-    long maxCost;
+    String minCost;
+    String maxCost;
     String  startDate;
     String endDate;
     int adults;
@@ -14,7 +14,7 @@ public class aTour {
     boolean  isPrivate;
     String avatar;
 
-    public aTour(int id, int status, String name, long minCost, long maxCost, String startDate, String endDate, int adults, int childs, boolean isPrivate, String avatar) {
+    public aTour(int id, int status, String name, String minCost, String maxCost, String startDate, String endDate, int adults, int childs, boolean isPrivate, String avatar) {
         this.id = id;
         this.status = status;
         this.name = name;
@@ -52,19 +52,19 @@ public class aTour {
         this.name = name;
     }
 
-    public long getMinCost() {
+    public String getMinCost() {
         return minCost;
     }
 
-    public void setMinCost(long minCost) {
+    public void setMinCost(String minCost) {
         this.minCost = minCost;
     }
 
-    public long getMaxCost() {
+    public String getMaxCost() {
         return maxCost;
     }
 
-    public void setMaxCost(long maxCost) {
+    public void setMaxCost(String maxCost) {
         this.maxCost = maxCost;
     }
 

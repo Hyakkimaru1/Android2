@@ -10,5 +10,6 @@ public class arrayListTour {
     @SerializedName("stopPoints")
     ArrayList<stopPoint> stopPoints;
     @SerializedName("deleteIds")
+    String getTourID;
 
 }

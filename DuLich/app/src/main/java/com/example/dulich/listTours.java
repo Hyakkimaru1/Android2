@@ -98,8 +98,8 @@ public class listTours extends Fragment {
                             if (responseArray.length() > 0) {
                                 for (int i = 0; i < responseArray.length(); i++) {
                                     JSONObject jb = responseArray.getJSONObject( i );
-                                    noteList.add( new aTour( jb.getInt( "id" ), jb.getInt( "status" ), jb.getString( "name" ), jb.getLong( "minCost" ),
-                                            jb.getLong( "maxCost" ), jb.getString( "startDate" ), jb.getString( "endDate" ), jb.getInt( "adults" ),
+                                    noteList.add( new aTour( jb.getInt( "id" ), jb.getInt( "status" ), jb.getString( "name" ), jb.getString( "minCost" ),
+                                            jb.getString( "maxCost" ), jb.getString( "startDate" ), jb.getString( "endDate" ), jb.getInt( "adults" ),
                                             jb.getInt( "childs" ), jb.getBoolean( "isPrivate" ), jb.getString( "avatar" ) ) );
 
                                 }

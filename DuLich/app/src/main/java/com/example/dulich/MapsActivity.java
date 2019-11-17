@@ -13,9 +13,11 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,9 +42,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -80,6 +84,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     int Radius = 1000;
 
+    ArrayList<stopPoint> noteList = new ArrayList<stopPoint>();
+    Stop_Point_Adapter myAdapter;
+    ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
@@ -99,6 +106,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         edtArrive = findViewById(R.id.editTextSelectDay);
         edtLeave = findViewById(R.id.editTextSelectDayLeave);
 
+        listView = findViewById( R.id.listStopPoint );
         arrive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,6 +157,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void geoLocate() {
+        mMap.clear();
         String searchString = searchText.getText().toString();
 
         Geocoder geocoder = new Geocoder( MapsActivity.this );
@@ -165,11 +174,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Address address = list.get( 0 );
             double latitude = address.getLatitude();
             double longitude = address.getLongitude();
-         //   findPlaceNearly( latitude,longitude );
+            findPlaceNearly( latitude,longitude );
             markerOptions = new MarkerOptions();
             latLng = new LatLng( address.getLatitude(),address.getLongitude() );
             markerOptions.position( latLng );
-            markerOptions.title( "Vị trí cần tìm" );
+            markerOptions.title(searchString);
             markerOptions.icon( BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED) );
             currentUserLocationMarker = mMap.addMarker( markerOptions );
             // Add a marker in current location and move the camera
@@ -302,11 +311,51 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public boolean onMarkerClick(Marker marker) {
                 Toast.makeText( MapsActivity.this, marker.getTitle(),Toast.LENGTH_SHORT).show();
 
-                    RelativeLayout relativeLayout = findViewById(R.id.formStopPoint);
+                    editTextStopPoint.setText( marker.getTitle() );
+                    final Address address = getAddress( marker.getPosition().latitude,marker.getPosition().longitude );
+                    editTextAddress.setText( address.getAddressLine( 0 ) );
+                    final RelativeLayout relativeLayout = findViewById(R.id.formStopPoint);
                     relativeLayout.setVisibility(View.VISIBLE);
-                    RelativeLayout relativeLayout1 =findViewById(R.id.mapLayout);
+                    final RelativeLayout relativeLayout1 =findViewById(R.id.mapLayout);
                     relativeLayout1.setAlpha(0.1f);
+                    Button button_x = findViewById( R.id.button_x );
+                    button_x.setOnClickListener( new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            relativeLayout.setVisibility(View.INVISIBLE);
+                            relativeLayout1.setAlpha(1f);
+                        }
+                    } );
+                    Button buttonCreateStopPoint = findViewById( R.id.buttonCreateStopPoint );
+                    buttonCreateStopPoint.setOnClickListener( new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if(CheckData())
+                            {
+                                String dateInString = editTextSelectDay.getText().toString();
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+                                Date dateTime = null;
+                                try {
+                                     dateTime = sdf.parse( dateInString );
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                String dateInString2 = editTextSelectDayLeave.getText().toString();
 
+                                Date dateTime2 = null;
+                                try {
+                                    dateTime2 = sdf.parse( dateInString2 );
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                noteList.add( new stopPoint( editTextStopPoint.getText().toString(),editTextAddress.getText().toString(),
+                                        1,address.getLatitude(),address.getLongitude(),dateTime.getTime(),dateTime2.getTime(),1,
+                                        Integer.parseInt( editTextMinC.getText().toString() ),Integer.parseInt( editTextMaxC.getText().toString() )) );
+                                myAdapter = new Stop_Point_Adapter( MapsActivity.this,0,noteList );
+                                listView.setAdapter( myAdapter );
+                            }
+                    }
+                } );
                 return false;
             }
         } );
@@ -363,6 +412,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         //Check private or public
         return true;
+    }
+
+    private Address getAddress(double lat,double lng) {
+
+
+        Address address = null;
+        Geocoder geocoder = new Geocoder( MapsActivity.this );
+        List<Address> list = new ArrayList<>(  );
+        try
+        {
+            list = geocoder.getFromLocation( lat,lng,2 );
+
+        } catch (IOException e){
+            Log.e( "TAG","geoLocate: IOException "+e.getMessage() );
+        }
+
+        if (list.size()>0){
+            address = list.get( 0 );
+        }
+        return address;
     }
 
     private void Start(){

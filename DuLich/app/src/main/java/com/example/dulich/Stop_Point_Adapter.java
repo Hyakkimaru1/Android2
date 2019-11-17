@@ -7,16 +7,20 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Stop_Point_Adapter extends ArrayAdapter<stopPoint> {
     ArrayList<stopPoint> noteList;
-    public Stop_Point_Adapter( Context context, int resource, ArrayList<stopPoint>  objects) {
+
+    public Stop_Point_Adapter(@NonNull Context context, int resource, @NonNull List<stopPoint> objects) {
         super( context, resource, objects );
-            noteList	=	objects;
     }
+
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
@@ -27,7 +31,7 @@ public class Stop_Point_Adapter extends ArrayAdapter<stopPoint> {
         // TODO Auto-generated method stub
         View v = convertView;
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-       // v = inflater.inflate(R.layout.item_layout, null);
+        v = inflater.inflate(R.layout.activity_maps, null);
 
         stopPoint p =getItem( position );
         if (p!=null) {

@@ -13,16 +13,14 @@
         android:layout_height="match_parent">
 
 
-
         <fragment
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </fragment>
+            android:layout_height="match_parent"></fragment>
 
         <RelativeLayout
-            android:layout_width="379dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/map"
             android:layout_alignTop="@+id/map"
@@ -30,7 +28,8 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="30dp"
-            android:background="@drawable/bg_round">
+            android:background="@drawable/bg_round"
+            android:visibility="invisible">
 
             <EditText
                 android:id="@+id/Search"
@@ -41,9 +40,9 @@
                 android:layout_toEndOf="@+id/imageView"
                 android:background="@null"
                 android:hint="Search"
+                android:imeOptions="actionSearch"
                 android:inputType="text"
-                android:maxLines="1"
-                android:imeOptions="actionSearch"/>
+                android:maxLines="1" />
 
             <ImageView
                 android:id="@+id/imageView"
@@ -55,21 +54,39 @@
                 android:layout_marginTop="14dp"
                 android:src="@android:drawable/ic_search_category_default" />
         </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
+            android:layout_height="500dp"
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="14dp"
-            android:background="@android:color/white"
-            android:visibility="invisible">
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginBottom="50dp"
+            android:background="@android:color/white">
+
+            <Button
+                android:id="@+id/buttonX"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/buttonX">
+
+            </Button>
 
             <EditText
                 android:id="@+id/editTextStopPoint"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="25dp"
-                android:layout_marginTop="100dp"
+                android:layout_marginTop="75dp"
                 android:layout_marginEnd="25dp"
                 android:background="@drawable/radiusbutton"
                 android:ems="10"
@@ -82,7 +99,7 @@
                 android:layout_width="375dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
-                android:layout_marginTop="70dp"
+                android:layout_marginTop="50dp"
                 android:layout_marginEnd="25dp"
                 android:text="Stop point name" />
 
@@ -91,18 +108,18 @@
                 android:layout_width="375dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="25dp"
                 android:text="Stop point information"
                 android:textAlignment="center"
-                android:textSize="25dp" />
+                android:textSize="18dp" />
 
             <TextView
                 android:id="@+id/TextViewServiceType"
                 android:layout_width="375dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
-                android:layout_marginTop="170dp"
+                android:layout_marginTop="120dp"
                 android:layout_marginEnd="25dp"
                 android:text="Service type" />
 
@@ -111,7 +128,7 @@
                 android:layout_width="375dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
-                android:layout_marginTop="270dp"
+                android:layout_marginTop="200dp"
                 android:layout_marginEnd="25dp"
                 android:text="Address" />
 
@@ -120,7 +137,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="25dp"
-                android:layout_marginTop="300dp"
+                android:layout_marginTop="225dp"
                 android:layout_marginEnd="25dp"
                 android:background="@drawable/radiusbutton"
                 android:ems="10"
@@ -133,7 +150,7 @@
                 android:layout_width="375dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
-                android:layout_marginTop="370dp"
+                android:layout_marginTop="280dp"
                 android:layout_marginEnd="25dp"
                 android:text="Province" />
 
@@ -144,7 +161,7 @@
                 android:layout_below="@+id/editTextAdult"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="25dp"
-                android:layout_marginTop="470dp"
+                android:layout_marginTop="370dp"
                 android:text="Min Cost" />
 
             <TextView
@@ -154,14 +171,14 @@
                 android:layout_below="@+id/editTextChildren"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="82dp"
-                android:layout_marginTop="470dp"
-                android:layout_marginEnd="80dp"
+                android:layout_marginTop="370dp"
+                android:layout_marginEnd="60dp"
                 android:layout_toEndOf="@+id/textViewAdult"
                 android:text="Max Cost" />
 
             <EditText
                 android:id="@+id/editTextMinC"
-                android:layout_width="158dp"
+                android:layout_width="150dp"
                 android:layout_height="40dp"
                 android:layout_below="@+id/textViewMinC"
                 android:layout_alignParentStart="true"
@@ -176,7 +193,7 @@
 
             <EditText
                 android:id="@+id/editTextMaxC"
-                android:layout_width="171dp"
+                android:layout_width="150dp"
                 android:layout_height="40dp"
                 android:layout_below="@+id/textViewMaxC"
                 android:layout_alignParentEnd="true"
@@ -196,19 +213,19 @@
                 android:layout_width="375dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
-                android:layout_marginTop="550dp"
+                android:layout_marginTop="450dp"
                 android:layout_marginEnd="25dp"
                 android:text="Arrive at" />
 
             <EditText
                 android:id="@+id/editTextTimeArrive"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="45dp"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="570dp"
-                android:layout_marginEnd="253dp"
+                android:layout_marginTop="475dp"
+                android:layout_marginEnd="25dp"
+                android:layout_toStartOf="@+id/editTextSelectDay"
                 android:background="@drawable/radiustext"
                 android:ems="8"
                 android:inputType="textPersonName"
@@ -217,11 +234,11 @@
 
             <EditText
                 android:id="@+id/editTextSelectDay"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="570dp"
-                android:layout_marginEnd="60dp"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="475dp"
+                android:layout_marginEnd="10dp"
+                android:layout_toStartOf="@+id/imageButtonStartTime"
                 android:ems="8"
                 android:inputType="textPersonName"
                 android:paddingStart="30px"
@@ -229,11 +246,11 @@
 
             <ImageButton
                 android:id="@+id/imageButtonStartTime"
-                android:layout_width="39dp"
-                android:layout_height="38dp"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="353dp"
-                android:layout_marginTop="570dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="475dp"
+                android:layout_marginEnd="25dp"
                 android:background="#FFFFFF"
                 android:scaleType="fitXY"
                 app:srcCompat="@drawable/calendar" />
@@ -243,19 +260,19 @@
                 android:layout_width="375dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
-                android:layout_marginTop="620dp"
+                android:layout_marginTop="530dp"
                 android:layout_marginEnd="25dp"
                 android:text="Leave at" />
 
             <EditText
                 android:id="@+id/editTextTimeLeave"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="45dp"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="650dp"
-                android:layout_marginEnd="253dp"
+                android:layout_marginTop="555dp"
+                android:layout_marginEnd="25dp"
+                android:layout_toStartOf="@+id/editTextSelectDayLeave"
                 android:background="@drawable/radiustext"
                 android:ems="8"
                 android:inputType="textPersonName"
@@ -264,11 +281,11 @@
 
             <EditText
                 android:id="@+id/editTextSelectDayLeave"
-                android:layout_width="wrap_content"
+                android:layout_width="140dp"
                 android:layout_height="40dp"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="650dp"
-                android:layout_marginEnd="60dp"
+                android:layout_marginTop="555dp"
+                android:layout_marginEnd="10dp"
+                android:layout_toStartOf="@+id/imageButtonTimeLeave"
                 android:ems="8"
                 android:inputType="textPersonName"
                 android:paddingStart="30px"
@@ -278,9 +295,9 @@
                 android:id="@+id/imageButtonTimeLeave"
                 android:layout_width="39dp"
                 android:layout_height="38dp"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="353dp"
-                android:layout_marginTop="650dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="555dp"
+                android:layout_marginEnd="25dp"
                 android:background="#FFFFFF"
                 android:scaleType="fitXY"
                 app:srcCompat="@drawable/calendar" />

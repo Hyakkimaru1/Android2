@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
@@ -47,6 +48,7 @@ class GetNearlyByPlaces extends AsyncTask<Object, String, String> {
 
     private void showNearbyPlaces(List<HashMap<String, String>> nearbyPlaceList)
     {
+        Marker marker;
         for(int i = 0; i < nearbyPlaceList.size(); i++)
         {
             final MarkerOptions markerOptions = new MarkerOptions();
@@ -59,10 +61,11 @@ class GetNearlyByPlaces extends AsyncTask<Object, String, String> {
 
             LatLng latLng = new LatLng( lat, lng);
             markerOptions.position(latLng);
-            markerOptions.title(placeName + " : "+ vicinity);
+            markerOptions.title(placeName);
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
 
-            mMap.addMarker(markerOptions);
+            marker = mMap.addMarker(markerOptions);
+            marker.showInfoWindow();
         }
     }
 }

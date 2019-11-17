@@ -1,7 +1,6 @@
 package com.example.dulich;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -13,7 +12,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -271,31 +269,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public boolean onMarkerClick(Marker marker) {
                 Toast.makeText( MapsActivity.this, marker.getTitle(),Toast.LENGTH_SHORT).show();
-                    final Dialog dialog = new Dialog( MapsActivity.this );
-                    dialog.setTitle( "Stop point" );
-                    dialog.setCancelable( false );
-                    dialog.setContentView( R.layout.activity_form_stop_point );
-                    EditText editTextStopPoint = dialog.findViewById( R.id.editTextStopPoint );
-                    EditText editTextAddress = dialog.findViewById( R.id.editTextAddress );
-                    Spinner serviceType = dialog.findViewById( R.id.serviceType );
-                    Spinner province = dialog.findViewById( R.id.province );
-                    EditText editTextTimeArrive = dialog.findViewById( R.id.editTextTimeArrive );
-                    EditText editTextSelectDay = dialog.findViewById( R.id.editTextSelectDay );
-                    EditText editTextTimeLeave = dialog.findViewById( R.id.editTextTimeLeave );
-                    EditText editTextSelectDayLeave = dialog.findViewById( R.id.editTextSelectDayLeave );
-                    EditText editTextMinC = dialog.findViewById(R.id.editTextMinC);
-                    EditText editTextMaxC = dialog.findViewById(R.id.editTextMaxC);
-                    Button button_x = dialog.findViewById( R.id.button_x );
-                    editTextStopPoint.setText( marker.getTitle());
-                    Address address = getNameMarker( marker.getPosition().latitude,marker.getPosition().longitude );
-                    editTextAddress.setText( address.getAddressLine( 0 ) );
-                    dialog.show();
-                    button_x.setOnClickListener( new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            dialog.cancel();
-                        }
-                    } );
+                   
+
                 return false;
             }
         } );

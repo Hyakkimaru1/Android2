@@ -5,8 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Stop_Point_Adapter extends ArrayAdapter<stopPoint> {
     ArrayList<stopPoint> noteList;
@@ -29,7 +32,28 @@ public class Stop_Point_Adapter extends ArrayAdapter<stopPoint> {
         stopPoint p =getItem( position );
         if (p!=null) {
 
+            TextView place = (TextView) v.findViewById( R.id.nameSP );
+            place.setText( p.getName());
+            TextView calendarSP = (TextView) v.findViewById( R.id.calendarSP );
 
+            Date d = null;
+            d = new Date(p.getArrivalAt());
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+
+            calendarSP.setText( sdf.format( d ));
+
+            TextView endDate = (TextView) v.findViewById( R.id.endDateSP );
+            d = new Date(p.getLeaveAt());
+
+            endDate.setText( sdf.format( d ) );
+
+            TextView priceMin = (TextView) v.findViewById( R.id.priceMinSP );
+            priceMin.setText( String.valueOf( p.getMinCost()));
+            TextView priceMax = (TextView) v.findViewById( R.id.priceMaxSP);
+            priceMax.setText( String.valueOf( p.getMaxCost()));
+            TextView group = (TextView) v.findViewById( R.id.locationSP );
+            group.setText(p.getAddress());
         }
         return v;
     }

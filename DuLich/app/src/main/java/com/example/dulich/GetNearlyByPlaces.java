@@ -2,7 +2,6 @@ package com.example.dulich;
 
 import android.os.AsyncTask;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -11,49 +10,59 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+/**
+ * @author Priyanka
+ */
 
-public class GetNearlyByPlaces extends AsyncTask<Object,String,String> {
-    private String googleplaceDate, url;
+class GetNearlyByPlaces extends AsyncTask<Object, String, String> {
+
+    private String googlePlacesData;
     private GoogleMap mMap;
+    String url;
+
     @Override
-    protected String doInBackground(Object... objects) {
-        mMap = (GoogleMap) objects[0];
-        url = (String) objects[1];
+    protected String doInBackground(Object... objects){
+        mMap = (GoogleMap)objects[0];
+        url = (String)objects[1];
         DownloadURL downloadURL = new DownloadURL();
         try {
-            googleplaceDate = downloadURL.ReadTheURL( url );
+            googlePlacesData = downloadURL.readUrl(url);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return googleplaceDate;
+
+        return googlePlacesData;
     }
 
     @Override
-    protected void onPostExecute(String s) {
-        List<HashMap<String,String>> nearByPlacesList = null;
-        DataParser dataParser = new DataParser();
-        nearByPlacesList = dataParser.parse( s );
-        DisplayNearbyPlaces(nearByPlacesList);
+    protected void onPostExecute(String s){
+
+        List<HashMap<String, String>> nearbyPlaceList;
+        DataParser parser = new DataParser();
+        nearbyPlaceList = parser.parse(s);
+
+       // Log.d("nearbyplacesdata","called parse method");
+        showNearbyPlaces(nearbyPlaceList);
     }
 
-    private void DisplayNearbyPlaces(List<HashMap<String,String>> nearByPlacesList){
-        for (int i = 0;i<nearByPlacesList.size();i++){
-            MarkerOptions markerOptions = new MarkerOptions();
-            HashMap<String,String> googleNearbyPlaces = nearByPlacesList.get( i );
-            String nameOfPlace = googleNearbyPlaces.get( "place_name");
-            String vicinty = googleNearbyPlaces.get( "vicinty");
-            double latitude = Double.parseDouble(  googleNearbyPlaces.get( "lat") );
-            double longitude =  Double.parseDouble( googleNearbyPlaces.get( "lng"));
-            String reference = googleNearbyPlaces.get( "reference");
+    private void showNearbyPlaces(List<HashMap<String, String>> nearbyPlaceList)
+    {
+        for(int i = 0; i < nearbyPlaceList.size(); i++)
+        {
+            final MarkerOptions markerOptions = new MarkerOptions();
+            HashMap<String, String> googlePlace = nearbyPlaceList.get(i);
 
-            LatLng latLng = new LatLng( latitude,longitude );
-            markerOptions.position( latLng );
-            markerOptions.title( nameOfPlace + ":" +vicinty);
-            markerOptions.icon( BitmapDescriptorFactory.defaultMarker() );
+            String placeName = googlePlace.get("place_name");
+            String vicinity = googlePlace.get("vicinity");
+            double lat = Double.parseDouble( googlePlace.get("lat"));
+            double lng = Double.parseDouble( googlePlace.get("lng"));
 
-            mMap.addMarker( markerOptions );
-            // Add a marker in current location and move the camera
-            mMap.moveCamera( CameraUpdateFactory.newLatLngZoom( latLng,17F) );
+            LatLng latLng = new LatLng( lat, lng);
+            markerOptions.position(latLng);
+            markerOptions.title(placeName + " : "+ vicinity);
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+
+            mMap.addMarker(markerOptions);
         }
     }
 }

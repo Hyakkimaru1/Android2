@@ -20,6 +20,7 @@
     <string name="server_client_id">482142359913-jm4tgljits44siu2jem5ir2c5nl19js5.apps.googleusercontent.com</string>
     //Google key
     <string name="apikey">AIzaSyC-BFseKgG8WtyMum6BrAAloj1XG5uFq5w</string>
+    <string name="apikeyPlaceNearly">AIzaSyDtIWXQDUA1ufc_Vff3qbz522DnZ26Nk9w</string>
     <string name="title_activity_maps">Map</string>
 
     <string name="city_prompt">Choose a city</string>

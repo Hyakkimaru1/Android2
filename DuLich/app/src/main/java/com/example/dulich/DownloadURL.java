@@ -1,5 +1,7 @@
 package com.example.dulich;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,40 +9,49 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+/**
+ * @author Priyanka
+ */
+
+
 
 public class DownloadURL {
-    public String ReadTheURL(String placeURL) throws IOException
+
+    public String readUrl(String myUrl) throws IOException
     {
-        String Data = "";
+        String data = "";
         InputStream inputStream = null;
-        HttpURLConnection httpURLConnection = null;
+        HttpURLConnection urlConnection = null;
+
         try {
-            URL url = new URL( placeURL );
-            httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.connect();
+            URL url = new URL(myUrl);
+            urlConnection=(HttpURLConnection) url.openConnection();
+            urlConnection.connect();
 
-            inputStream = httpURLConnection.getInputStream();
-            BufferedReader bufferedReader = new BufferedReader( new InputStreamReader( inputStream ) );
-            StringBuffer stringBuffer = new StringBuffer( );
+            inputStream = urlConnection.getInputStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuffer sb = new StringBuffer();
+
             String line = "";
-
-            while ((line=bufferedReader.readLine())!=null)
+            while((line = br.readLine()) != null)
             {
-                stringBuffer.append( line );
+                sb.append(line);
             }
 
-            Data = stringBuffer.toString();
-            bufferedReader.close();
-        } catch (MalformedURLException e) {
+            data = sb.toString();
+            br.close();
 
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
         finally {
             inputStream.close();
-            httpURLConnection.disconnect();
+            urlConnection.disconnect();
         }
-        return Data;
+        Log.d("DownloadURL","Returning data= "+data);
+
+        return data;
     }
 }

@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/formStopPoint"
+    android:background="@android:color/white"
+    tools:context=".formStopPoint">
+
+        <Button
+            android:id="@+id/button_x"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/button_x">
+        </Button>
+
+
+        <EditText
+            android:id="@+id/editTextStopPoint"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="75dp"
+            android:layout_marginEnd="25dp"
+            android:background="@drawable/radiusbutton"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:paddingStart="30px"
+            android:textAlignment="viewStart" />
+
+        <TextView
+            android:id="@+id/TextViewStopPoint"
+            android:layout_width="375dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="25dp"
+            android:text="Stop point name" />
+
+        <TextView
+            android:id="@+id/TextViewStopPointInfo"
+            android:layout_width="375dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="25dp"
+            android:text="Stop point information"
+            android:textAlignment="center"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/TextViewServiceType"
+            android:layout_width="375dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="120dp"
+            android:layout_marginEnd="25dp"
+            android:text="Service type" />
+
+        <TextView
+            android:id="@+id/TextVieAddress"
+            android:layout_width="375dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="200dp"
+            android:layout_marginEnd="25dp"
+            android:text="Address" />
+
+        <EditText
+            android:id="@+id/editTextAddress"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="225dp"
+            android:layout_marginEnd="25dp"
+            android:background="@drawable/radiusbutton"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:paddingStart="30px"
+            android:textAlignment="viewStart" />
+
+        <TextView
+            android:id="@+id/TextVievProvince"
+            android:layout_width="375dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="280dp"
+            android:layout_marginEnd="25dp"
+            android:text="Province" />
+
+        <TextView
+            android:id="@+id/textViewMinC"
+            android:layout_width="107dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editTextAdult"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="370dp"
+            android:text="Min Cost" />
+
+        <TextView
+            android:id="@+id/textViewMaxC"
+            android:layout_width="111dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editTextChildren"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="82dp"
+            android:layout_marginTop="370dp"
+            android:layout_marginEnd="60dp"
+            android:layout_toEndOf="@+id/textViewAdult"
+            android:text="Max Cost" />
+
+        <EditText
+            android:id="@+id/editTextMinC"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/textViewMinC"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/radiusbutton"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:paddingStart="30px"
+            android:text="0"
+            android:textAlignment="viewStart" />
+
+        <EditText
+            android:id="@+id/editTextMaxC"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/textViewMaxC"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="27dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="25dp"
+            android:layout_toEndOf="@+id/editTextAdult"
+            android:background="@drawable/radiusbutton"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:paddingStart="30px"
+            android:text="0"
+            android:textAlignment="viewStart" />
+
+        <TextView
+            android:id="@+id/TextVievArriveTime"
+            android:layout_width="375dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="450dp"
+            android:layout_marginEnd="25dp"
+            android:text="Arrive at" />
+
+        <EditText
+            android:id="@+id/editTextTimeArrive"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="475dp"
+            android:layout_marginEnd="25dp"
+            android:layout_toStartOf="@+id/editTextSelectDay"
+            android:background="@drawable/radiustext"
+            android:ems="8"
+            android:inputType="textPersonName"
+            android:paddingStart="30px"
+            android:textAlignment="viewStart" />
+
+        <EditText
+            android:id="@+id/editTextSelectDay"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="475dp"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@+id/imageButtonStartTime"
+            android:ems="8"
+            android:inputType="textPersonName"
+            android:paddingStart="30px"
+            android:textAlignment="viewStart" />
+
+        <ImageButton
+            android:id="@+id/imageButtonStartTime"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="475dp"
+            android:layout_marginEnd="25dp"
+            android:background="#FFFFFF"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/calendar" />
+
+        <TextView
+            android:id="@+id/TextVievLeaveTime"
+            android:layout_width="375dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="530dp"
+            android:layout_marginEnd="25dp"
+            android:text="Leave at" />
+
+        <EditText
+            android:id="@+id/editTextTimeLeave"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="555dp"
+            android:layout_marginEnd="25dp"
+            android:layout_toStartOf="@+id/editTextSelectDayLeave"
+            android:background="@drawable/radiustext"
+            android:ems="8"
+            android:inputType="textPersonName"
+            android:paddingStart="30px"
+            android:textAlignment="viewStart" />
+
+        <EditText
+            android:id="@+id/editTextSelectDayLeave"
+            android:layout_width="140dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="555dp"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@+id/imageButtonTimeLeave"
+            android:ems="8"
+            android:inputType="textPersonName"
+            android:paddingStart="30px"
+            android:textAlignment="viewStart" />
+
+        <ImageButton
+            android:id="@+id/imageButtonTimeLeave"
+            android:layout_width="39dp"
+            android:layout_height="38dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="555dp"
+            android:layout_marginEnd="25dp"
+            android:background="#FFFFFF"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/calendar" />
+
+        <Spinner
+            android:id="@+id/province"
+            android:layout_width="350dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/TextVievProvince"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="25dp"
+            android:entries="@array/city_arrays"
+            android:prompt="@string/city_prompt" />
+
+        <Spinner
+            android:id="@+id/serviceType"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/TextViewServiceType"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="25dp"
+            android:entries="@array/service_type_arrays"
+            android:prompt="@string/service_type_prompt" />
+
+</RelativeLayout>

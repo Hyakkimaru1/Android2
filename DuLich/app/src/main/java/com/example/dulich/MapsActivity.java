@@ -1,6 +1,7 @@
 package com.example.dulich;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -38,6 +39,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -67,6 +69,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     EditText editTextMinC;
     EditText editTextMaxC;
 
+    int Radius = 1000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
@@ -93,7 +97,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById( R.id.map );
         mapFragment.getMapAsync( this );
-
 
     }
 
@@ -124,7 +127,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         List<Address> list = new ArrayList<>(  );
         try
         {
-            list = geocoder.getFromLocationName( searchString,5 );
+            list = geocoder.getFromLocationName( searchString,2 );
 
         } catch (IOException e){
             Log.e( "TAG","geoLocate: IOException "+e.getMessage() );
@@ -132,12 +135,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         if (list.size()>0){
             Address address = list.get( 0 );
-            latLng = new LatLng( address.getLatitude(),address.getLongitude() );
+            double latitude = address.getLatitude();
+            double longitude = address.getLongitude();
+         //   findPlaceNearly( latitude,longitude );
             markerOptions = new MarkerOptions();
+            latLng = new LatLng( address.getLatitude(),address.getLongitude() );
             markerOptions.position( latLng );
             markerOptions.title( "Vị trí cần tìm" );
-            markerOptions.icon( BitmapDescriptorFactory.defaultMarker() );
-
+            markerOptions.icon( BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED) );
             currentUserLocationMarker = mMap.addMarker( markerOptions );
             // Add a marker in current location and move the camera
             mMap.moveCamera( CameraUpdateFactory.newLatLngZoom( latLng,17F) );
@@ -167,7 +172,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
             rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
             rlp.setMargins(0, 1500, 180, 0);
-
         }
 
     }
@@ -254,6 +258,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Toast.makeText( this,location.getLatitude()+"  "+location.getLongitude(),Toast.LENGTH_SHORT ).show();
         latLng = new LatLng( location.getLatitude(),location.getLongitude() );
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+        findPlaceNearly(latitude,longitude);
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position( latLng );
         markerOptions.title( "Vị trí hiện tại" );
@@ -262,7 +269,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         currentUserLocationMarker = mMap.addMarker( markerOptions );
         // Add a marker in current location and move the camera
         mMap.moveCamera( CameraUpdateFactory.newLatLngZoom( latLng,17F) );
-
+        mMap.setOnMarkerClickListener( new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Toast.makeText( MapsActivity.this, marker.getTitle(),Toast.LENGTH_SHORT).show();
+                    Dialog dialog = new Dialog( MapsActivity.this );
+                    dialog.setTitle( "Stop point" );
+                    dialog.setCancelable( false );
+                    dialog.setContentView( R.layout.activity_form_stop_point );
+                    dialog.show();
+                return false;
+            }
+        } );
         if (googleApiClient!=null)
         {
             LocationServices.FusedLocationApi.removeLocationUpdates( googleApiClient,this );
@@ -270,6 +288,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    private void findPlaceNearly(double latitude,double longitude)
+    {
+        String restaurant = "restaurant", hotel = "hotel";
+        Object transferDate[] = new Object[2];
+        String url = getURL(latitude,longitude, restaurant);
+
+        GetNearlyByPlaces getNearbyPlaces = new GetNearlyByPlaces();
+        transferDate[0] = mMap;
+        transferDate[1] = url;
+        List<HashMap<String, String>> marker;
+        getNearbyPlaces.execute(transferDate);
+
+    }
+
+    private String getURL(double lat, double lng,String nearbyPlace){
+        StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+        googlePlaceUrl.append("location="+lat+","+lng);
+        googlePlaceUrl.append("&radius="+Radius);
+        googlePlaceUrl.append("&type="+nearbyPlace);
+        googlePlaceUrl.append("&sensor=true");
+        googlePlaceUrl.append("&key="+getString(R.string.apikeyPlaceNearly));
+
+        Log.i(">>>>>>>>>>>>>>>>>>>>>>", "url = "+googlePlaceUrl.toString());
+
+        return googlePlaceUrl.toString();
+    }
 
 
     private boolean CheckData()

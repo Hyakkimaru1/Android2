@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-
+        <activity android:name=".formStopPoint"></activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -38,7 +38,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".createTourActivity"></activity>
+        <activity android:name=".createTourActivity" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -48,9 +48,7 @@
             android:name=".ui.login.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity android:name=".SplashActivity" />
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".MainActivity"></activity>
     </application>
 
 </manifest>

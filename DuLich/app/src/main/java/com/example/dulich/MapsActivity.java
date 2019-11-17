@@ -1,6 +1,7 @@
 package com.example.dulich;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -12,9 +13,10 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +40,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -60,17 +64,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     MarkerOptions markerOptions;
     LatLng latLng;
 
+    ImageButton arrive;
+    ImageButton leave;
+    EditText edtArrive;
+    EditText edtLeave;
+
     EditText editTextStopPoint;
     EditText editTextAddress;
-    Spinner serviceType;
-    Spinner province;
-    EditText editTextTimeArrive;
-    EditText editTextSelectDay;
     EditText editTextTimeLeave;
     EditText editTextSelectDayLeave;
-    EditText editTextMinC ;
+    EditText editTextTimeArrive;
+    EditText editTextSelectDay;
+    EditText editTextMinC;
     EditText editTextMaxC;
-
 
     int Radius = 1000;
 
@@ -79,6 +85,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_maps );
 
+        editTextStopPoint = findViewById(R.id.editTextStopPoint);
+        editTextAddress = findViewById(R.id.editTextAddress);
+        editTextTimeLeave = findViewById(R.id.editTextTimeLeave);
+        editTextMinC = findViewById(R.id.editTextMinC);
+        editTextMaxC = findViewById(R.id.editTextMaxC);
+        editTextSelectDay = findViewById(R.id.editTextSelectDay);
+        editTextTimeArrive = findViewById(R.id.editTextTimeArrive);
+        editTextSelectDayLeave = findViewById(R.id.editTextSelectDayLeave);
+
+        arrive = findViewById(R.id.imageButtonStartTime);
+        leave = findViewById(R.id.imageButtonTimeLeave);
+        edtArrive = findViewById(R.id.editTextSelectDay);
+        edtLeave = findViewById(R.id.editTextSelectDayLeave);
+
+        arrive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Start();
+            }
+        });
+
+        leave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                End();
+            }
+        });
 
         searchText = findViewById( R.id.Search );
 
@@ -116,7 +149,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void geoLocate() {
-        mMap.clear();
         String searchString = searchText.getText().toString();
 
         Geocoder geocoder = new Geocoder( MapsActivity.this );
@@ -133,11 +165,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Address address = list.get( 0 );
             double latitude = address.getLatitude();
             double longitude = address.getLongitude();
-            findPlaceNearly( latitude,longitude );
+         //   findPlaceNearly( latitude,longitude );
             markerOptions = new MarkerOptions();
             latLng = new LatLng( address.getLatitude(),address.getLongitude() );
             markerOptions.position( latLng );
-            markerOptions.title( searchString );
+            markerOptions.title( "Vị trí cần tìm" );
             markerOptions.icon( BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED) );
             currentUserLocationMarker = mMap.addMarker( markerOptions );
             // Add a marker in current location and move the camera
@@ -259,7 +291,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         findPlaceNearly(latitude,longitude);
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position( latLng );
-        markerOptions.title("Vị trí hiện tại");
+        markerOptions.title( "Vị trí hiện tại" );
         markerOptions.icon( BitmapDescriptorFactory.defaultMarker() );
 
         currentUserLocationMarker = mMap.addMarker( markerOptions );
@@ -269,7 +301,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public boolean onMarkerClick(Marker marker) {
                 Toast.makeText( MapsActivity.this, marker.getTitle(),Toast.LENGTH_SHORT).show();
-                   
+
+                    RelativeLayout relativeLayout = findViewById(R.id.formStopPoint);
+                    relativeLayout.setVisibility(View.VISIBLE);
+                    RelativeLayout relativeLayout1 =findViewById(R.id.mapLayout);
+                    relativeLayout1.setAlpha(0.1f);
 
                 return false;
             }
@@ -316,36 +352,50 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 ||editTextTimeArrive.getText().toString().isEmpty()||editTextSelectDay.getText().toString().isEmpty()
                 || editTextTimeLeave.getText().toString().isEmpty() || editTextSelectDayLeave.getText().toString().isEmpty() )
         {
-            Toast.makeText( MapsActivity.this, "Vui lòng không để trống thông tin",Toast.LENGTH_SHORT ).show();
+            Toast.makeText( this, "Vui lòng không để trống thông tin",Toast.LENGTH_SHORT ).show();
             return false;
         }
         if (Integer.parseInt(editTextMaxC.getText().toString()) < 0 ||
                 Integer.parseInt(editTextMinC.getText().toString()) < 0 )
         {
-            Toast.makeText( MapsActivity.this, "Vui lòng không nhập số âm",Toast.LENGTH_SHORT ).show();
+            Toast.makeText( this, "Vui lòng không nhập số âm",Toast.LENGTH_SHORT ).show();
             return false;
         }
-        return true;
         //Check private or public
+        return true;
     }
 
-    private Address getNameMarker(double lat,double lng) {
+    private void Start(){
+        final Calendar calendar = Calendar.getInstance();
+        int ngay = calendar.get(Calendar.DATE);
+        int thang = calendar.get(Calendar.MONTH);
+        int nam = calendar.get(Calendar.YEAR);
 
-        Geocoder geocoder = new Geocoder( MapsActivity.this );
-        Address address= null;
-        List<Address> list = new ArrayList<>(  );
-        try
-        {
-            list = geocoder.getFromLocation( lat,lng,2 );
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                calendar.set(year,month,dayOfMonth);
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                edtArrive.setText(simpleDateFormat.format(calendar.getTime()));
+            }
+        }, nam,thang,ngay);
+        datePickerDialog.show();
+    }
 
-        } catch (IOException e){
-            Log.e( "TAG","geoLocate: IOException "+e.getMessage() );
-        }
+    private void End(){
+        final Calendar calendar = Calendar.getInstance();
+        int ngay = calendar.get(Calendar.DATE);
+        int thang = calendar.get(Calendar.MONTH);
+        int nam = calendar.get(Calendar.YEAR);
 
-        if (list.size()>0){
-             address = list.get( 0 );
-
-        }
-        return address;
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                calendar.set(year,month,dayOfMonth);
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                edtLeave.setText(simpleDateFormat.format(calendar.getTime()));
+            }
+        }, nam,thang,ngay);
+        datePickerDialog.show();
     }
 }

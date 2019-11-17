@@ -44,6 +44,7 @@
             android:value="@string/facebook_app_id" />
 
         <activity
+            android:theme="@android:style/Theme.Holo.DialogWhenLarge"
             android:name=".ui.login.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity android:name=".SplashActivity" />

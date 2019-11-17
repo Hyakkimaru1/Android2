@@ -1,5 +1,6 @@
 package com.example.dulich;
 
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.ResponseBody;
@@ -66,6 +67,15 @@ public interface Api {
             @Field( "maxCost" ) long maxCost
             //@Field("avatar") String avatar
 
+    );
+
+    @FormUrlEncoded
+    @POST("/tour/set-stop-points")
+    Call<ResponseBody> addStopPoint(
+            @Header("Authorization") String token,
+            @Field( "tourID" ) String tourID,
+            @Field("stopPoints") List<String> stopPoints
+            //@Field( "deleteIds" ) id[] deleteIds
     );
 
 }

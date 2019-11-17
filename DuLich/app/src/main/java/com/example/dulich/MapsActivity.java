@@ -40,6 +40,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -55,10 +57,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private EditText searchText;
     MarkerOptions markerOptions;
     LatLng latLng;
+
+    EditText editTextStopPoint;
+    EditText editTextAddress;
+    EditText editTextTimeLeave;
+    EditText editTextSelectDayLeave;
+    EditText editTextTimeArrive;
+    EditText editTextSelectDay;
+    EditText editTextMinC;
+    EditText editTextMaxC;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_maps );
+
+        editTextStopPoint = findViewById(R.id.editTextStopPoint);
+        editTextAddress = findViewById(R.id.editTextAddress);
+        editTextTimeLeave = findViewById(R.id.editTextTimeLeave);
+        editTextMinC = findViewById(R.id.editTextMinC);
+        editTextMaxC = findViewById(R.id.editTextMaxC);
+        editTextSelectDay = findViewById(R.id.editTextSelectDay);
+        editTextTimeArrive = findViewById(R.id.editTextTimeArrive);
+        editTextSelectDayLeave = findViewById(R.id.editTextSelectDayLeave);
 
         searchText = findViewById( R.id.Search );
 
@@ -247,5 +268,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LocationServices.FusedLocationApi.removeLocationUpdates( googleApiClient,this );
 
         }
+    }
+
+
+
+    private boolean CheckData()
+    {
+        if (editTextStopPoint.getText().toString().isEmpty()||editTextAddress.getText().toString().isEmpty()
+                ||editTextMinC.getText().toString().isEmpty() || editTextMaxC.getText().toString().isEmpty()
+                ||editTextTimeArrive.getText().toString().isEmpty()||editTextSelectDay.getText().toString().isEmpty()
+                || editTextTimeLeave.getText().toString().isEmpty() || editTextSelectDayLeave.getText().toString().isEmpty() )
+        {
+            Toast.makeText( this, "Vui lòng không để trống thông tin",Toast.LENGTH_SHORT ).show();
+            return false;
+        }
+        if (Integer.parseInt(editTextMaxC.getText().toString()) < 0 ||
+                Integer.parseInt(editTextMinC.getText().toString()) < 0 )
+        {
+            Toast.makeText( this, "Vui lòng không nhập số âm",Toast.LENGTH_SHORT ).show();
+            return false;
+        }
+        //Check private or public
+        return true;
     }
 }

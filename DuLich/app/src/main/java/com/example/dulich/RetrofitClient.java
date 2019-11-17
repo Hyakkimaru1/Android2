@@ -22,7 +22,7 @@ public class RetrofitClient {
         return mInstance;
     }
 
-    public Api getApi(){
+    public Api<Number> getApi(){
         return retrofit.create( Api.class );
     }
 

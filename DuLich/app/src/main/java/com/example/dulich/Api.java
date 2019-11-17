@@ -5,6 +5,7 @@ import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -12,7 +13,7 @@ import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.QueryMap;
 
-public interface Api {
+public interface Api<I extends Number> {
 
     @FormUrlEncoded
     @POST("user/register")
@@ -78,6 +79,8 @@ public interface Api {
             //@Field( "deleteIds" ) id[] deleteIds
     );
 
-
+    @FormUrlEncoded
+    @POST("/tour/set-stop-points")
+    Call<Api<Integer>> stopPointsSet(@Body serviceStopPoints serviceStopPoints);
 
 }

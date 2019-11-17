@@ -29,8 +29,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
-
 public class createTourActivity extends AppCompatActivity {
     Button creatTour;
 
@@ -133,8 +131,8 @@ public class createTourActivity extends AppCompatActivity {
 
                                     Toast.makeText( createTourActivity.this, "Tạo tour thành công",Toast.LENGTH_SHORT ).show();
                                     Intent intent = new Intent(getBaseContext(), MapsActivity.class);
-                                    int message = tourData.getInt( "id" );
-                                    intent.putExtra(EXTRA_MESSAGE, message);
+                                    String message = tourData.getString( "id" );
+                                    intent.putExtra("idTour", message);
                                     startActivity(intent);
                                 } catch (IOException e) {
                                     e.printStackTrace();

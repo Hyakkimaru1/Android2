@@ -51,6 +51,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
@@ -82,6 +87,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     EditText editTextSelectDay;
     EditText editTextMinC;
     EditText editTextMaxC;
+
+
 
     FloatingActionButton makeStopPoint;
 
@@ -115,9 +122,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         makeStopPoint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+        serviceStopPoints serviceStopPoints;
+
+
+
+
+        //sendNetworkRequest(serviceStopPoints);
 
             }
         });
+
+
 
 
 
@@ -150,6 +165,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync( this );
 
     }
+
+    private void sendNetworkRequest(serviceStopPoints serviceStopPoints){
+    Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("http://35.197.153.192:3000/")
+                .addConverterFactory( GsonConverterFactory.create());
+    Retrofit retrofit = builder.build();
+    Api api = retrofit.create(Api.class);
+        Call<Api<Integer>> call = api.stopPointsSet(serviceStopPoints);
+        call.enqueue(new Callback<Api<Integer>>() {
+            @Override
+            public void onResponse(Call<Api<Integer>> call, Response<Api<Integer>> response) {
+                Toast.makeText(MapsActivity.this, "Tạo danh sách điểm dừng thành công!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<Api<Integer>> call, Throwable t) {
+                Toast.makeText(MapsActivity.this, "Lỗi khi tạo danh sách điểm dừng!", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

@@ -86,7 +86,20 @@ public class MyAdapter extends ArrayAdapter<aTour> implements Filterable {
             TextView priceMax = (TextView) v.findViewById( R.id.priceMax );
             priceMax.setText(  p.getMaxCost());
             TextView group = (TextView) v.findViewById( R.id.group );
-            group.setText(String.valueOf( p.getAdults() +p.getChilds()));
+            if (p.getAdults().equals( "null" )&& p.getChilds().equals( "null" )){
+                group.setText("0");
+            }
+            else if (p.getAdults().equals( "null" ) && !p.getChilds().equals( "null" )) {
+                group.setText(String.valueOf( Integer.parseInt(p.getChilds())));
+
+            }
+            else if (!p.getAdults().equals( "nu;;" ) && p.getChilds().equals( "null" )){
+                group.setText(String.valueOf( Integer.parseInt( p.getAdults())));
+            }
+            else {
+                group.setText(String.valueOf( Integer.parseInt(p.getChilds())+Integer.parseInt(p.getAdults())));
+            }
+
 
             ImageView imageView = (ImageView)v.findViewById( R.id.mainPic);
             if (!p.getAvatar().equals(""))

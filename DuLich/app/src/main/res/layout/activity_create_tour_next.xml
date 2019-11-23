@@ -1,102 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:id="@+id/getPlaceTour"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/radiusbutton">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="40dp">
 
+        <TextView
+            android:id="@+id/TextViewTourname"
+            android:layout_width="wrap_content"
+            android:layout_height="37dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="2"
+            android:text="Point of departure" />
+
+        <ImageButton
+            android:id="@+id/imageButtonDeparture"
+            android:layout_width="wrap_content"
+            android:layout_height="37dp"
+            android:layout_marginEnd="10dp"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/map"
+            android:layout_weight="2"/>
+
+    </LinearLayout>
     <EditText
         android:id="@+id/editTextDeparture"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_below="@+id/TextViewTourname"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="19dp"
         android:background="@drawable/radiusbutton"
-        android:ems="10"
         android:inputType="textPersonName"
-        android:paddingStart="30px"
+        android:paddingStart="0px"
         android:textAlignment="viewStart" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:id="@+id/textViewDestinationPlace"
+            android:layout_width="wrap_content"
+            android:layout_height="37dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="2"
+            android:layout_marginTop="10dp"
+            android:text="Destination place" />
+
+        <ImageButton
+            android:id="@+id/imageButtonDestinate"
+            android:layout_width="wrap_content"
+            android:layout_height="37dp"
+            android:layout_marginEnd="10dp"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/map"
+            android:layout_weight="2"/>
+
+    </LinearLayout>
     <EditText
         android:id="@+id/editTextDestinate"
-        android:layout_width="260dp"
-        android:layout_height="48dp"
-        android:layout_below="@+id/textViewDestinationPlace"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="19dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="25dp"
         android:background="@drawable/radiusbutton"
-        android:ems="10"
         android:inputType="textPersonName"
-        android:paddingStart="30px"
+        android:paddingStart="0px"
         android:textAlignment="viewStart" />
 
-    <TextView
-        android:id="@+id/TextViewTourname"
-        android:layout_width="375dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="21dp"
-        android:text="Point of departure" />
-
-    <TextView
-        android:id="@+id/textViewDestinationPlace"
-        android:layout_width="375dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editTextDeparture"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="19dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="22dp"
-        android:text="Destination place" />
-
-    <ImageButton
-        android:id="@+id/imageButtonDeparture"
-        android:layout_width="41dp"
-        android:layout_height="36dp"
-        android:layout_below="@+id/TextViewTourname"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="28dp"
-        android:layout_toEndOf="@+id/editTextDeparture"
-        android:background="@null"
-        android:scaleType="fitCenter"
-        app:srcCompat="@drawable/map" />
-
-    <ImageButton
-        android:id="@+id/imageButtonDestinate"
-        android:layout_width="41dp"
-        android:layout_height="36dp"
-        android:layout_below="@+id/textViewDestinationPlace"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="28dp"
-        android:layout_toEndOf="@+id/editTextDeparture"
-        android:background="@null"
-        android:scaleType="fitCenter"
-        app:srcCompat="@drawable/map" />
 
     <Button
         android:id="@+id/buttonCreate"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editTextDestinate"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="19dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
         android:background="@drawable/signupbt"
         android:backgroundTint="#35BBAE"
         android:text="create"
         android:textColor="#EAEBEB"
         android:textStyle="bold" />
 
-</RelativeLayout>
+</LinearLayout>

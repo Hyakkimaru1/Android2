@@ -15,19 +15,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class createTourActivity extends AppCompatActivity {
     Button creatTour;
@@ -110,53 +101,17 @@ public class createTourActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    Call<ResponseBody> call = RetrofitClient
-                            .getInstance()
-                            .getApi()
-                            .createTour(token,tourName.getText().toString(),sStartDay,sEndDay,check.isChecked(), Integer.parseInt(adult.getText().toString()),
-                                    Integer.parseInt( children.getText().toString() ), Long.parseLong( minC.getText().toString() ),
-                                    Long.parseLong( maxC.getText().toString() ) );
-
-                    call.enqueue( new Callback<ResponseBody>() {
-                        @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            if (response.code()==200) {
-                                String bodyTourCreate = null;
-                                try {
-                                    bodyTourCreate = response.body().string();
-
-                                    JSONObject tourData = new JSONObject(bodyTourCreate);
-                                    // Log.i("JSON",tourData.getString("total"));
-
-
-                                    Toast.makeText( createTourActivity.this, "Tạo tour thành công",Toast.LENGTH_SHORT ).show();
-                                    Intent intent = new Intent(getBaseContext(), MapsActivity.class);
-                                    String message = tourData.getString( "id" );
-                                    intent.putExtra("idTour", message);
-                                    startActivity(intent);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            else if (response.code()==400)
-                            {
-                                Toast.makeText( createTourActivity.this, "Tạo tour thất bại",Toast.LENGTH_SHORT ).show();
-                            }
-                            else {
-                                Toast.makeText( createTourActivity.this, "Server error on creating tour",Toast.LENGTH_SHORT ).show();
-                            }
-
-                        }
-
-                        @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                        }
-                    } );
-
+                    Intent intent = new Intent(getBaseContext(), MapsActivity.class);
+                    intent.putExtra("token", token);
+                    intent.putExtra( "tourName" ,tourName.getText().toString());
+                    intent.putExtra( "sStartDay",sStartDay );
+                    intent.putExtra( "sEndDay",sEndDay );
+                    intent.putExtra( "check",check.isChecked() );
+                    intent.putExtra( "adult",Integer.parseInt(adult.getText().toString()) );
+                    intent.putExtra( "children",Integer.parseInt( children.getText().toString() ) );
+                    intent.putExtra( "minC",Long.parseLong( minC.getText().toString() ) );
+                    intent.putExtra( "maxC",Long.parseLong( maxC.getText().toString() ) );
+                    startActivity(intent);
                 }
 
             }

@@ -99,8 +99,8 @@ public class listTours extends Fragment {
                                 for (int i = 0; i < responseArray.length(); i++) {
                                     JSONObject jb = responseArray.getJSONObject( i );
                                     noteList.add( new aTour( jb.getInt( "id" ), jb.getInt( "status" ), jb.getString( "name" ), jb.getString( "minCost" ),
-                                            jb.getString( "maxCost" ), jb.getString( "startDate" ), jb.getString( "endDate" ), jb.getInt( "adults" ),
-                                            jb.getInt( "childs" ), jb.getBoolean( "isPrivate" ), jb.getString( "avatar" ) ) );
+                                            jb.getString( "maxCost" ), jb.getString( "startDate" ), jb.getString( "endDate" ), jb.getString( "adults" ),
+                                            jb.getString( "childs" ), jb.getBoolean( "isPrivate" ), jb.getString( "avatar" ) ) );
 
                                 }
                                 myAdapter = new MyAdapter( getContext(), R.layout.item_layout, noteList );

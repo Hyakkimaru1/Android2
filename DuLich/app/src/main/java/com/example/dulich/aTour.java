@@ -9,12 +9,12 @@ public class aTour {
     String maxCost;
     String  startDate;
     String endDate;
-    int adults;
-    int childs;
+    String adults;
+    String childs;
     boolean  isPrivate;
     String avatar;
 
-    public aTour(int id, int status, String name, String minCost, String maxCost, String startDate, String endDate, int adults, int childs, boolean isPrivate, String avatar) {
+    public aTour(int id, int status, String name, String minCost, String maxCost, String startDate, String endDate, String adults, String childs, boolean isPrivate, String avatar) {
         this.id = id;
         this.status = status;
         this.name = name;
@@ -84,19 +84,19 @@ public class aTour {
         this.endDate = endDate;
     }
 
-    public int getAdults() {
+    public String getAdults() {
         return adults;
     }
 
-    public void setAdults(int adults) {
+    public void setAdults(String adults) {
         this.adults = adults;
     }
 
-    public int getChilds() {
+    public String getChilds() {
         return childs;
     }
 
-    public void setChilds(int childs) {
+    public void setChilds(String childs) {
         this.childs = childs;
     }
 

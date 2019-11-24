@@ -48,9 +48,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -102,6 +104,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     Address source = null;
     Address des = null;
+    String tourID = "";
 
     FloatingActionButton makeStopPoint;
 
@@ -151,13 +154,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     final LinearLayout linearLayout = findViewById( R.id.listSP );
                     linearLayout.setVisibility( View.VISIBLE );
                     final RelativeLayout relativeLayout1 = findViewById( R.id.mapLayout );
-                    relativeLayout1.setAlpha( 0.1f );
+                    relativeLayout1.setVisibility(View.INVISIBLE);
                     Button endListSP = findViewById( R.id.endListSP );
                     endListSP.setOnClickListener( new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            relativeLayout1.setAlpha( 1f );
+                            relativeLayout1.setVisibility(View.VISIBLE);
                             linearLayout.setVisibility( View.INVISIBLE );
+
                         }
                     } );
                    /* serviceStopPoints serviceStopPoints = null;
@@ -413,104 +417,161 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMarkerClickListener( new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                final Dialog dialog = new Dialog( MapsActivity.this );
-                dialog.setTitle( "Get place" );
-                dialog.setCancelable( false );
-                dialog.setContentView( R.layout.activity_create_tour_next);
-                final EditText editTextDeparture = dialog.findViewById( R.id.editTextDeparture );
-                final EditText editTextDestinate = dialog.findViewById( R.id.editTextDestinate );
-                final Address address = getAddress( marker.getPosition().latitude,marker.getPosition().longitude );
-                if (checkPlaceTour){
-                    source = address;
-                    editTextDeparture.setText( address.getAddressLine( 0 ));
-                    if (des!=null){
-                        editTextDestinate.setText( des.getAddressLine( 0 ));
-                    }
-                }
-                else {
-                    des = address;
-                    editTextDestinate.setText( address.getAddressLine( 0 ));
-                    if (source!=null)
-                    {
-                        editTextDeparture.setText( source.getAddressLine( 0 ));
-                    }
-                }
-                ImageButton imageButtonDeparture = dialog.findViewById( R.id.imageButtonDeparture );
-                imageButtonDeparture.setOnClickListener( new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        checkPlaceTour = true;
-                        dialog.cancel();
-                    }
-                } );
-                ImageButton imageButtonDestinate = dialog.findViewById( R.id.imageButtonDestinate );
-                imageButtonDestinate.setOnClickListener( new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        checkPlaceTour = false;
-                        dialog.cancel();
-                    }
-                } );
-
-                Button buttonCreate = dialog.findViewById(R.id.buttonCreate);
-                buttonCreate.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (editTextDeparture.getText().toString().equals( "" ) ||editTextDestinate.getText().toString().equals( "" ) )
-                        {
-                            Toast.makeText(MapsActivity.this,"Vui lòng không để trống địa chỉ",Toast.LENGTH_SHORT).show();
+                if (tourID.equals( "" )){
+                    final Dialog dialog = new Dialog( MapsActivity.this );
+                    dialog.setTitle( "Get place" );
+                    dialog.setCancelable( false );
+                    dialog.setContentView( R.layout.activity_create_tour_next);
+                    final EditText editTextDeparture = dialog.findViewById( R.id.editTextDeparture );
+                    final EditText editTextDestinate = dialog.findViewById( R.id.editTextDestinate );
+                    final Address address = getAddress( marker.getPosition().latitude,marker.getPosition().longitude );
+                    if (checkPlaceTour){
+                        source = address;
+                        editTextDeparture.setText( address.getAddressLine( 0 ));
+                        if (des!=null){
+                            editTextDestinate.setText( des.getAddressLine( 0 ));
                         }
-                        else {
-                            Call<ResponseBody> call = RetrofitClient
-                                    .getInstance()
-                                    .getApi()
-                                    .createTour(token,tourName,sStartDay,sEndDay,source.getLatitude(),source.getLongitude(),des.getLatitude(),des.getLongitude(),check, adult, children,minC, maxC);
-
-                            call.enqueue( new Callback<ResponseBody>() {
-                                @Override
-                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                    if (response.code()==200) {
-                                        String bodyTourCreate = null;
-                                        try {
-                                            bodyTourCreate = response.body().string();
-
-                                            JSONObject tourData = new JSONObject(bodyTourCreate);
-                                            // Log.i("JSON",tourData.getString("total"));
-
-
-                                            Toast.makeText( MapsActivity.this, "Tạo tour thành công",Toast.LENGTH_SHORT ).show();
-                                           /* Intent intent = new Intent(getBaseContext(), MapsActivity.class);
-                                            String message = tourData.getString( "id" );
-                                            intent.putExtra("idTour", message);
-                                            startActivity(intent);*/
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                    else if (response.code()==400)
-                                    {
-                                        Toast.makeText( MapsActivity.this, "Tạo tour thất bại",Toast.LENGTH_SHORT ).show();
-                                    }
-                                    else {
-                                        Toast.makeText( MapsActivity.this, "Server error on creating tour",Toast.LENGTH_SHORT ).show();
-                                    }
-
-                                }
-
-                                @Override
-                                public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                                }
-                            } );
+                    }
+                    else {
+                        des = address;
+                        editTextDestinate.setText( address.getAddressLine( 0 ));
+                        if (source!=null)
+                        {
+                            editTextDeparture.setText( source.getAddressLine( 0 ));
+                        }
+                    }
+                    ImageButton imageButtonDeparture = dialog.findViewById( R.id.imageButtonDeparture );
+                    imageButtonDeparture.setOnClickListener( new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            checkPlaceTour = true;
                             dialog.cancel();
                         }
+                    } );
+                    ImageButton imageButtonDestinate = dialog.findViewById( R.id.imageButtonDestinate );
+                    imageButtonDestinate.setOnClickListener( new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            checkPlaceTour = false;
+                            dialog.cancel();
+                        }
+                    } );
 
-                    }
-                } );
-                dialog.show();
+                    Button buttonCreate = dialog.findViewById(R.id.buttonCreate);
+                    buttonCreate.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (editTextDeparture.getText().toString().equals( "" ) ||editTextDestinate.getText().toString().equals( "" ) )
+                            {
+                                Toast.makeText(MapsActivity.this,"Vui lòng không để trống địa chỉ",Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Call<ResponseBody> call = RetrofitClient
+                                        .getInstance()
+                                        .getApi()
+                                        .createTour(token,tourName,sStartDay,sEndDay,source.getLatitude(),source.getLongitude(),des.getLatitude(),des.getLongitude(),check, adult, children,minC, maxC);
+
+                                call.enqueue( new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        if (response.code()==200) {
+                                            String bodyTourCreate = null;
+                                            try {
+                                                bodyTourCreate = response.body().string();
+
+                                                JSONObject tourData = new JSONObject(bodyTourCreate);
+                                                // Log.i("JSON",tourData.getString("total"));
+
+
+                                                Toast.makeText( MapsActivity.this, "Tạo tour thành công",Toast.LENGTH_SHORT ).show();
+                                                tourID  = tourData.getString( "id" );
+                                           /* Intent intent = new Intent(getBaseContext(), MapsActivity.class);
+
+                                            intent.putExtra("idTour", message);
+                                            startActivity(intent);*/
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                        else if (response.code()==400)
+                                        {
+                                            Toast.makeText( MapsActivity.this, "Tạo tour thất bại",Toast.LENGTH_SHORT ).show();
+                                        }
+                                        else {
+                                            Toast.makeText( MapsActivity.this, "Server error on creating tour",Toast.LENGTH_SHORT ).show();
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                                    }
+                                } );
+                                dialog.cancel();
+                            }
+
+                        }
+                    } );
+                    dialog.show();
+                }
+                else {
+
+                   // Toast.makeText( MapsActivity.this, marker.getTitle(),Toast.LENGTH_SHORT).show();
+
+
+                    editTextStopPoint.setText( marker.getTitle() );
+                    final Address address = getAddress( marker.getPosition().latitude,marker.getPosition().longitude );
+                    editTextAddress.setText( address.getAddressLine( 0 ) );
+                    final RelativeLayout relativeLayout = findViewById(R.id.formStopPoint);
+                    relativeLayout.setVisibility(View.VISIBLE);
+                    final RelativeLayout relativeLayout1 =findViewById(R.id.mapLayout);
+                    relativeLayout1.setVisibility(View.INVISIBLE);
+                    Button button_x = findViewById( R.id.button_x );
+                    button_x.setOnClickListener( new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            relativeLayout.setVisibility(View.INVISIBLE);
+                            relativeLayout1.setVisibility(View.VISIBLE);
+                        }
+                    } );
+                    Button buttonCreateStopPoint = findViewById( R.id.buttonCreateStopPoint );
+                    buttonCreateStopPoint.setOnClickListener( new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if(CheckData())
+                            {
+                                String dateInString = editTextSelectDay.getText().toString();
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+                                Date dateTime = null;
+                                try {
+                                    dateTime = sdf.parse( dateInString );
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                String dateInString2 = editTextSelectDayLeave.getText().toString();
+
+                                Date dateTime2 = null;
+                                try {
+                                    dateTime2 = sdf.parse( dateInString2 );
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                noteList.add( new stopPoint( editTextStopPoint.getText().toString(),editTextAddress.getText().toString(),
+                                        1,address.getLatitude(),address.getLongitude(),54441556456456L,416548454151L,1, Integer.parseInt( editTextMinC.getText().toString() ),Integer.parseInt( editTextMaxC.getText().toString() )) );
+                                myAdapter = new Stop_Point_Adapter( MapsActivity.this,R.layout.item_stoppoint_layout,noteList );
+                                listView.setAdapter( myAdapter );
+                                relativeLayout.setVisibility(View.INVISIBLE);
+                                relativeLayout1.setVisibility(View.VISIBLE);
+                                Toast.makeText( MapsActivity.this,"Đăng ký thành công",Toast.LENGTH_SHORT ).show();
+                            }
+                        }
+
+                    } );
+                }
                 return false;
             }
         } );

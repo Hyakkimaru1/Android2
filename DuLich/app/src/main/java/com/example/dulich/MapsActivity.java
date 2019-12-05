@@ -30,6 +30,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.dulich.data.Result;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -56,6 +57,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -82,6 +84,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     ImageButton arrive;
     ImageButton leave;
+
+    Button createListStopP;
     EditText edtArrive;
     EditText edtLeave;
 
@@ -93,6 +97,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     EditText editTextSelectDay;
     EditText editTextMinC;
     EditText editTextMaxC;
+
+
 
     String token;
     String tourName;
@@ -111,6 +117,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     int Radius = 1000;
 
     ArrayList<stopPoint> noteList = new ArrayList<stopPoint>();
+    serviceStopPoints serviceStopPoints ;
     Stop_Point_Adapter myAdapter;
     ListView listView;
     @Override
@@ -129,7 +136,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         minC = intent.getLongExtra( "minC",0);
         maxC = intent.getLongExtra( "maxC",0);
 
-      //  Toast.makeText(this,idTour,Toast.LENGTH_SHORT ).show();
+        //  Toast.makeText(this,idTour,Toast.LENGTH_SHORT ).show();
         editTextStopPoint = findViewById(R.id.editTextStopPoint);
         editTextAddress = findViewById(R.id.editTextAddress);
         editTextTimeLeave = findViewById(R.id.editTextTimeLeave);
@@ -146,6 +153,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         listView = findViewById( R.id.listStopPoint );
         makeStopPoint = findViewById(R.id.makeStopPoint);
+
+        createListStopP = findViewById(R.id.createListStopPoint);
 
         makeStopPoint.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,6 +182,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Toast.makeText( MapsActivity.this,"Please make a stop point",Toast.LENGTH_SHORT ).show();
                 }
 
+            }
+        });
+
+        createListStopP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                serviceStopPoints = new serviceStopPoints(tourID,noteList);
+                //Toast.makeText(MapsActivity.this, tourID, Toast.LENGTH_SHORT).show();
+                sendNetworkRequest(serviceStopPoints);
             }
         });
 
@@ -205,25 +223,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    private void sendNetworkRequest(serviceStopPoints serviceStopPoints){
-    Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://35.197.153.192:3000/")
-                .addConverterFactory( GsonConverterFactory.create());
-    Retrofit retrofit = builder.build();
-    Api api = retrofit.create(Api.class);
-        Call<Api<Integer>> call = api.stopPointsSet(serviceStopPoints);
-        call.enqueue(new Callback<Api<Integer>>() {
+    private void sendNetworkRequest(serviceStopPoints svStopPoint){
+
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .stopPointsSet(token,svStopPoint);
+        call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<Api<Integer>> call, Response<Api<Integer>> response) {
-                Toast.makeText(MapsActivity.this, "Tạo danh sách điểm dừng thành công!", Toast.LENGTH_SHORT).show();
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.code()==200) {
+                    Toast.makeText( MapsActivity.this, "Tạo tour thành công",Toast.LENGTH_SHORT ).show();
+                }
+                else if (response.code()==404)
+                {
+                    Toast.makeText( MapsActivity.this, "Tour is not found",Toast.LENGTH_SHORT ).show();
+                }
+                else if(response.code()==403) {
+                    Toast.makeText( MapsActivity.this, "Not permission to add stop point",Toast.LENGTH_SHORT ).show();
+                }
+                else {
+                    Toast.makeText( MapsActivity.this, "Server error on adding stop point",Toast.LENGTH_SHORT ).show();
+                }
+
+
             }
 
             @Override
-            public void onFailure(Call<Api<Integer>> call, Throwable t) {
-                Toast.makeText(MapsActivity.this, "Lỗi khi tạo danh sách điểm dừng!", Toast.LENGTH_SHORT).show();
-
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(MapsActivity.this, "Failed", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
 
@@ -485,6 +516,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                                                 Toast.makeText( MapsActivity.this, "Tạo tour thành công",Toast.LENGTH_SHORT ).show();
                                                 tourID  = tourData.getString( "id" );
+                                                Toast.makeText(MapsActivity.this, tourID, Toast.LENGTH_SHORT).show();
+
+
                                            /* Intent intent = new Intent(getBaseContext(), MapsActivity.class);
 
                                             intent.putExtra("idTour", message);
@@ -520,7 +554,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 else {
 
-                   // Toast.makeText( MapsActivity.this, marker.getTitle(),Toast.LENGTH_SHORT).show();
+                    // Toast.makeText( MapsActivity.this, marker.getTitle(),Toast.LENGTH_SHORT).show();
 
 
                     editTextStopPoint.setText( marker.getTitle() );
@@ -563,6 +597,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 noteList.add( new stopPoint( editTextStopPoint.getText().toString(),editTextAddress.getText().toString(),
                                         1,address.getLatitude(),address.getLongitude(),54441556456456L,416548454151L,1, Integer.parseInt( editTextMinC.getText().toString() ),Integer.parseInt( editTextMaxC.getText().toString() )) );
                                 myAdapter = new Stop_Point_Adapter( MapsActivity.this,R.layout.item_stoppoint_layout,noteList );
+
                                 listView.setAdapter( myAdapter );
                                 relativeLayout.setVisibility(View.INVISIBLE);
                                 relativeLayout1.setVisibility(View.VISIBLE);

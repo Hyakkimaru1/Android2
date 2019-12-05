@@ -10,6 +10,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.QueryMap;
 
@@ -79,8 +80,11 @@ public interface Api<I extends Number> {
             //@Field( "deleteIds" ) id[] deleteIds
     );
 
-    @FormUrlEncoded
-    @POST("/tour/set-stop-points")
-    Call<Api<Integer>> stopPointsSet(@Body serviceStopPoints serviceStopPoints);
+    @Headers("Content-Type: application/json")
+    @POST("tour/set-stop-points")
+    Call<ResponseBody> stopPointsSet(
+            @Header("Authorization") String token,
+            @Body serviceStopPoints serviceStopPoints
 
+    );
 }

@@ -86,7 +86,7 @@ public interface Api<I extends Number> {
             //@Field( "deleteIds" ) id[] deleteIds
     );
 
-<<<<<<< HEAD
+
     @FormUrlEncoded
     @POST("/tour/update-tour")
     Call<ResponseBody> updateDelTour(
@@ -95,16 +95,13 @@ public interface Api<I extends Number> {
             @Field( "status" ) int status
     );
 
-    @FormUrlEncoded
-    @POST("/tour/set-stop-points")
-    Call<Api<Integer>> stopPointsSet(@Body serviceStopPoints serviceStopPoints);
-=======
+
     @Headers("Content-Type: application/json")
     @POST("tour/set-stop-points")
     Call<ResponseBody> stopPointsSet(
             @Header("Authorization") String token,
             @Body serviceStopPoints serviceStopPoints
->>>>>>> b9dd82c28b282a2d4a8e5dd2e6cf3b3287b00180
+
 
     );
 }

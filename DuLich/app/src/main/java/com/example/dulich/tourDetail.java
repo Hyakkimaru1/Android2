@@ -1,20 +1,19 @@
 package com.example.dulich;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import org.json.JSONArray;
@@ -63,11 +62,13 @@ public class tourDetail extends Fragment{
             }
         } );
 
-        listView.setOnLongClickListener( new View.OnLongClickListener() {
+        listView.setOnItemLongClickListener( new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onLongClick(View view) {
-
-
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText( getContext(),"AAAAA",Toast.LENGTH_SHORT ).show();
+                MyCustomDialog dialog = new MyCustomDialog();
+                dialog.show( getFragmentManager(),"MyCustomDiaLog" );
+                dialog.setCancelable( false );
                 return false;
             }
         } );

@@ -1,16 +1,38 @@
 package com.example.dulich;
 
-public class stopPoint {
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
+public class stopPoint {
+    @SerializedName("name")
+    @Expose
     private String name;
+    @SerializedName("address")
+    @Expose
     private String address;
+    @SerializedName("provinceId")
+    @Expose
     private int provinceId;
+    @SerializedName("lat")
+    @Expose
     private double lat;
+    @SerializedName("long")
+    @Expose
     private double lng;
+    @SerializedName("arrivalAt")
+    @Expose
     private long arrivalAt;
+    @SerializedName("leaveAt")
+    @Expose
     private long leaveAt;
+    @SerializedName("serviceTypeId")
+    @Expose
     private int serviceTypeId;
+    @SerializedName("minCost")
+    @Expose
     private long minCost;
+    @SerializedName("maxCost")
+    @Expose
     private long maxCost;
 
 

@@ -425,8 +425,10 @@
                     android:layout_height="25dp"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
+                    android:layout_marginStart="47dp"
                     android:layout_marginTop="19dp"
-                    android:layout_marginEnd="39dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toEndOf="@+id/createListStopPoint"
                     android:background="@drawable/button_x" />
 
                 <ImageView
@@ -438,6 +440,18 @@
                     android:layout_marginStart="0dp"
                     android:layout_marginTop="0dp"
                     android:src="@drawable/person"/>
+
+                <Button
+                    android:id="@+id/createListStopPoint"
+                    android:layout_width="84dp"
+                    android:layout_height="41dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="63dp"
+                    android:layout_marginTop="13dp"
+                    android:layout_toEndOf="@+id/StopPoint"
+                    android:background="@drawable/signupbt"
+                    android:backgroundTint="#B7EAF7"
+                    android:text="CREATE" />
             </RelativeLayout>
             <LinearLayout
                 android:layout_width="match_parent"

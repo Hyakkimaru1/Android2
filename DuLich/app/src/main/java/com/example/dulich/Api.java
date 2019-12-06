@@ -38,6 +38,12 @@ public interface Api<I extends Number> {
             @QueryMap Map<String,String> params
             );
 
+    @GET("/tour/history-user")
+    Call<ResponseBody > getHistoryTourUser(
+            @Header("Authorization") String Authorization,
+            @QueryMap Map<String,String> params
+    );
+
     @FormUrlEncoded
     @POST("user/login/by-google")
     Call<ResponseBody> logInByGG(
@@ -77,6 +83,14 @@ public interface Api<I extends Number> {
             @Field( "tourID" ) String tourID,
             @Field("stopPoints") List<String> stopPoints
             //@Field( "deleteIds" ) id[] deleteIds
+    );
+
+    @FormUrlEncoded
+    @POST("/tour/update-tour")
+    Call<ResponseBody> updateDelTour(
+            @Header("Authorization") String token,
+            @Field( "id" ) String password,
+            @Field( "status" ) int status
     );
 
     @FormUrlEncoded

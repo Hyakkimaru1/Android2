@@ -126,7 +126,13 @@ public class MyAdapter extends ArrayAdapter<aTour> implements Filterable {
                 filterNotes.addAll(noteListFull);
             }
             else {
-                //Dieu kien de filter
+                String filterPattern = charSequence.toString().toLowerCase().trim();
+                for (aTour x:noteListFull)
+                {
+                    if (x.getName().toLowerCase().contains( filterPattern )){
+                        filterNotes.add(x);
+                    }
+                }
 
             }
 

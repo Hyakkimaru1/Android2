@@ -1,9 +1,14 @@
 package com.example.dulich;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,10 +16,16 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -30,9 +41,10 @@ public class createTourActivity extends AppCompatActivity {
     EditText children;
     EditText minC;
     EditText maxC;
-    // ImageView img;
+    ImageView img;
     ImageButton start;
     ImageButton end;
+    Button chooseImg;
     SharedPreferences preferences;
     String token;
     EditText departure;
@@ -40,6 +52,7 @@ public class createTourActivity extends AppCompatActivity {
     CheckBox check;
     SimpleDateFormat simpleDateFormat;
 
+    int Request_Code_Img = 5;
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
@@ -77,8 +90,24 @@ public class createTourActivity extends AppCompatActivity {
             }
         });
 
+        img = findViewById(R.id.imageView);
+        chooseImg = findViewById( R.id.textViewChooseImage );
 
-        //img = findViewById(R.id.imageView);
+        chooseImg.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //Xin phep may anh va thu vien anh
+                if (checkThuVienAnhPermisstion())
+                {
+                    Intent intent = new Intent( Intent.ACTION_PICK );
+                    intent.setType( "image/*" );
+                    startActivityForResult( intent,Request_Code_Img );
+                }
+
+            }
+        } );
+
 
         creatTour.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -113,12 +142,43 @@ public class createTourActivity extends AppCompatActivity {
                     intent.putExtra( "maxC",Long.parseLong( maxC.getText().toString() ) );
                     startActivity(intent);
                 }
-
             }
         } );
 
 
     }
+
+
+    private boolean checkThuVienAnhPermisstion(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)){
+                ActivityCompat.requestPermissions( this,new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},Request_Code_Img);
+            }
+            else {
+                ActivityCompat.requestPermissions( this,new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},Request_Code_Img);
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode == Request_Code_Img && resultCode == RESULT_OK && data != null){
+            Uri uri = data.getData();
+
+            try {
+                InputStream inputStream = getContentResolver().openInputStream( uri );
+                Bitmap bitmap = BitmapFactory.decodeStream( inputStream );
+                img.setImageBitmap( bitmap );
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        super.onActivityResult( requestCode, resultCode, data );
+    }
+
     private void Start(){
         final Calendar calendar = Calendar.getInstance();
         int ngay = calendar.get(Calendar.DATE);

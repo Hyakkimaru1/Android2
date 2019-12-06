@@ -33,7 +33,7 @@ import retrofit2.Response;
 
 public class listTours extends Fragment {
     ListView listView;
-    ArrayList<aTour> noteList = new ArrayList<aTour>();
+    ArrayList<aTour> noteList;
     MyAdapter myAdapter;
     SharedPreferences preferences;
     TextView tours;
@@ -76,7 +76,7 @@ public class listTours extends Fragment {
         if (!token.equals(""))
         {
             Map<String, String> params = new HashMap<>();
-            params.put("rowPerPage","8000");
+            params.put("rowPerPage","150");
             params.put("pageNum","1");
             Call<ResponseBody> call = RetrofitClient
                     .getInstance()
@@ -87,6 +87,7 @@ public class listTours extends Fragment {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     if (response.code()==200) {
+                        noteList = new ArrayList<aTour>( );
                         String bodyListTour = null;
                         try {
                             bodyListTour = response.body().string();
@@ -100,11 +101,15 @@ public class listTours extends Fragment {
                                     JSONObject jb = responseArray.getJSONObject( i );
                                     noteList.add( new aTour( jb.getInt( "id" ), jb.getInt( "status" ), jb.getString( "name" ), jb.getString( "minCost" ),
                                             jb.getString( "maxCost" ), jb.getString( "startDate" ), jb.getString( "endDate" ), jb.getString( "adults" ),
-                                            jb.getString( "childs" ), jb.getBoolean( "isPrivate" ), jb.getString( "avatar" ) ) );
+                                            jb.getString( "childs" ),  jb.getString( "avatar" ) ) );
 
                                 }
-                                myAdapter = new MyAdapter( getContext(), R.layout.item_layout, noteList );
-                                listView.setAdapter( myAdapter );
+                                if (!noteList.isEmpty())
+                                {
+                                    myAdapter = new MyAdapter( getContext(), R.layout.item_layout, noteList );
+                                    listView.setAdapter( myAdapter );
+                                }
+
                             }
                         } catch (IOException e) {
                             e.printStackTrace();

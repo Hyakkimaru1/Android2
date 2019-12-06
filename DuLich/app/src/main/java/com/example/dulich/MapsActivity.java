@@ -459,6 +459,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     if (checkPlaceTour){
                         source = address;
                         editTextDeparture.setText( address.getAddressLine( 0 ));
+
                         if (des!=null){
                             editTextDestinate.setText( des.getAddressLine( 0 ));
                         }

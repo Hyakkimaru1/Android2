@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class serviceStopPoints extends Number {
+public class serviceStopPoints  {
     @SerializedName("tourId")
     @Expose
     String tourID;
@@ -23,9 +23,10 @@ public class serviceStopPoints extends Number {
         this.stopPoints = stopPoints;
     }
 
-    public ArrayList<stopPoint> getStopPoints(ArrayList<stopPoint> noteList) {
+    public ArrayList<stopPoint> getStopPoints() {
         return stopPoints;
     }
+
 
     public void setTourID(String tourID) {
         this.tourID = tourID;
@@ -35,23 +36,5 @@ public class serviceStopPoints extends Number {
         this.stopPoints = stopPoints;
     }
 
-    @Override
-    public int intValue() {
-        return 0;
-    }
 
-    @Override
-    public long longValue() {
-        return 0;
-    }
-
-    @Override
-    public float floatValue() {
-        return 0;
-    }
-
-    @Override
-    public double doubleValue() {
-        return 0;
-    }
 }

@@ -58,7 +58,7 @@ public class listTours extends Fragment {
                 }
                 //
                 //Intent intent = new Intent(getActivity(), createTourActivity.class);
-                Intent intent = new Intent(getActivity(), Tour_detail.class);
+                Intent intent = new Intent(getActivity(), searchFriend_Activity.class);
                 startActivity(intent);
             }
         });

@@ -21,7 +21,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Tour_detail extends AppCompatActivity {
+public class searchFriend_Activity extends AppCompatActivity {
     SearchView searchView;
     ListView listView;
     ArrayList<friends_user> noteList;
@@ -68,7 +68,7 @@ public class Tour_detail extends AppCompatActivity {
                                     }
                                     if (!noteList.isEmpty())
                                     {
-                                        myAdapter = new adapter_searchFriend(Tour_detail.this,R.layout.layout_searchfriend, noteList );
+                                        myAdapter = new adapter_searchFriend( searchFriend_Activity.this,R.layout.layout_searchfriend, noteList );
                                         listView.setAdapter( myAdapter );
                                     }
 

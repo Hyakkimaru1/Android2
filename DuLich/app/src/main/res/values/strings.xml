@@ -1,4 +1,7 @@
 <resources>
+    <string name="history_dialog_message">Do you want to remove this tour!</string>
+    <string name="history_dialog_yes">Yes</string>
+    <string name="history_dialog_no">No</string>
     <string name="app_name">DuLich</string>
     <string name="title_activity_login">Sign in</string>
     <string name="prompt_email">Email</string>

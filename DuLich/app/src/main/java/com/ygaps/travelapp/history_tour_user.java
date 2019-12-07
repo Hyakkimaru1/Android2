@@ -39,6 +39,8 @@ public class history_tour_user extends Fragment{
     SharedPreferences preferences;
     TextView tours;
     String token;
+
+    SharedPreferences.Editor editor;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -67,10 +69,15 @@ public class history_tour_user extends Fragment{
         listView.setOnItemLongClickListener( new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText( getContext(),"AAAAA",Toast.LENGTH_SHORT ).show();
+                Toast.makeText( getContext(),String.valueOf(noteList.get(i).getId()),Toast.LENGTH_SHORT ).show();
+                editor = preferences.edit();
+                editor.putInt( "id", noteList.get(i).getId());
+                editor.commit();
+
                 MyCustomDialog dialog = new MyCustomDialog();
                 dialog.show( getFragmentManager(),"MyCustomDiaLog" );
                 dialog.setCancelable( false );
+                Toast.makeText( getContext(),"Canceled!",Toast.LENGTH_SHORT ).show();
                 return false;
             }
         } );

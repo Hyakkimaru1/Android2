@@ -92,10 +92,10 @@ public interface Api<I extends Number> {
 
 
     @FormUrlEncoded
-    @POST("/tour/update-tour")
+    @POST("tour/update-tour")
     Call<ResponseBody> updateDelTour(
             @Header("Authorization") String token,
-            @Field( "id" ) String password,
+            @Field( "id" ) String id,
             @Field( "status" ) int status
     );
 

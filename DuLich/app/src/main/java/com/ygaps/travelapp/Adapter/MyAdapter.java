@@ -1,4 +1,4 @@
-package com.ygaps.travelapp;
+package com.ygaps.travelapp.Adapter;
 
 
 import android.content.Context;
@@ -14,6 +14,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.squareup.picasso.Picasso;
+import com.ygaps.travelapp.R;
+import com.ygaps.travelapp.aTour;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,7 +53,7 @@ public class MyAdapter extends ArrayAdapter<aTour> implements Filterable {
         // TODO Auto-generated method stub
         View v = convertView;
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        v = inflater.inflate(R.layout.item_layout, null);
+        v = inflater.inflate( R.layout.item_layout, null);
 
         aTour p =getItem( position );
         if (p!=null) {

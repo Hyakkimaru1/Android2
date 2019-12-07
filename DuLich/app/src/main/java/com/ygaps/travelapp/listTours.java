@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.ygaps.travelapp.Adapter.MyAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,7 +56,9 @@ public class listTours extends Fragment {
                     Toast.makeText( getContext(),"Vui lòng đăng nhập",Toast.LENGTH_SHORT ).show();
                     return;
                 }
-                Intent intent = new Intent(getActivity(), createTourActivity.class);
+                //
+                //Intent intent = new Intent(getActivity(), createTourActivity.class);
+                Intent intent = new Intent(getActivity(), Tour_detail.class);
                 startActivity(intent);
             }
         });

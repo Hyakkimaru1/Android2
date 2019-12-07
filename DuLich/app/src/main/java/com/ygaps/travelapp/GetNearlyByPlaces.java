@@ -62,8 +62,11 @@ class GetNearlyByPlaces extends AsyncTask<Object, String, String> {
             LatLng latLng = new LatLng( lat, lng);
             markerOptions.position(latLng);
             markerOptions.title(placeName);
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
 
+            int height = 100;
+            int width = 100;
+
+            markerOptions.icon(BitmapDescriptorFactory.fromResource( R.drawable.restaurant ));
             marker = mMap.addMarker(markerOptions);
             marker.showInfoWindow();
         }

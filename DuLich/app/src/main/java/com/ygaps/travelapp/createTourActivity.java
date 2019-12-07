@@ -1,6 +1,7 @@
 package com.ygaps.travelapp;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -50,8 +51,8 @@ public class createTourActivity extends AppCompatActivity {
     EditText departure;
     EditText destinate;
     CheckBox check;
-    SimpleDateFormat simpleDateFormat;
-
+   // SimpleDateFormat simpleDateFormat;
+    public static Activity fa;
     int Request_Code_Img = 5;
     @Override
     public boolean onSupportNavigateUp() {
@@ -141,6 +142,7 @@ public class createTourActivity extends AppCompatActivity {
                     intent.putExtra( "minC",Long.parseLong( minC.getText().toString() ) );
                     intent.putExtra( "maxC",Long.parseLong( maxC.getText().toString() ) );
                     startActivity(intent);
+
                 }
             }
         } );

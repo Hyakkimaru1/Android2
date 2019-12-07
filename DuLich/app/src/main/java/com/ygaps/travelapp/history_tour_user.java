@@ -16,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.ygaps.travelapp.Adapter.MyAdapter;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,7 +32,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class tourDetail extends Fragment{
+public class history_tour_user extends Fragment{
     ListView listView;
     ArrayList<aTour> noteList = new ArrayList<aTour>();
     MyAdapter myAdapter;
@@ -40,7 +42,7 @@ public class tourDetail extends Fragment{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_tour_detail,container,false);
+        View view = inflater.inflate(R.layout.activity_history_tour_user,container,false);
         listView =(ListView) view.findViewById( R.id.listHistoryTour);
         preferences = this.getActivity().getSharedPreferences("isLogin", Context.MODE_PRIVATE);
         token = preferences.getString( "token","" );

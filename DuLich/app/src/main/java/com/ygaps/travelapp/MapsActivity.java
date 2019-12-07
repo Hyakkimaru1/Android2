@@ -44,6 +44,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -107,7 +108,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Address source = null;
     Address des = null;
     String tourID = "";
-
+    Intent intent;
+    boolean check_ActionList = false;
     FloatingActionButton makeStopPoint;
 
     int Radius = 1000;
@@ -155,20 +157,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         makeStopPoint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final LinearLayout linearLayout = findViewById( R.id.listSP );
+                final RelativeLayout relativeLayout1 = findViewById( R.id.mapLayout );
                 if (noteList.size()>0) {
-                    final LinearLayout linearLayout = findViewById( R.id.listSP );
-                    linearLayout.setVisibility( View.VISIBLE );
-                    final RelativeLayout relativeLayout1 = findViewById( R.id.mapLayout );
-                    relativeLayout1.setVisibility(View.INVISIBLE);
-                    Button endListSP = findViewById( R.id.endListSP );
-                    endListSP.setOnClickListener( new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            relativeLayout1.setVisibility(View.VISIBLE);
-                            linearLayout.setVisibility( View.INVISIBLE );
+                    if (check_ActionList==false){
+                        linearLayout.setVisibility( View.VISIBLE );
+                        relativeLayout1.setVisibility(View.INVISIBLE);
+                        Button endListSP = findViewById( R.id.endListSP );
+                        endListSP.setOnClickListener( new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
 
-                        }
-                    } );
+
+                            }
+                        } );
+                        check_ActionList=!check_ActionList;
+                    }
+                    else {
+                        relativeLayout1.setVisibility(View.VISIBLE);
+                        linearLayout.setVisibility( View.INVISIBLE );
+                        check_ActionList=!check_ActionList;
+                    }
+
                    /* serviceStopPoints serviceStopPoints = null;
                     serviceStopPoints.setTourID( idTour );
                     serviceStopPoints.getStopPoints(noteList);
@@ -229,7 +239,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.code()==200) {
-                    Toast.makeText( MapsActivity.this, "Tạo tour thành công",Toast.LENGTH_SHORT ).show();
+                    Toast.makeText( MapsActivity.this, "Tạo stop points thành công",Toast.LENGTH_SHORT ).show();
+                    Intent intentNew = new Intent(MapsActivity.this, MainActivity.class);
+                    intentNew.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity( intentNew );
+
                 }
                 else if (response.code()==404)
                 {
@@ -275,7 +289,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void geoLocate() {
-        mMap.clear();
+       // mMap.clear();
         String searchString = searchText.getText().toString();
 
         Geocoder geocoder = new Geocoder( MapsActivity.this );
@@ -297,10 +311,82 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             latLng = new LatLng( address.getLatitude(),address.getLongitude() );
             markerOptions.position( latLng );
             markerOptions.title(searchString);
-            markerOptions.icon( BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED) );
+            markerOptions.icon( BitmapDescriptorFactory.fromResource(R.drawable.location_choose) );
             currentUserLocationMarker = mMap.addMarker( markerOptions );
             // Add a marker in current location and move the camera
-            mMap.moveCamera( CameraUpdateFactory.newLatLngZoom( latLng,17F) );
+            mMap.moveCamera( CameraUpdateFactory.newLatLngZoom( latLng,18F) );
+            if (  token != null && !token.equals( "" ))
+            {
+
+                CoordList coordList = new CoordList();
+                coordList.setLat( address.getLatitude());
+                coordList.setLong(address.getLongitude());
+                getSuggest_Stoppoint suggest_stoppoint = new getSuggest_Stoppoint();
+                suggest_stoppoint.setHasOneCoordinate( true );
+                suggest_stoppoint.setCoordList( coordList );
+
+
+                Call<ResponseBody> call = RetrofitClient
+                        .getInstance()
+                        .getApi()
+                        .suggest_Stoppoint( token,suggest_stoppoint);
+
+                call.enqueue( new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.code()==200) {
+
+                            String bodyListTour = null;
+                            try {
+                                bodyListTour = response.body().string();
+                             //   Log.i("Suggest stoppoint:", bodyListTour);
+                                JSONObject tourData = new JSONObject(bodyListTour);
+                                JSONArray responseArray = tourData.getJSONArray("stopPoints");
+                             //   Log.i("Suggest Length:", String.valueOf(responseArray.length()));
+                                if (responseArray.length() > 0){
+                                    for (int i = 0;i<responseArray.length();i++){
+                                        JSONObject jb = responseArray.getJSONObject( i );
+                                        MarkerOptions markerOptions = new MarkerOptions();
+                                        LatLng latLngStopPoint = new LatLng( jb.getDouble( "lat" ),jb.getDouble( "long" ) );
+                                        markerOptions.position( latLngStopPoint );
+                                        markerOptions.title( jb.getString( "name" ));
+                                        if (jb.getInt( "serviceTypeId" )==1){
+                                            markerOptions.icon( BitmapDescriptorFactory.fromResource(R.drawable.restaurant) );
+                                        }
+                                        else if (jb.getInt( "serviceTypeId" )==2){
+                                            markerOptions.icon( BitmapDescriptorFactory.fromResource( R.drawable.hotel ));
+                                        }
+                                        else if (jb.getInt( "serviceTypeId" )==3){
+                                            markerOptions.icon( BitmapDescriptorFactory.fromResource( R.drawable.rest_station ) );
+                                        }
+                                        else {
+                                            markerOptions.icon( BitmapDescriptorFactory.fromResource( R.drawable.other ) );
+                                        }
+
+                                        currentUserLocationMarker = mMap.addMarker( markerOptions );
+
+                                    }
+
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else {
+                          //  Toast.makeText( MapsActivity.this,"GOOODDD",Toast.LENGTH_SHORT ).show();
+                          //  Log.i("Suggest stoppoint:", response.toString());
+                        }
+                    }
+
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                } );
+            }
         }
 
     }
@@ -328,6 +414,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
             rlp.setMargins(0, 1500, 180, 0);
         }
+
+
+
         mMap.setOnMapLongClickListener( new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
@@ -340,13 +429,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 // This will be displayed on taping the marker
                 markerOptions.title(latLng.latitude + " : " + latLng.longitude);
 
-                markerOptions.icon( BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN) );
+                markerOptions.icon( BitmapDescriptorFactory.fromResource(R.drawable.location_choose) );
                 currentUserLocationMarker = mMap.addMarker( markerOptions );
                 // Add a marker in current location and move the camera
-                mMap.moveCamera( CameraUpdateFactory.newLatLngZoom( latLng,17F) );
+                mMap.moveCamera( CameraUpdateFactory.newLatLngZoom( latLng,18F) );
 
             }
         } );
+
+
+
+       mMap.setOnCameraMoveListener( new GoogleMap.OnCameraMoveListener() {
+           @Override
+           public void onCameraMove() {
+               LatLng center = mMap.getCameraPosition().target;
+             // Log.i( "LONGITUDEE _ LATITUDEE",String.valueOf( center.longitude )+" "+String.valueOf( center.latitude ) );
+
+
+           }
+       } );
     }
 
     protected synchronized void buildGoogleApiClient(){
@@ -421,6 +522,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+
     @Override
     public void onLocationChanged(Location location) {
         lastLocation = location;
@@ -436,11 +538,83 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position( latLng );
         markerOptions.title( "Vị trí hiện tại" );
-        markerOptions.icon( BitmapDescriptorFactory.defaultMarker() );
+        markerOptions.icon( BitmapDescriptorFactory.fromResource(R.drawable.location_choose) );
 
         currentUserLocationMarker = mMap.addMarker( markerOptions );
+        if (  token != null && !token.equals( "" ))
+        {
+
+            CoordList coordList = new CoordList();
+            coordList.setLat( location.getLatitude());
+            coordList.setLong(location.getLongitude());
+            getSuggest_Stoppoint suggest_stoppoint = new getSuggest_Stoppoint();
+            suggest_stoppoint.setHasOneCoordinate( true );
+            suggest_stoppoint.setCoordList( coordList );
+
+
+            Call<ResponseBody> call = RetrofitClient
+                    .getInstance()
+                    .getApi()
+                    .suggest_Stoppoint( token,suggest_stoppoint);
+
+            call.enqueue( new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if (response.code()==200) {
+
+                        String bodyListTour = null;
+                        try {
+                            bodyListTour = response.body().string();
+                        //    Log.i("Suggest stoppoint:", bodyListTour);
+                            JSONObject tourData = new JSONObject(bodyListTour);
+                            JSONArray responseArray = tourData.getJSONArray("stopPoints");
+                        //    Log.i("Suggest Length:", String.valueOf(responseArray.length()));
+                            if (responseArray.length() > 0){
+                                for (int i = 0;i<responseArray.length();i++){
+                                    JSONObject jb = responseArray.getJSONObject( i );
+                                    MarkerOptions markerOptions = new MarkerOptions();
+                                    LatLng latLngStopPoint = new LatLng( jb.getDouble( "lat" ),jb.getDouble( "long" ) );
+                                    markerOptions.position( latLngStopPoint );
+                                    markerOptions.title( jb.getString( "name" ));
+                                    if (jb.getInt( "serviceTypeId" )==1){
+                                        markerOptions.icon( BitmapDescriptorFactory.fromResource(R.drawable.restaurant) );
+                                    }
+                                    else if (jb.getInt( "serviceTypeId" )==2){
+                                        markerOptions.icon( BitmapDescriptorFactory.fromResource( R.drawable.hotel ));
+                                    }
+                                    else if (jb.getInt( "serviceTypeId" )==3){
+                                        markerOptions.icon( BitmapDescriptorFactory.fromResource( R.drawable.rest_station ) );
+                                    }
+                                    else {
+                                        markerOptions.icon( BitmapDescriptorFactory.fromResource( R.drawable.other ) );
+                                    }
+
+                                    currentUserLocationMarker = mMap.addMarker( markerOptions );
+
+                                }
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else {
+                     //   Toast.makeText( MapsActivity.this,"GOOODDD",Toast.LENGTH_SHORT ).show();
+                     //   Log.i("Suggest stoppoint:", response.toString());
+                    }
+                }
+
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                }
+            } );
+        }
         // Add a marker in current location and move the camera
-        mMap.moveCamera( CameraUpdateFactory.newLatLngZoom( latLng,17F) );
+        mMap.moveCamera( CameraUpdateFactory.newLatLngZoom( latLng,18F) );
         mMap.setOnMarkerClickListener( new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -513,8 +687,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                                                 Toast.makeText( MapsActivity.this, "Tạo tour thành công",Toast.LENGTH_SHORT ).show();
                                                 tourID  = tourData.getString( "id" );
-                                                Toast.makeText(MapsActivity.this, tourID, Toast.LENGTH_SHORT).show();
-
+                                              //Need to kill first activity
 
                                            /* Intent intent = new Intent(getBaseContext(), MapsActivity.class);
 
@@ -598,7 +771,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 listView.setAdapter( myAdapter );
                                 relativeLayout.setVisibility(View.INVISIBLE);
                                 relativeLayout1.setVisibility(View.VISIBLE);
-                                Toast.makeText( MapsActivity.this,"Đăng ký thành công",Toast.LENGTH_SHORT ).show();
+                                Toast.makeText( MapsActivity.this,"Đã thêm stop point",Toast.LENGTH_SHORT ).show();
                             }
                         }
 
@@ -612,9 +785,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LocationServices.FusedLocationApi.removeLocationUpdates( googleApiClient,this );
 
         }
+
+
     }
 
-    private void findPlaceNearly(double latitude,double longitude)
+    private void findPlaceNearly(double latitude, double longitude)
     {
         String restaurant = "restaurant", hotel = "hotel";
         Object transferDate[] = new Object[2];
@@ -628,7 +803,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    private String getURL(double lat, double lng,String nearbyPlace){
+    @org.jetbrains.annotations.NotNull
+    private String getURL(double lat, double lng, String nearbyPlace){
         StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         googlePlaceUrl.append("location="+lat+","+lng);
         googlePlaceUrl.append("&radius="+Radius);

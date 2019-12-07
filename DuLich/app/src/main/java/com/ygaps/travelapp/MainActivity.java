@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                     textView.setText("Travel Assistant");
                     break;
                 case R.id.navigation_history:
-                    selectedFragment = new tourDetail();
+                    selectedFragment = new history_tour_user();
 
                     textView.setText("Tour Detail");
                     break;

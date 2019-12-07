@@ -1,6 +1,5 @@
 package com.ygaps.travelapp;
 
-import java.util.List;
 import java.util.Map;
 
 import okhttp3.ResponseBody;
@@ -12,6 +11,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 public interface Api<I extends Number> {
@@ -43,6 +43,13 @@ public interface Api<I extends Number> {
     Call<ResponseBody > getHistoryTourUser(
             @Header("Authorization") String Authorization,
             @QueryMap Map<String,String> params
+    );
+
+    @GET("/user/search")
+    Call<ResponseBody> searchFriend(
+            @Query( "searchKey" )  String key,
+            @Query( "pageIndex" )  int pageIndex,
+            @Query( "pageSize" )  int pageSize
     );
 
     @FormUrlEncoded
@@ -77,14 +84,11 @@ public interface Api<I extends Number> {
 
     );
 
-    @FormUrlEncoded
-    @POST("/tour/set-stop-points")
-    Call<ResponseBody> addStopPoint(
+    @POST("/tour/suggested-destination-list")
+    Call<ResponseBody> suggest_Stoppoint(
             @Header("Authorization") String token,
-            @Field( "tourID" ) String tourID,
-            @Field("stopPoints") List<String> stopPoints
-            //@Field( "deleteIds" ) id[] deleteIds
-    );
+            @Body getSuggest_Stoppoint getSuggest_stoppoint
+            );
 
 
     @FormUrlEncoded
@@ -104,4 +108,6 @@ public interface Api<I extends Number> {
 
 
     );
+
+
 }

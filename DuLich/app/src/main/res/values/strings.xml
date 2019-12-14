@@ -26,6 +26,10 @@
     <string name="apikeyPlaceNearly">AIzaSyDtIWXQDUA1ufc_Vff3qbz522DnZ26Nk9w</string>
     <string name="title_activity_maps">Map</string>
     <string name="search_friend">Search your friends</string>
+    <string name="name_user">Nguyễn Duy Thắng</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="switch_language">Switch language</string>
+    <string name="title_logout">Log out</string>
     <string name="project_ID" >122</string>
     <string name="notification" >sent you an invitation for tour</string>
 

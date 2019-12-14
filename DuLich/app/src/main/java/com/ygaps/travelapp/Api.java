@@ -33,23 +33,29 @@ public interface Api<I extends Number> {
             @Field( "password" ) String password
     );
 
-    @GET("/tour/list")
+    @GET("tour/list")
     Call<ResponseBody > getListTour(
             @Header("Authorization") String Authorization,
             @QueryMap Map<String,String> params
             );
 
-    @GET("/tour/history-user")
+    @GET("tour/history-user")
     Call<ResponseBody > getHistoryTourUser(
             @Header("Authorization") String Authorization,
             @QueryMap Map<String,String> params
     );
 
-    @GET("/user/search")
+    @GET("user/search")
     Call<ResponseBody> searchFriend(
             @Query( "searchKey" )  String key,
             @Query( "pageIndex" )  int pageIndex,
             @Query( "pageSize" )  int pageSize
+    );
+
+    @GET("tour/info")
+    Call<ResponseBody> getTourInfo(
+            @Header("Authorization") String Authorization,
+            @Query( "tourId" )  int tourId
     );
 
     @FormUrlEncoded

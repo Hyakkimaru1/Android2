@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="wrap_content"
+        android:layout_height="21dp"
+        android:layout_below="@+id/textViewName"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="17dp"
+        app:srcCompat="@drawable/location_choose" />
+
+    <TextView
+        android:id="@+id/textViewName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="19dp"
+        android:text="Place name"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewName"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="17dp"
+        android:layout_toEndOf="@+id/imageView8"
+        android:text="Address" />
+
+    <ImageView
+        android:id="@+id/imageView12"
+        android:layout_width="21dp"
+        android:layout_height="38dp"
+        android:layout_below="@+id/imageView8"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="13dp"
+        app:srcCompat="@drawable/calendar" />
+
+    <TextView
+        android:id="@+id/textViewTimeStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewAddress"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="24dp"
+        android:layout_toEndOf="@+id/imageView12"
+        android:text="Time" />
+
+    <ImageView
+        android:id="@+id/imageView13"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_below="@+id/imageView12"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="7dp"
+        app:srcCompat="@drawable/price" />
+
+    <TextView
+        android:id="@+id/textViewMin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewTimeStart"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="21dp"
+        android:layout_toEndOf="@+id/imageView13"
+        android:text="Price"
+        android:textColor="#2BDBF1" />
+
+    <TextView
+        android:id="@+id/textViewMax"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewTimeStart"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="21dp"
+        android:layout_toEndOf="@+id/textViewCost3"
+        android:text="Price"
+        android:textColor="#2BDBF1" />
+
+    <TextView
+        android:id="@+id/textViewCost3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewTimeStart"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="21dp"
+        android:layout_toEndOf="@+id/textViewMin"
+        android:text="-"
+        android:textColor="#2BDBF1" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="15dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewAddress"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="25dp"
+        android:layout_toEndOf="@+id/textViewTimeStart"
+        android:text="-" />
+
+    <TextView
+        android:id="@+id/textViewTimeEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewAddress"
+        android:layout_marginStart="-2dp"
+        android:layout_marginTop="24dp"
+        android:layout_toEndOf="@+id/textView13"
+        android:text="Time" />
+</RelativeLayout></androidx.cardview.widget.CardView>

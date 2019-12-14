@@ -116,6 +116,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     ArrayList<stopPoint> noteList = new ArrayList<stopPoint>();
     serviceStopPoints serviceStopPoints ;
+    static
     Stop_Point_Adapter myAdapter;
     ListView listView;
     @Override
@@ -239,6 +240,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.code()==200) {
+                    Toast.makeText( MapsActivity.this, token,Toast.LENGTH_SHORT ).show();
                     Toast.makeText( MapsActivity.this, "Tạo stop points thành công",Toast.LENGTH_SHORT ).show();
                     Intent intentNew = new Intent(MapsActivity.this, MainActivity.class);
                     intentNew.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

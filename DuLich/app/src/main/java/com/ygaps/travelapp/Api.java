@@ -58,6 +58,13 @@ public interface Api<I extends Number> {
             @Query( "tourId" )  int tourId
     );
 
+    @GET("/tour/get/invitation")
+    Call<ResponseBody> getTourInvitation(
+            @Header("Authorization") String Authorization,
+            @Query( "pageIndex" )  int pageIndex,
+            @Query( "pageSize" )  int pageSize
+    );
+
     @FormUrlEncoded
     @POST("user/login/by-google")
     Call<ResponseBody> logInByGG(
@@ -68,6 +75,15 @@ public interface Api<I extends Number> {
     @POST("user/login/by-facebook")
     Call<ResponseBody> logInByFB(
             @Field("accessToken") String accessToken
+    );
+
+    @FormUrlEncoded
+    @POST("/tour/response/invitation")
+    Call<ResponseBody> joiningTour(
+            @Header("Authorization") String Authorization,
+            @Field( "tourId" ) String tourId,
+            @Field( "isAccepted" ) int isAccepted
+
     );
 
     @FormUrlEncoded
@@ -113,6 +129,25 @@ public interface Api<I extends Number> {
             @Body serviceStopPoints serviceStopPoints
 
 
+    );
+
+    @FormUrlEncoded
+    @POST("/user/notification/put-token")
+    Call<ResponseBody> register_Firebase(
+            @Header("Authorization") String token,
+            @Field( "fcmToken" ) String fcmToken,
+            @Field( "deviceId" ) String deviceId,
+            @Field( "platform" ) int platform,
+            @Field( "appVersion" ) String appVersion
+    );
+
+    @FormUrlEncoded
+    @POST("/tour/add/member")
+    Call<ResponseBody> invite_friend(
+            @Header("Authorization") String Authorization,
+            @Field( "tourId" ) String tourId,
+            @Field( "invitedUserId" ) String invitedUserId,
+            @Field( "isInvited" ) boolean isInvited
     );
 
 

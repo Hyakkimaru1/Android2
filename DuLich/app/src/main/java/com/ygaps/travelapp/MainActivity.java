@@ -1,7 +1,10 @@
 package com.ygaps.travelapp;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -12,6 +15,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     TextView textView;
@@ -26,8 +38,22 @@ public class MainActivity extends AppCompatActivity {
         textView = findViewById(R.id.titleBar);
         textView.setText("Travel Assistant");
 
+        FirebaseApp.initializeApp(this);
+       /* FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this, new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                String newToken = instanceIdResult.getToken();
+                Log.e( "newToken", newToken );
+                //getActivity().getPreferences(Context.MODE_PRIVATE).edit().putString("fb", newToken).apply();
+            }
+        } );
+        */
+        fireBase();
+
+
         //check xem tai khoan da duoc dang nhap hay chua
         sharedPreferences = getSharedPreferences("isLogin",MODE_PRIVATE);
+
 
 
         //xu ly bottom navigation
@@ -80,5 +106,40 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     };
+    void fireBase(){
+        String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        SharedPreferences preferences = this.getSharedPreferences( "isLogin", Context.MODE_PRIVATE );
+        String Authorization = preferences.getString( "token","" );
+        if (!Authorization.equals(""))
+        {
+            //Log.e("AAAAAAAAA",Authorization);
+            String token = FirebaseInstanceId.getInstance().getToken();
+            Log.e( "TOKENNNNNNNNNNNNNNNNN", token );
+            Call<ResponseBody> call = RetrofitClient
+                    .getInstance()
+                    .getApi()
+                    .register_Firebase(Authorization,token,android_id,1,"1.0");
 
+            call.enqueue( new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if (response.code()==200){
+                        try {
+                            String body = response.body().string();
+                            Log.i("OKOKOKOKOKO", body);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else {
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                }
+            });
+        }
+    }
 }

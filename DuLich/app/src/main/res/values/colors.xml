@@ -5,4 +5,6 @@
     <color name="colorPrimaryDark">#22AC89</color>
     <color name="colorAccent">#D81B60</color>
     <color name="price">#18C597</color>
+    <color name="colorConfirm">#FFA000</color>
+    <color name="colorDel">#CCCFCE</color>
 </resources>

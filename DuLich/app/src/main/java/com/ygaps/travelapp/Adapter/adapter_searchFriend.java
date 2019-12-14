@@ -19,20 +19,10 @@ import java.util.ArrayList;
 
 public class adapter_searchFriend extends ArrayAdapter<friends_user> implements Filterable {
     ArrayList<friends_user> noteList;
-    ArrayList<friends_user> noteListFull;
     public adapter_searchFriend(Context context, int resource, ArrayList<friends_user> objects) {
         super(context, resource, objects);
         // TODO Auto-generated constructor stub
         noteList	=	objects;
-        noteListFull = new ArrayList<>(noteList);
-    }
-
-    public void delete(ArrayList<friends_user> objects)
-    {
-        noteList	=	objects;
-        noteListFull.clear();
-        noteListFull.addAll(noteList);
-        notifyDataSetChanged();
     }
 
 

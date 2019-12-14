@@ -1,4 +1,4 @@
-package com.ygaps.travelapp;
+package com.ygaps.travelapp.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,9 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+
+import com.ygaps.travelapp.R;
+import com.ygaps.travelapp.stopPoint;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,7 +34,7 @@ public class Stop_Point_Adapter extends ArrayAdapter<stopPoint> {
         // TODO Auto-generated method stub
         View v = convertView;
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        v = inflater.inflate(R.layout.item_stoppoint_layout, null);
+        v = inflater.inflate( R.layout.item_stoppoint_layout, null);
         stopPoint p =getItem( position );
         if (p!=null) {
 

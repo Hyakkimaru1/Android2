@@ -26,6 +26,8 @@
     <string name="apikeyPlaceNearly">AIzaSyDtIWXQDUA1ufc_Vff3qbz522DnZ26Nk9w</string>
     <string name="title_activity_maps">Map</string>
     <string name="search_friend">Search your friends</string>
+    <string name="project_ID" >122</string>
+    <string name="notification" >sent you an invitation for tour</string>
 
     <string name="city_prompt">Choose a city</string>
     <string-array name="city_arrays">

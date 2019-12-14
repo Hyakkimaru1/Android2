@@ -40,6 +40,7 @@ public class listTours extends Fragment {
     TextView tours;
     String token;
     FloatingActionButton buttonAddTour;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class listTours extends Fragment {
         listView =(ListView) view.findViewById( R.id.listTours);
         buttonAddTour = view.findViewById(R.id.button_input);
         preferences = this.getActivity().getSharedPreferences("isLogin", Context.MODE_PRIVATE);
+
         token = preferences.getString( "token","" );
         buttonAddTour.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,8 +59,8 @@ public class listTours extends Fragment {
                     return;
                 }
                 //
-                //Intent intent = new Intent(getActivity(), createTourActivity.class);
-                Intent intent = new Intent(getActivity(), searchFriend_Activity.class);
+                Intent intent = new Intent(getActivity(), createTourActivity.class);
+                //Intent intent = new Intent(getActivity(), searchFriend_Activity.class);
                 startActivity(intent);
             }
         });

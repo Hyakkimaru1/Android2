@@ -1,14 +1,16 @@
-package com.ygaps.travelapp;
+package com.ygaps.travelapp.activity;
+
+import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
+import com.ygaps.travelapp.R;
 
 public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+        setContentView( R.layout.activity_splash);
     }
 }

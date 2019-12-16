@@ -16,7 +16,7 @@
         app:srcCompat="@mipmap/ic_launcher_round" />
 
     <TextView
-        android:id="@+id/name"
+        android:id="@+id/name_friend"
         android:layout_width="161dp"
         android:layout_height="92dp"
         android:layout_below="@+id/avatar"
@@ -28,7 +28,7 @@
         android:id="@+id/logout"
         android:layout_width="150dp"
         android:layout_height="80dp"
-        android:layout_below="@+id/name"
+        android:layout_below="@+id/name_friend"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="46dp"
         android:text="Button" />

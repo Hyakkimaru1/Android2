@@ -33,6 +33,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.ygaps.travelapp.activity.MainActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -106,6 +107,7 @@ public class setting extends Fragment {
                                 JSONObject jsonObject = new JSONObject(bodyLogin);
                                 editor = preferences.edit();
                                 editor.putString( "token",jsonObject.getString( "token") );
+                                editor.putInt( "userID",jsonObject.getInt( "userId") );
                                 editor.putString( "Email",username.getText().toString());
                                 editor.putBoolean( "isLogIn",true );
                                 editor.commit();
@@ -179,6 +181,7 @@ public class setting extends Fragment {
                                // editor.putString( "avatar",jsonObject.getString("avatar"));
                                 editor.putString( "fullName",jsonObject.getString("userId"));
                                 editor.putString( "token",jsonObject.getString( "token" ));
+                                editor.putInt( "userID",jsonObject.getInt( "userId") );
                                 editor.putBoolean( "isLogIn",true );
                                 editor.commit();
                                 Fragment fragment = new user();
@@ -309,6 +312,7 @@ public class setting extends Fragment {
                             editor.putString( "avatar",jsonObject.getString("avatar"));
                             editor.putString( "fullName",jsonObject.getString("fullName"));
                             editor.putString("token", jsonObject.getString("token"));
+                            editor.putInt("userID", jsonObject.getInt("userId"));
                             editor.commit();
                             Toast.makeText( getContext(), "Đăng nhập thành công",Toast.LENGTH_SHORT).show();
                             //    Log.i("DATA DATA", jsonObject.getString( "token"));

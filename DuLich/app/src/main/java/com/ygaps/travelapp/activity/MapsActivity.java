@@ -1,4 +1,4 @@
-package com.ygaps.travelapp;
+package com.ygaps.travelapp.activity;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
@@ -44,6 +44,13 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ygaps.travelapp.Adapter.Stop_Point_Adapter;
+import com.ygaps.travelapp.CoordList;
+import com.ygaps.travelapp.GetNearlyByPlaces;
+import com.ygaps.travelapp.R;
+import com.ygaps.travelapp.RetrofitClient;
+import com.ygaps.travelapp.getSuggest_Stoppoint;
+import com.ygaps.travelapp.serviceStopPoints;
+import com.ygaps.travelapp.stopPoint;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -116,7 +123,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     int Radius = 1000;
 
     ArrayList<stopPoint> noteList = new ArrayList<stopPoint>();
-    serviceStopPoints serviceStopPoints ;
+    com.ygaps.travelapp.serviceStopPoints serviceStopPoints ;
     static
     Stop_Point_Adapter myAdapter;
     ListView listView;
@@ -852,7 +859,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             list = geocoder.getFromLocation( lat,lng,2 );
 
         } catch (IOException e){
-            Log.e( "TAG","geoLocate: IOException "+e.getMessage() );
+            //Log.e( "TAG","geoLocate: IOException "+e.getMessage() );
         }
 
         if (list.size()>0){

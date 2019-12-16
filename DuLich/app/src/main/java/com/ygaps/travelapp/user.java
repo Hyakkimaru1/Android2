@@ -27,7 +27,7 @@ public class user extends Fragment {
         View view = inflater.inflate(R.layout.fragment_user,container,false) ;
         SharedPreferences preferences = this.getActivity().getSharedPreferences("isLogin", Context.MODE_PRIVATE);
 
-        textView = view.findViewById( R.id.name );
+        textView = view.findViewById( R.id.name_friend );
         imageView=view.findViewById(R.id.avatar);
         textView.setText( preferences.getString( "fullName","") );
         if (!preferences.getString( "avatar","" ).equals(""))

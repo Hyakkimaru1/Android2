@@ -1,4 +1,4 @@
-package com.ygaps.travelapp;
+package com.ygaps.travelapp.activity;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -14,6 +14,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ygaps.travelapp.Adapter.adapter_searchFriend;
+import com.ygaps.travelapp.R;
+import com.ygaps.travelapp.RetrofitClient;
+import com.ygaps.travelapp.friends_user;
 
 import org.json.JSONArray;
 import org.json.JSONException;

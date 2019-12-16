@@ -38,7 +38,7 @@
     </RatingBar>
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/comment_of_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ratingBar"
@@ -57,7 +57,7 @@
         android:id="@+id/textViewRatingAndRv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText"
+        android:layout_below="@+id/comment_of_user"
         android:layout_alignParentStart="true"
         android:layout_marginStart="22dp"
         android:layout_marginTop="8dp"
@@ -98,7 +98,7 @@
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText"
+        android:layout_below="@+id/comment_of_user"
         android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="39dp"
@@ -151,7 +151,7 @@
         android:id="@+id/ratingBar3"
         android:layout_width="wrap_content"
         android:layout_height="41dp"
-        android:layout_below="@+id/editText"
+        android:layout_below="@+id/comment_of_user"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="27dp"
         android:layout_marginEnd="-1dp"

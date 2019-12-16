@@ -1,6 +1,5 @@
-package com.ygaps.travelapp;
+package com.ygaps.travelapp.activity;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -12,11 +11,21 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.ygaps.travelapp.MyCustomDialog;
+import com.ygaps.travelapp.R;
+import com.ygaps.travelapp.RetrofitClient;
+import com.ygaps.travelapp.history_tour_user;
+import com.ygaps.travelapp.listTours;
+import com.ygaps.travelapp.map;
+import com.ygaps.travelapp.notifications;
+import com.ygaps.travelapp.setting;
+import com.ygaps.travelapp.user;
 
 import java.io.IOException;
 
@@ -25,20 +34,28 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MyCustomDialog.NoticeDialogListener{
     TextView textView;
     SharedPreferences sharedPreferences;
+    boolean check;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView( R.layout.activity_main);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 
         getSupportActionBar().setCustomView(R.layout.titlebar);
         textView = findViewById(R.id.titleBar);
         textView.setText("Travel Assistant");
+        sharedPreferences = getSharedPreferences("isLogin",MODE_PRIVATE);
+        check = sharedPreferences.getBoolean("isLogIn", false);
+        Log.e("CHECKK", String.valueOf( check ));
+        //check xem tai khoan da duoc dang nhap hay chua
+        if (check){
+            FirebaseApp.initializeApp(this);
+            fireBase();
+        }
 
-        FirebaseApp.initializeApp(this);
        /* FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this, new OnSuccessListener<InstanceIdResult>() {
             @Override
             public void onSuccess(InstanceIdResult instanceIdResult) {
@@ -48,13 +65,6 @@ public class MainActivity extends AppCompatActivity {
             }
         } );
         */
-        fireBase();
-
-
-        //check xem tai khoan da duoc dang nhap hay chua
-        sharedPreferences = getSharedPreferences("isLogin",MODE_PRIVATE);
-
-
 
         //xu ly bottom navigation
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -108,13 +118,12 @@ public class MainActivity extends AppCompatActivity {
     };
     void fireBase(){
         String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        SharedPreferences preferences = this.getSharedPreferences( "isLogin", Context.MODE_PRIVATE );
-        String Authorization = preferences.getString( "token","" );
+        String Authorization = sharedPreferences.getString( "token","" );
         if (!Authorization.equals(""))
         {
             //Log.e("AAAAAAAAA",Authorization);
             String token = FirebaseInstanceId.getInstance().getToken();
-            Log.e( "TOKENNNNNNNNNNNNNNNNN", token );
+           // Log.e( "TOKENNNNNNNNNNNNNNNNN", token );
             Call<ResponseBody> call = RetrofitClient
                     .getInstance()
                     .getApi()
@@ -141,5 +150,17 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        Fragment selectedFragment = new history_tour_user();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,selectedFragment).commit();
+
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+
     }
 }

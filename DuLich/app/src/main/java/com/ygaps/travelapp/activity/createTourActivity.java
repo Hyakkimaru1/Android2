@@ -1,4 +1,4 @@
-package com.ygaps.travelapp;
+package com.ygaps.travelapp.activity;
 
 import android.Manifest;
 import android.app.Activity;
@@ -24,6 +24,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.ygaps.travelapp.R;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -63,7 +65,7 @@ public class createTourActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        setContentView(R.layout.activity_create_tour);
+        setContentView( R.layout.activity_create_tour);
         preferences = getSharedPreferences("isLogin", Context.MODE_PRIVATE);
         token = preferences.getString( "token","" );
         creatTour = findViewById(R.id.CreateTour );

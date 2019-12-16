@@ -58,9 +58,17 @@ public interface Api<I extends Number> {
             @Query( "tourId" )  int tourId
     );
 
-    @GET("/tour/get/invitation")
+    @GET("tour/get/invitation")
     Call<ResponseBody> getTourInvitation(
             @Header("Authorization") String Authorization,
+            @Query( "pageIndex" )  int pageIndex,
+            @Query( "pageSize" )  int pageSize
+    );
+
+    @GET("tour/comment-list")
+    Call<ResponseBody> getCommentList(
+            @Header("Authorization") String Authorization,
+            @Query( "tourId" )  int tourId,
             @Query( "pageIndex" )  int pageIndex,
             @Query( "pageSize" )  int pageSize
     );
@@ -71,6 +79,16 @@ public interface Api<I extends Number> {
             @Field("accessToken") String accessToken
     );
 
+
+    @FormUrlEncoded
+    @POST("tour/comment")
+    Call<ResponseBody> sendComment(
+            @Header("Authorization") String Authorization,
+            @Field( "tourId" ) int tourId,
+            @Field( "userId" ) int userId,
+            @Field( "comment" ) String comment
+    );
+
     @FormUrlEncoded
     @POST("user/login/by-facebook")
     Call<ResponseBody> logInByFB(
@@ -78,7 +96,7 @@ public interface Api<I extends Number> {
     );
 
     @FormUrlEncoded
-    @POST("/tour/response/invitation")
+    @POST("tour/response/invitation")
     Call<ResponseBody> joiningTour(
             @Header("Authorization") String Authorization,
             @Field( "tourId" ) String tourId,
@@ -106,7 +124,7 @@ public interface Api<I extends Number> {
 
     );
 
-    @POST("/tour/suggested-destination-list")
+    @POST("tour/suggested-destination-list")
     Call<ResponseBody> suggest_Stoppoint(
             @Header("Authorization") String token,
             @Body getSuggest_Stoppoint getSuggest_stoppoint
@@ -132,7 +150,7 @@ public interface Api<I extends Number> {
     );
 
     @FormUrlEncoded
-    @POST("/user/notification/put-token")
+    @POST("user/notification/put-token")
     Call<ResponseBody> register_Firebase(
             @Header("Authorization") String token,
             @Field( "fcmToken" ) String fcmToken,
@@ -142,7 +160,7 @@ public interface Api<I extends Number> {
     );
 
     @FormUrlEncoded
-    @POST("/tour/add/member")
+    @POST("tour/add/member")
     Call<ResponseBody> invite_friend(
             @Header("Authorization") String Authorization,
             @Field( "tourId" ) String tourId,

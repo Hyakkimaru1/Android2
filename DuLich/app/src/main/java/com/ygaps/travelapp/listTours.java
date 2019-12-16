@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ygaps.travelapp.Adapter.MyAdapter;
+import com.ygaps.travelapp.activity.chat_tour;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,8 +60,8 @@ public class listTours extends Fragment {
                     return;
                 }
                 //
-                Intent intent = new Intent(getActivity(), createTourActivity.class);
-                //Intent intent = new Intent(getActivity(), searchFriend_Activity.class);
+                //Intent intent = new Intent(getActivity(), createTourActivity.class);
+                Intent intent = new Intent(getActivity(), chat_tour.class);
                 startActivity(intent);
             }
         });

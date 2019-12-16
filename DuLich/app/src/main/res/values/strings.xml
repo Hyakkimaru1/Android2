@@ -30,9 +30,13 @@
     <string name="edit_profile">Edit profile</string>
     <string name="switch_language">Switch language</string>
     <string name="title_logout">Log out</string>
-    <string name="project_ID" >122</string>
-    <string name="notification" >sent you an invitation for tour</string>
+    <string name="project_ID">122</string>
+    <string name="notification">sent you an invitation for tour</string>
 
+    <string-array name="language_arrays">
+        <item>English</item>
+        <item>Việt Nam</item>
+    </string-array>
     <string name="city_prompt">Choose a city</string>
     <string-array name="city_arrays">
         <item>Hồ Chí Minh</item>

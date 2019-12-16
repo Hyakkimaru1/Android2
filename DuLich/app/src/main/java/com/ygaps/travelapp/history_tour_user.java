@@ -1,18 +1,15 @@
 package com.ygaps.travelapp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,6 +34,7 @@ import retrofit2.Response;
 public class history_tour_user extends Fragment{
     ListView listView;
     ArrayList<aTour> noteList = new ArrayList<aTour>();
+    ArrayList<aTour> noteListFull = new ArrayList<aTour>();
     MyAdapter myAdapter;
     SharedPreferences preferences;
     TextView tours;
@@ -73,8 +71,8 @@ public class history_tour_user extends Fragment{
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent =new Intent(getActivity(),tourDetail.class);
-                startActivity(intent);
+            //    Intent intent =new Intent(getActivity(),tourDetail.class);
+                //   startActivity(intent);
             }
         });
 
@@ -83,7 +81,7 @@ public class history_tour_user extends Fragment{
         listView.setOnItemLongClickListener( new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText( getContext(),String.valueOf(noteList.get(i).getId()),Toast.LENGTH_SHORT ).show();
+                //Toast.makeText( getContext(),String.valueOf(noteList.get(i).getId()),Toast.LENGTH_SHORT ).show();
                 editor = preferences.edit();
                 editor.putInt( "id", noteList.get(i).getId());
                 editor.commit();
@@ -91,7 +89,8 @@ public class history_tour_user extends Fragment{
                 MyCustomDialog dialog = new MyCustomDialog();
                 dialog.show( getFragmentManager(),"MyCustomDiaLog" );
                 dialog.setCancelable( false );
-                Toast.makeText( getContext(),"Canceled!",Toast.LENGTH_SHORT ).show();
+
+                //Toast.makeText( getContext(),"Canceled!",Toast.LENGTH_SHORT ).show();
                 return false;
             }
         } );
@@ -120,21 +119,33 @@ public class history_tour_user extends Fragment{
                             bodyListTour = response.body().string();
 
                             JSONObject tourData = new JSONObject(bodyListTour);
-                            // Log.i("JSON",tourData.getString("total"));
-                            tours.setText( tourData.getString("total"));
+                            //Log.e("JSON",bodyListTour);
+                            int total = tourData.getInt("total") ;
                             JSONArray responseArray = tourData.getJSONArray("tours");
                             if (responseArray.length() > 0) {
                                 for (int i = 0; i < responseArray.length(); i++) {
                                     JSONObject jb = responseArray.getJSONObject( i );
-                                    noteList.add( new aTour( jb.getInt( "id" ), jb.getInt( "status" ), jb.getString( "name" ), jb.getString( "minCost" ),
+                                    noteListFull.add( new aTour( jb.getInt( "id" ), jb.getInt( "status" ), jb.getString( "name" ), jb.getString( "minCost" ),
                                             jb.getString( "maxCost" ), jb.getString( "startDate" ), jb.getString( "endDate" ), jb.getString( "adults" ),
-                                            jb.getString( "childs" ),  jb.getString( "avatar" ) ) );
+                                            jb.getString( "childs" ), jb.getString( "avatar" ) ) );
 
                                 }
-                                if (!noteList.isEmpty())
+                                if (!noteListFull.isEmpty())
                                 {
-                                    myAdapter = new MyAdapter( getContext(), R.layout.item_layout, noteList );
-                                    listView.setAdapter( myAdapter );
+                                    for (int i = 0;i<noteListFull.size();i++)
+                                    {
+                                        if (noteListFull.get( i ).getStatus() != -1){
+                                            noteList.add( noteListFull.get( i ));
+                                        }
+                                        else {
+                                            total--;
+                                        }
+                                    }
+                                    if (!noteList.isEmpty()){
+                                        tours.setText( String.valueOf( total ));
+                                        myAdapter = new MyAdapter( getContext(), R.layout.item_layout, noteList );
+                                        listView.setAdapter( myAdapter );
+                                    }
                                 }
                             }
                         } catch (IOException e) {
@@ -152,12 +163,9 @@ public class history_tour_user extends Fragment{
                 }
             } );
 
-
-
         }
 
     }
-
 
     /*
     private String docNoiDung_Tu_URL(String theUrl){

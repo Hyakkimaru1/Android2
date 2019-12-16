@@ -4,23 +4,13 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -31,7 +21,6 @@ import retrofit2.Response;
 
 public class MyCustomDialog extends DialogFragment {
     private static final String TAG = "MyCustomDialog";
-
     private Button button;
     private TextView textView;
     String token;
@@ -40,6 +29,24 @@ public class MyCustomDialog extends DialogFragment {
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
 
+    public interface NoticeDialogListener {
+        public void onDialogPositiveClick(DialogFragment dialog);
+        public void onDialogNegativeClick(DialogFragment dialog);
+    }
+    NoticeDialogListener mListener;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach( context );
+        try {
+            // Instantiate the NoticeDialogListener so we can send events to the host
+            mListener = (NoticeDialogListener) context;
+        } catch (ClassCastException e) {
+            // The activity doesn't implement the interface, throw exception
+            throw new ClassCastException(context.toString()
+                    + " must implement NoticeDialogListener");
+        }
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -48,8 +55,8 @@ public class MyCustomDialog extends DialogFragment {
         preferences = super.getContext().getSharedPreferences("isLogin", Context.MODE_PRIVATE);
         token = preferences.getString( "token","" );
         id = String.valueOf(preferences.getInt( "id",-1 )) ;
-        Log.i("idddddddddddddddd", id);
-        Log.i("token", token);
+     //   Log.i("idddddddddddddddd", id);
+     //   Log.i("token", token);
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -58,7 +65,6 @@ public class MyCustomDialog extends DialogFragment {
                 .setPositiveButton(R.string.history_dialog_yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, int which) {
-
                         Call<ResponseBody> call = RetrofitClient
                                 .getInstance()
                                 .getApi()
@@ -68,22 +74,22 @@ public class MyCustomDialog extends DialogFragment {
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                 //Toast.makeText(getContext(),response.code() , Toast.LENGTH_SHORT).show();
                                 if (response.code()==200) {
+                                    mListener.onDialogPositiveClick(MyCustomDialog.this);
+                                    try {
+                                        String body = response.body().string();
+                                        Log.e("respond",body);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
 
-                                       Log.i("respond","200");
 
-
-                                           //* Intent intent = new Intent(getBaseContext(), MapsActivity.class);
-
-
-
+                                    //* Intent intent = new Intent(getBaseContext(), MapsActivity.class);
                                 }
-
-                                else  if (response.code()==400){
-                                 //   Toast.makeText(getContext(), "Removing failed!", Toast.LENGTH_SHORT).show();
-                                   Log.i("BBB", response.message().toString());
+                                else{
+                                    //Toast.makeText( "Vui lòng thử lại!", Toast.LENGTH_SHORT).show();
+                                    Log.e("Error update"," :delete tour");
                                 }
                             }
-
                             @Override
                             public void onFailure(Call<ResponseBody> call, Throwable t) {
                                Log.i("Fail","Fail");
@@ -95,10 +101,11 @@ public class MyCustomDialog extends DialogFragment {
                 .setNegativeButton(R.string.history_dialog_no, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
-                        Toast.makeText(getContext(), "Canceled!", Toast.LENGTH_SHORT).show();
+                        mListener.onDialogNegativeClick(MyCustomDialog.this);
+                       // Toast.makeText(getContext(), "Canceled!", Toast.LENGTH_SHORT).show();
                     }
                 });
+
 return builder.create();
         /*View view = inflater.inflate(R.layout.dialog_historytour,container,false);
         button = view.findViewById( R.id.deleteTour );

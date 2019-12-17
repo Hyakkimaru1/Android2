@@ -17,6 +17,7 @@
     <string name="title_password">PASSWORD</string>
     <string name="signin">Sign in</string>
     <string name="signup">Sign up</string>
+    <string name="setting">Setting</string>
     <string name="facebook_app_id">763854984088757</string>
     //facebook key
     <string name="fb_login_protocol_scheme">fb763854984088757</string>
@@ -35,7 +36,9 @@
 
     <string-array name="language_arrays">
         <item>English</item>
-        <item>Việt Nam</item>
+        <item>German</item>
+        <item>French</item>
+        <item>Vietnamese</item>
     </string-array>
     <string name="city_prompt">Choose a city</string>
     <string-array name="city_arrays">

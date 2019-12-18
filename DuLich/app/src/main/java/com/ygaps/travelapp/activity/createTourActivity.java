@@ -217,6 +217,8 @@ public class createTourActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
+
+
     private boolean CheckData()
     {
         if (tourName.getText().toString().isEmpty()||startDay.getText().toString().isEmpty()

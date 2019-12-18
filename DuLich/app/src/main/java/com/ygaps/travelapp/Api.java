@@ -1,5 +1,6 @@
 package com.ygaps.travelapp;
 
+import java.io.File;
 import java.util.Map;
 
 import okhttp3.ResponseBody;
@@ -87,6 +88,18 @@ public interface Api<I extends Number> {
             @Field( "tourId" ) int tourId,
             @Field( "userId" ) int userId,
             @Field( "comment" ) String comment
+    );
+
+    @FormUrlEncoded
+    @POST("/tour/recording")
+    Call<ResponseBody> sendRecordFile(
+            @Header("Authorization") String Authorization,
+            @Field( "file" ) File file,
+            @Field( "tourId" ) int tourId,
+            @Field( "fullName" ) String fullName,
+            @Field( "avatar" ) String Avatar,
+            @Field( "lat" ) int lat,
+            @Field( "long" ) int longitude
     );
 
     @FormUrlEncoded

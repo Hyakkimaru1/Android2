@@ -22,13 +22,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#fff"
+        android:weightSum="10"
         android:orientation="horizontal">
 
+        <ImageButton
+            android:id="@+id/recordFile"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:background="@android:drawable/ic_btn_speak_now" />
         <EditText
             android:id="@+id/comment_of_user"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="7"
             android:ems="10"
             android:hint="Write a message"
             android:inputType="text"
@@ -40,6 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_weight="1"
             android:layout_marginHorizontal="10dp"
             android:background="@drawable/ic_send_black_24dp"
             android:padding="20dp"

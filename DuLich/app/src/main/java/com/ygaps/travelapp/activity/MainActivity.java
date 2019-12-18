@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements MyCustomDialog.No
         textView.setText("Travel Assistant");
         sharedPreferences = getSharedPreferences("isLogin",MODE_PRIVATE);
         check = sharedPreferences.getBoolean("isLogIn", false);
-        Log.e("CHECKK", String.valueOf( check ));
+        //Log.e("CHECKK", String.valueOf( check ));
         //check xem tai khoan da duoc dang nhap hay chua
         if (check){
             FirebaseApp.initializeApp(this);

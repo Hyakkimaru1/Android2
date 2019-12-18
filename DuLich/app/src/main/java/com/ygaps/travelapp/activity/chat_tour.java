@@ -1,15 +1,27 @@
 package com.ygaps.travelapp.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.support.v4.media.MediaBrowserCompat;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.ygaps.travelapp.Adapter.MessageAdapter;
 import com.ygaps.travelapp.Message;
@@ -20,6 +32,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -34,20 +47,38 @@ public class chat_tour extends AppCompatActivity   {
     ArrayList<Message> messages;
     MessageAdapter messageAdapter;
     SharedPreferences preferences;
+
     String token;
     int tourID;
     int Id_Login;
     ImageButton sendComment;
+    ImageButton recordFile;
     EditText editText;
+    TextView textView;
+    private MediaBrowserCompat mediaBrowser;
+    private static final String LOG_TAG = "AudioRecordFile";
+    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
+    private static String fileName = null;
+    private MediaRecorder recorder = null;
+    private MediaPlayer player = null;
+    private String [] permissions = {Manifest.permission.RECORD_AUDIO};
+    String storeComment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_chat_tour );
+        getSupportActionBar().setDisplayOptions( ActionBar.DISPLAY_SHOW_CUSTOM);
+
+        getSupportActionBar().setCustomView(R.layout.titlebar);
+        textView = findViewById(R.id.titleBar);
 
         preferences = getSharedPreferences("isLogin", Context.MODE_PRIVATE);
         token = preferences.getString( "token","" );
         Id_Login = preferences.getInt( "userID",-1 );
+        textView.setText(preferences.getString( "nameTour","" ));
+        fileName = getExternalCacheDir().getAbsolutePath();
+        fileName += "/wow_recordtour.3gp";
 
         //get tourID from Intent
         //
@@ -56,6 +87,7 @@ public class chat_tour extends AppCompatActivity   {
         listView = findViewById( R.id.messages_view );
         editText = findViewById( R.id.comment_of_user );
         sendComment =  findViewById( R.id.send_comment );
+        recordFile = findViewById( R.id.recordFile );
         getCommentList();
 
 
@@ -94,7 +126,124 @@ public class chat_tour extends AppCompatActivity   {
                 }
             }
         } );
+
+
+        recordFile.setOnTouchListener( new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+
+                    if (checkPermission()){
+                        startRecording();
+                        storeComment = editText.getText().toString();
+                        editText.setText( "Recording started!!" );
+                    }
+                   // Log.e("PERMISSION",String.valueOf( checkPermission() ));
+                }
+                else if (motionEvent.getAction() == MotionEvent.ACTION_UP){
+                    if (checkPermission()){
+                        stopRecording();
+                        editText.setText( storeComment );
+                    }
+                }
+                return false;
+            }
+        } );
+
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case REQUEST_RECORD_AUDIO_PERMISSION:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+        }
+    }
+
+
+    private boolean checkPermission(){
+        if (ContextCompat.checkSelfPermission(chat_tour.this,
+                Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(chat_tour.this,
+                    Manifest.permission.RECORD_AUDIO)) {
+                ActivityCompat.requestPermissions( this,new String[] {Manifest.permission.RECORD_AUDIO},REQUEST_RECORD_AUDIO_PERMISSION);
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions( this,new String[] {Manifest.permission.RECORD_AUDIO},REQUEST_RECORD_AUDIO_PERMISSION);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+            return false;
+        } else {
+            return true;
+            // Permission has already been granted
+        }
+    }
+
+
+    private void startRecording() {
+        recorder = new MediaRecorder();
+        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        recorder.setOutputFile(fileName);
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+
+        try {
+            recorder.prepare();
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "prepare() failed");
+        }
+
+        recorder.start();
+    }
+
+    private void stopRecording() {
+        recorder.stop();
+        recorder.release();
+        recorder = null;
+
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .sendRecordFile(token,new File(fileName),3874,"DUY","",101,100);
+
+        call.enqueue( new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.code()==200){
+                    Log.e("OKE","this sent file record ok");
+                }
+                else {
+                    Log.e("ERROR","this sent file record error");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("NOTHINGS", "eeeeeee");
+            }
+        } );
+    }
+
 
     void getCommentList(){
         Call<ResponseBody> call = RetrofitClient

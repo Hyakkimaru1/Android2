@@ -1,7 +1,5 @@
 package com.ygaps.travelapp;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,7 +23,7 @@ public class DataParser {
         String longitude="";
         String reference="";
 
-        Log.d("DataParser","jsonobject ="+googlePlaceJson.toString());
+       // Log.d("DataParser","jsonobject ="+googlePlaceJson.toString());
 
 
         try {
@@ -78,7 +76,7 @@ public class DataParser {
         JSONArray jsonArray = null;
         JSONObject jsonObject;
 
-        Log.d("json data", jsonData);
+       // Log.d("json data", jsonData);
 
         try {
             jsonObject = new JSONObject(jsonData);

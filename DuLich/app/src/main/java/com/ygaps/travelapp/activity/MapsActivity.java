@@ -11,9 +11,9 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -21,7 +21,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -83,7 +83,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationRequest locationRequest;
     private Marker currentUserLocationMarker;
     private static final int Request_User_Location_Code = 99;
-    private EditText searchText;
+    private SearchView searchText;
     MarkerOptions markerOptions;
     LatLng latLng;
 
@@ -117,16 +117,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Address des = null;
     String tourID = "";
     Intent intent;
+    int pageIndex = 1;
+    boolean flag_loading = false;
     boolean check_ActionList = false;
     FloatingActionButton makeStopPoint;
 
     int Radius = 1000;
 
     ArrayList<stopPoint> noteList = new ArrayList<stopPoint>();
+    ArrayList<stopPoint> list_searchSP = new ArrayList<stopPoint>();
     com.ygaps.travelapp.serviceStopPoints serviceStopPoints ;
-    static
+
     Stop_Point_Adapter myAdapter;
+    Stop_Point_Adapter stop_point_adapter = null;
     ListView listView;
+    ListView search_SP_in_maps;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
@@ -159,10 +164,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         edtLeave = findViewById(R.id.editTextSelectDayLeave);
 
         listView = findViewById( R.id.listStopPoint );
+        search_SP_in_maps = findViewById( R.id.search_SP_in_maps );
         makeStopPoint = findViewById(R.id.makeStopPoint);
 
         createListStopP = findViewById(R.id.createListStopPoint);
-
+        search_SP_in_maps.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                stopPoint stop_point = list_searchSP.get( i );
+                markerOptions = new MarkerOptions();
+                latLng = new LatLng( stop_point.getLat(),stop_point.getLng() );
+                markerOptions.position( latLng );
+                markerOptions.title(stop_point.getName());
+                if (stop_point.getProvinceId()==1){
+                    markerOptions.icon( BitmapDescriptorFactory.fromResource(R.drawable.restaurant) );
+                }
+                else if (stop_point.getProvinceId()==2){
+                    markerOptions.icon( BitmapDescriptorFactory.fromResource( R.drawable.hotel ));
+                }
+                else if (stop_point.getProvinceId()==3){
+                    markerOptions.icon( BitmapDescriptorFactory.fromResource( R.drawable.rest_station ) );
+                }
+                else {
+                    markerOptions.icon( BitmapDescriptorFactory.fromResource( R.drawable.other ) );
+                }
+                stop_point_adapter.clear();
+                stop_point_adapter = null;
+                mMap.addMarker( markerOptions );
+                mMap.moveCamera( CameraUpdateFactory.newLatLngZoom( latLng,18F) );
+            }
+        } );
         makeStopPoint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -176,8 +207,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         endListSP.setOnClickListener( new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-
-
+                                relativeLayout1.setVisibility(View.VISIBLE);
+                                linearLayout.setVisibility( View.INVISIBLE );
+                                check_ActionList=!check_ActionList;
                             }
                         } );
                         check_ActionList=!check_ActionList;
@@ -231,7 +263,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             init();
         }
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        // Obtain the SupportMapFragment and get notified when the fragment_explore is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById( R.id.map );
         mapFragment.getMapAsync( this );
@@ -284,24 +316,37 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void init(){
-        searchText.setOnEditorActionListener( new TextView.OnEditorActionListener() {
+        searchText.setOnQueryTextListener( new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onEditorAction(TextView textView, int actionID, KeyEvent keyEvent) {
+            public boolean onQueryTextSubmit(String s) {
+                geoLocate(s);
+                return false;
+            }
 
-                if (actionID == EditorInfo.IME_ACTION_SEARCH||actionID==EditorInfo.IME_ACTION_DONE
-                        || keyEvent.getAction()==KeyEvent.ACTION_DOWN || keyEvent.getAction()==KeyEvent.KEYCODE_ENTER){
-                    geoLocate();
+            @Override
+            public boolean onQueryTextChange(String s) {
+                if (s.length()>1 && s.charAt( 0 ) == '#'  ){
+                    searchStopPoint(s.substring( 1 ));
+                    if (stop_point_adapter!=null){
+                        stop_point_adapter.clear();
+                        stop_point_adapter = null;
+                    }
 
+                    pageIndex = 1;
+                    flag_loading = false;
+                }
+                else{
+                    if (stop_point_adapter!=null){
+                        stop_point_adapter.clear();
+                        stop_point_adapter = null;
+                    }
                 }
                 return false;
             }
         } );
     }
-
-    private void geoLocate() {
+    private void geoLocate(String searchString) {
        // mMap.clear();
-        String searchString = searchText.getText().toString();
-
         Geocoder geocoder = new Geocoder( MapsActivity.this );
         List<Address> list = new ArrayList<>(  );
         try
@@ -309,7 +354,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             list = geocoder.getFromLocationName( searchString,2 );
 
         } catch (IOException e){
-            Log.e( "TAG","geoLocate: IOException "+e.getMessage() );
+           Log.e( "TAG","geoLocate: IOException "+e.getMessage() );
         }
 
         if (list.size()>0){
@@ -401,9 +446,131 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    private void searchStopPoint(final String searchString){
+
+            Call<ResponseBody> call = RetrofitClient
+                    .getInstance()
+                    .getApi()
+                    .getDestination( token,searchString, pageIndex,20);
+            pageIndex++;
+            call.enqueue( new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if (response.code()==200){
+                        try {
+                            String body = response.body().string();
+                            JSONObject jsonObject = new JSONObject( body );
+
+                            JSONArray jsonArray = jsonObject.getJSONArray( "stopPoints" );
+
+                            if (jsonArray.length()>0){
+                                for (int i = 0; i<jsonArray.length();i++){
+                                    JSONObject object = jsonArray.getJSONObject( i );
+
+                                    list_searchSP.add( new stopPoint( object.getString( "name" ),object.getString( "address" ),object.getInt( "provinceId" ),
+                                            object.getDouble( "lat") ,object.getDouble( "long" ),object.getLong( "minCost" ),
+                                            object.getLong( "maxCost" ),object.getString( "avatar" ),object.getInt( "serviceTypeId" )) );
+                                }
+                                if (stop_point_adapter == null)
+                                {
+                                    stop_point_adapter = new Stop_Point_Adapter( MapsActivity.this,R.layout.item_stoppoint_layout,list_searchSP );
+                                    search_SP_in_maps.setAdapter( stop_point_adapter );
+                                }
+                                else {
+                                    stop_point_adapter.notifyDataSetChanged();
+                                }
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else {
+                        Toast.makeText(MapsActivity.this,"Có lỗi, vui lòng thử lại sau.",Toast.LENGTH_LONG ).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Toast.makeText( MapsActivity.this,"Có lỗi, vui lòng thử lại sau.",Toast.LENGTH_LONG ).show();
+                }
+            } );
+
+            search_SP_in_maps.setOnScrollListener( new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if(firstVisibleItem+visibleItemCount == totalItemCount && totalItemCount!=0)
+                {
+                    if(flag_loading == false)
+                    {
+                        flag_loading = true;
+                        new Thread( new Runnable() {
+                            @Override
+                            public void run() {
+                                additems(searchString);
+                            }
+                        } );
+                    }
+                }
+            }
+        } );
+    }
+
+    private void additems(String searchString) {
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .getDestination( token, searchString, pageIndex, 20 );
+
+        call.enqueue( new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.code() == 200) {
+                    pageIndex++;
+                    flag_loading = false;
+                    try {
+                        String body = response.body().string();
+                        JSONObject jsonObject = new JSONObject( body );
+
+                        JSONArray jsonArray = jsonObject.getJSONArray( "stopPoints" );
+
+                        if (jsonArray.length() > 0) {
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject object = jsonArray.getJSONObject( i );
+
+                                list_searchSP.add( new stopPoint( object.getString( "name" ), object.getString( "address" ), object.getInt( "provinceId" ),
+                                        object.getDouble( "lat" ), object.getDouble( "long" ), object.getLong( "minCost" ),
+                                        object.getLong( "maxCost" ), object.getString( "avatar" ), object.getInt( "serviceTypeId" ) ) );
+                            }
+                            stop_point_adapter.notifyDataSetChanged();
+
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText( MapsActivity.this, "Có lỗi, vui lòng thử lại sau.", Toast.LENGTH_LONG ).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        } );
+    }
+
     /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
+     * Manipulates the fragment_explore once available.
+     * This callback is triggered when the fragment_explore is ready to be used.
      * This is where we can add markers or lines, add listeners or move the camera. In this case,
      * we just add a marker near Sydney, Australia.
      * If Google Play services is not installed on the device, the user will be prompted to install
@@ -422,7 +589,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             // position on right bottom
             rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
             rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
-            rlp.setMargins(0, 1500, 180, 0);
+            rlp.setMargins(0, 250, 200, 0);
         }
 
 
@@ -438,7 +605,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 // Setting the title for the marker.
                 // This will be displayed on taping the marker
                 markerOptions.title(latLng.latitude + " : " + latLng.longitude);
-
+                markerOptions.zIndex( 5.0f );
                 markerOptions.icon( BitmapDescriptorFactory.fromResource(R.drawable.location_choose) );
                 currentUserLocationMarker = mMap.addMarker( markerOptions );
                 // Add a marker in current location and move the camera
@@ -587,20 +754,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     markerOptions.position( latLngStopPoint );
                                     markerOptions.title( jb.getString( "name" ));
                                     if (jb.getInt( "serviceTypeId" )==1){
+                                        markerOptions.zIndex( 1.0f );
                                         markerOptions.icon( BitmapDescriptorFactory.fromResource(R.drawable.restaurant) );
                                     }
                                     else if (jb.getInt( "serviceTypeId" )==2){
+                                        markerOptions.zIndex( 2.0f );
                                         markerOptions.icon( BitmapDescriptorFactory.fromResource( R.drawable.hotel ));
                                     }
                                     else if (jb.getInt( "serviceTypeId" )==3){
+                                        markerOptions.zIndex( 3.0f );
                                         markerOptions.icon( BitmapDescriptorFactory.fromResource( R.drawable.rest_station ) );
                                     }
                                     else {
+                                        markerOptions.zIndex( 4.0f );
                                         markerOptions.icon( BitmapDescriptorFactory.fromResource( R.drawable.other ) );
                                     }
 
                                     currentUserLocationMarker = mMap.addMarker( markerOptions );
-
                                 }
 
                             }
@@ -735,8 +905,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 else {
 
                     // Toast.makeText( MapsActivity.this, marker.getTitle(),Toast.LENGTH_SHORT).show();
-
-
                     editTextStopPoint.setText( marker.getTitle() );
                     final Address address = getAddress( marker.getPosition().latitude,marker.getPosition().longitude );
                     editTextAddress.setText( address.getAddressLine( 0 ) );
@@ -822,7 +990,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         googlePlaceUrl.append("&sensor=true");
         googlePlaceUrl.append("&key="+getString(R.string.apikeyPlaceNearly));
 
-        Log.i(">>>>>>>>>>>>>>>>>>>>>>", "url = "+googlePlaceUrl.toString());
+      //  Log.i(">>>>>>>>>>>>>>>>>>>>>>", "url = "+googlePlaceUrl.toString());
 
         return googlePlaceUrl.toString();
     }

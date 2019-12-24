@@ -67,6 +67,7 @@ public class GetNearlyByPlaces extends AsyncTask<Object, String, String> {
             int width = 100;
 
             markerOptions.icon(BitmapDescriptorFactory.fromResource( R.drawable.restaurant ));
+            markerOptions.zIndex( 5.0f );
             marker = mMap.addMarker(markerOptions);
             marker.showInfoWindow();
         }

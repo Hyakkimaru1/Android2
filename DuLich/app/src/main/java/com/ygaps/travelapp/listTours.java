@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,7 +18,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ygaps.travelapp.Adapter.MyAdapter;
-import com.ygaps.travelapp.activity.chat_tour;
+import com.ygaps.travelapp.activity.createTourActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,8 +26,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -41,6 +40,8 @@ public class listTours extends Fragment {
     TextView tours;
     String token;
     FloatingActionButton buttonAddTour;
+    int pageNum = 1;
+    boolean flag_loading = false;
 
     @Nullable
     @Override
@@ -60,39 +61,52 @@ public class listTours extends Fragment {
                     return;
                 }
                 //
-                //Intent intent = new Intent(getActivity(), createTourActivity.class);
-                Intent intent = new Intent(getActivity(), chat_tour.class);
+                Intent intent = new Intent(getActivity(), createTourActivity.class);
+                //Intent intent = new Intent(getActivity(), chat_tour.class);
                 startActivity(intent);
             }
         });
 
-
-
-
-        tours= view.findViewById( R.id.tours );
+        tours = view.findViewById( R.id.tours );
         readJson();
+
+        listView.setOnScrollListener( new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if(firstVisibleItem+visibleItemCount == totalItemCount && totalItemCount!=0)
+                {
+                    if(flag_loading == false)
+                    {
+                        flag_loading = true;
+                        additems();
+                    }
+                }
+            }
+        } );
         return view;
 
-
-
-
     }
+
+
 
     void readJson(){
         if (!token.equals(""))
         {
-            Map<String, String> params = new HashMap<>();
-            params.put("rowPerPage","150");
-            params.put("pageNum","1");
             Call<ResponseBody> call = RetrofitClient
                     .getInstance()
                     .getApi()
-                    .getListTour(token,params);
+                    .getListTour(token,20,pageNum);
 
             call.enqueue( new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     if (response.code()==200) {
+                        pageNum++;
                         noteList = new ArrayList<aTour>( );
                         String bodyListTour = null;
                         try {
@@ -137,32 +151,52 @@ public class listTours extends Fragment {
         }
 
     }
-    /*
-    private String docNoiDung_Tu_URL(String theUrl){
-        StringBuilder content = new StringBuilder();
-        try    {
-            // create a url object
-            URL url = new URL(theUrl);
+    private void additems() {
 
-            // create a urlconnection object
-            URLConnection urlConnection = url.openConnection();
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .getListTour(token,20,pageNum);
 
-            // wrap the urlconnection in a bufferedreader
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+        call.enqueue( new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.code()==200) {
+                    pageNum++;
+                    flag_loading = false;
+                    String bodyListTour = null;
+                    try {
+                        bodyListTour = response.body().string();
 
-            String line;
+                        JSONObject tourData = new JSONObject(bodyListTour);
+                        // Log.e("JSON",bodyListTour);
+                        tours.setText( tourData.getString("total"));
+                        JSONArray responseArray = tourData.getJSONArray("tours");
+                        if (responseArray.length() > 0) {
+                            for (int i = 0; i < responseArray.length(); i++) {
+                                JSONObject jb = responseArray.getJSONObject( i );
+                                noteList.add( new aTour( jb.getInt( "id" ), jb.getInt( "status" ), jb.getString( "name" ), jb.getString( "minCost" ),
+                                        jb.getString( "maxCost" ), jb.getString( "startDate" ), jb.getString( "endDate" ), jb.getString( "adults" ),
+                                        jb.getString( "childs" ),  jb.getString( "avatar" ) ) );
 
-            // read from the urlconnection via the bufferedreader
-            while ((line = bufferedReader.readLine()) != null){
-                content.append(line + "\n");
+                            }
+                            myAdapter.notifyDataSetChanged();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
-            bufferedReader.close();
-        }
-        catch(Exception e)    {
-            e.printStackTrace();
-        }
-        return content.toString();
-    }
 
-     */
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        } );
+
+
+    }
 }

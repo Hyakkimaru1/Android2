@@ -37,7 +37,8 @@ public interface Api<I extends Number> {
     @GET("tour/list")
     Call<ResponseBody > getListTour(
             @Header("Authorization") String Authorization,
-            @QueryMap Map<String,String> params
+            @Query( "rowPerPage" ) int rowPerPage,
+            @Query( "pageNum" ) int pageNum
             );
 
     @GET("tour/history-user")
@@ -73,6 +74,15 @@ public interface Api<I extends Number> {
             @Query( "pageIndex" )  int pageIndex,
             @Query( "pageSize" )  int pageSize
     );
+
+    @GET("/tour/search/service")
+    Call<ResponseBody> getDestination(
+            @Header("Authorization") String Authorization,
+            @Query( "searchKey" )  String searchKey,
+            @Query( "pageIndex" )  int pageIndex,
+            @Query( "pageSize" )  int pageSize
+    );
+
 
     @FormUrlEncoded
     @POST("user/login/by-google")

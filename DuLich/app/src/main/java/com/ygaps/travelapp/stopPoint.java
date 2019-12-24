@@ -34,6 +34,9 @@ public class stopPoint {
     @SerializedName("maxCost")
     @Expose
     private long maxCost;
+    @SerializedName("avatar")
+    @Expose
+    private String avatar;
 
 
     public stopPoint(String name, String address, int provinceId, double lat, double lng, long arrivalAt, long leaveAt, int serviceTypeId, long minCost, long maxCost) {
@@ -47,6 +50,21 @@ public class stopPoint {
         this.serviceTypeId = serviceTypeId;
         this.minCost = minCost;
         this.maxCost = maxCost;
+        this.avatar = "";
+    }
+
+    public stopPoint(String name, String address, int provinceId, double lat, double lng, long minCost, long maxCost,String avatar, int serviceTypeId) {
+        this.name = name;
+        this.address = address;
+        this.provinceId = provinceId;
+        this.lat = lat;
+        this.lng = lng;
+        this.arrivalAt = 0;
+        this.leaveAt = 0;
+        this.minCost = minCost;
+        this.maxCost = maxCost;
+        this.avatar = avatar;
+        this.serviceTypeId = serviceTypeId;
     }
 
 
@@ -129,6 +147,13 @@ public class stopPoint {
 
     public void setMaxCost(long maxCost) {
         this.maxCost = maxCost;
+    }
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
 }

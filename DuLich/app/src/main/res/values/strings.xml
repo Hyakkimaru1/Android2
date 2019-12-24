@@ -105,6 +105,9 @@
     </string-array>
 
     <string name="service_type_prompt">Choose a service type</string>
+    <string name="user_location_permission_explanation">This app needs location permissions in order to show its functionality.</string>
+    <string name="user_location_permission_not_granted">You didn\'t grant location permissions.</string>
+    <string name="access_token">pk.eyJ1IjoiZHV5ODE5OSIsImEiOiJjazRlMTFubXUwNnh4M2xwZWE1MG9rMmV5In0.cFyJPMTMy-CmhsATotfdkA</string>
     <string-array name="service_type_arrays">
         <item>Restaurant</item>
         <item>Hotel</item>

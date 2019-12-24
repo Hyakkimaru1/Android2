@@ -20,7 +20,7 @@
             android:layout_marginStart="11dp"
             android:layout_marginTop="11dp"
             android:background="@drawable/avt_radius"
-            app:srcCompat="@mipmap/ic_launcher_round" />
+            android:src="@drawable/person" />
 
         <Button
             android:id="@+id/confirm_invite"

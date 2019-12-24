@@ -1,7 +1,5 @@
 package com.ygaps.travelapp;
 
-import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,7 +48,7 @@ public class DownloadURL {
             inputStream.close();
             urlConnection.disconnect();
         }
-        Log.d("DownloadURL","Returning data= "+data);
+        //Log.d("DownloadURL","Returning data= "+data);
 
         return data;
     }

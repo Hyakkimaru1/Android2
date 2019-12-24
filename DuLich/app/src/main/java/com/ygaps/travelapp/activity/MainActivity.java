@@ -20,9 +20,9 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.ygaps.travelapp.MyCustomDialog;
 import com.ygaps.travelapp.R;
 import com.ygaps.travelapp.RetrofitClient;
+import com.ygaps.travelapp.fragment_explore;
 import com.ygaps.travelapp.history_tour_user;
 import com.ygaps.travelapp.listTours;
-import com.ygaps.travelapp.map;
 import com.ygaps.travelapp.notifications;
 import com.ygaps.travelapp.setting;
 import com.ygaps.travelapp.user;
@@ -53,7 +53,13 @@ public class MainActivity extends AppCompatActivity implements MyCustomDialog.No
         //check xem tai khoan da duoc dang nhap hay chua
         if (check){
             FirebaseApp.initializeApp(this);
-            fireBase();
+            new Thread( new Runnable() {
+                @Override
+                public void run() {
+                    fireBase();
+                }
+            } ).start();
+
         }
 
        /* FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this, new OnSuccessListener<InstanceIdResult>() {
@@ -93,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements MyCustomDialog.No
                     textView.setText("Tour Detail");
                     break;
                 case R.id.navigation_map:
-                    selectedFragment = new map();
+                    selectedFragment = new fragment_explore();
                     textView.setText("Map");
                     break;
                 case R.id.navigation_notifications:
@@ -123,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements MyCustomDialog.No
         {
             //Log.e("AAAAAAAAA",Authorization);
             String token = FirebaseInstanceId.getInstance().getToken();
-           // Log.e( "TOKENNNNNNNNNNNNNNNNN", token );
+            //Log.e( "TOKENNNNNNNNNNNNNNNNN", token );
             Call<ResponseBody> call = RetrofitClient
                     .getInstance()
                     .getApi()
@@ -135,12 +141,13 @@ public class MainActivity extends AppCompatActivity implements MyCustomDialog.No
                     if (response.code()==200){
                         try {
                             String body = response.body().string();
-                            Log.i("OKOKOKOKOKO", body);
+                            Log.i("Firebase", body);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     }
                     else {
+                        Log.i("Firebase", "false");
                     }
                 }
 

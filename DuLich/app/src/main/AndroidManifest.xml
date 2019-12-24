@@ -17,12 +17,17 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <service
-            android:name=".service.MyFirebaseService">
+        <activity android:name=".updateTourNext"></activity>
+        <activity android:name=".updateTour" />
 
-        </service>
-        <activity android:name=".searchFriend_Activity" android:parentActivityName=".MainActivity" >
-        </activity>
+        <service android:name=".service.MyFirebaseService" />
+
+        <activity
+            android:name=".searchFriend_Activity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".tourDetail"
+            android:parentActivityName=".tourDetail" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -37,10 +42,11 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps">
+            android:label="@string/title_activity_maps" />
+        <activity
+            android:name=".createTourActivity"
+            android:parentActivityName=".MainActivity" />
 
-        </activity>
-        <activity android:name=".createTourActivity" android:parentActivityName=".MainActivity" ></activity>
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -56,7 +62,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
     </application>
 

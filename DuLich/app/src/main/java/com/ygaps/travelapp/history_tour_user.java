@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -73,7 +74,10 @@ public class history_tour_user extends Fragment{
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent =new Intent(getActivity(),tourDetail.class);
+                Intent intent = new Intent(getActivity(),tourDetail.class);
+                intent.putExtra("token", token);
+                intent.putExtra("tourId", String.valueOf(noteList.get(position).getId()));
+
                 startActivity(intent);
             }
         });
@@ -91,7 +95,7 @@ public class history_tour_user extends Fragment{
                 MyCustomDialog dialog = new MyCustomDialog();
                 dialog.show( getFragmentManager(),"MyCustomDiaLog" );
                 dialog.setCancelable( false );
-                Toast.makeText( getContext(),"Canceled!",Toast.LENGTH_SHORT ).show();
+
                 return false;
             }
         } );

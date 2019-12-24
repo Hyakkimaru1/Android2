@@ -1,4 +1,4 @@
-package com.ygaps.travelapp;
+package com.ygaps.travelapp.Adapter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,6 +15,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.squareup.picasso.Picasso;
+import com.ygaps.travelapp.R;
+import com.ygaps.travelapp.RetrofitClient;
+import com.ygaps.travelapp.Tour_Invitation;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -48,7 +51,7 @@ public class notification_Adapter extends ArrayAdapter<Tour_Invitation> {
         preferences = this.getContext().getSharedPreferences("isLogin", Context.MODE_PRIVATE);
 
         token = preferences.getString( "token","" );
-        v = inflater.inflate(R.layout.item_notification, null);
+        v = inflater.inflate( R.layout.item_notification, null);
         final Tour_Invitation p =getItem( position );
         if (p!=null) {
             TextView textView = v.findViewById( R.id.textNotification );
@@ -58,7 +61,7 @@ public class notification_Adapter extends ArrayAdapter<Tour_Invitation> {
             Date d = new Date(p.getCreateOn());
             textTimeInvite.setText(sdf.format( d ));
             ImageView imageView = (ImageView)v.findViewById( R.id.avtTourInvite);
-            if (!p.getAvtTour().equals(""))
+            if (!p.getAvtTour().equals("") && !p.getAvtTour().equals( "null" ))
                 Picasso.get().load(p.getAvtTour()).into(imageView);
             Button confirm_invite = v.findViewById( R.id.confirm_invite );
             confirm_invite.setOnClickListener( new View.OnClickListener() {

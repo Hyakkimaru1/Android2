@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".searchFriend_Activity">
+    tools:context=".activity.searchFriend_Activity">
     <SearchView
         android:id="@+id/search_Friend"
         android:layout_width="match_parent"

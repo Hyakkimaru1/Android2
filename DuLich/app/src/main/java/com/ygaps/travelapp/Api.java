@@ -1,5 +1,6 @@
 package com.ygaps.travelapp;
 
+import java.io.File;
 import java.util.Map;
 
 import okhttp3.ResponseBody;
@@ -36,7 +37,8 @@ public interface Api<I extends Number> {
     @GET("tour/list")
     Call<ResponseBody > getListTour(
             @Header("Authorization") String Authorization,
-            @QueryMap Map<String,String> params
+            @Query( "rowPerPage" ) int rowPerPage,
+            @Query( "pageNum" ) int pageNum
             );
 
     @GET("tour/history-user")
@@ -58,17 +60,56 @@ public interface Api<I extends Number> {
             @Query( "tourId" )  int tourId
     );
 
-    @GET("/tour/get/invitation")
+    @GET("tour/get/invitation")
     Call<ResponseBody> getTourInvitation(
             @Header("Authorization") String Authorization,
             @Query( "pageIndex" )  int pageIndex,
             @Query( "pageSize" )  int pageSize
     );
 
+    @GET("tour/comment-list")
+    Call<ResponseBody> getCommentList(
+            @Header("Authorization") String Authorization,
+            @Query( "tourId" )  int tourId,
+            @Query( "pageIndex" )  int pageIndex,
+            @Query( "pageSize" )  int pageSize
+    );
+
+    @GET("/tour/search/service")
+    Call<ResponseBody> getDestination(
+            @Header("Authorization") String Authorization,
+            @Query( "searchKey" )  String searchKey,
+            @Query( "pageIndex" )  int pageIndex,
+            @Query( "pageSize" )  int pageSize
+    );
+
+
     @FormUrlEncoded
     @POST("user/login/by-google")
     Call<ResponseBody> logInByGG(
             @Field("accessToken") String accessToken
+    );
+
+
+    @FormUrlEncoded
+    @POST("tour/comment")
+    Call<ResponseBody> sendComment(
+            @Header("Authorization") String Authorization,
+            @Field( "tourId" ) int tourId,
+            @Field( "userId" ) int userId,
+            @Field( "comment" ) String comment
+    );
+
+    @FormUrlEncoded
+    @POST("/tour/recording")
+    Call<ResponseBody> sendRecordFile(
+            @Header("Authorization") String Authorization,
+            @Field( "file" ) File file,
+            @Field( "tourId" ) int tourId,
+            @Field( "fullName" ) String fullName,
+            @Field( "avatar" ) String Avatar,
+            @Field( "lat" ) int lat,
+            @Field( "long" ) int longitude
     );
 
     @FormUrlEncoded
@@ -78,7 +119,7 @@ public interface Api<I extends Number> {
     );
 
     @FormUrlEncoded
-    @POST("/tour/response/invitation")
+    @POST("tour/response/invitation")
     Call<ResponseBody> joiningTour(
             @Header("Authorization") String Authorization,
             @Field( "tourId" ) String tourId,
@@ -153,7 +194,7 @@ public interface Api<I extends Number> {
     );
 
     @FormUrlEncoded
-    @POST("/user/notification/put-token")
+    @POST("user/notification/put-token")
     Call<ResponseBody> register_Firebase(
             @Header("Authorization") String token,
             @Field( "fcmToken" ) String fcmToken,
@@ -163,7 +204,7 @@ public interface Api<I extends Number> {
     );
 
     @FormUrlEncoded
-    @POST("/tour/add/member")
+    @POST("tour/add/member")
     Call<ResponseBody> invite_friend(
             @Header("Authorization") String Authorization,
             @Field( "tourId" ) String tourId,

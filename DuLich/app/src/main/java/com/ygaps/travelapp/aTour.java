@@ -3,6 +3,9 @@ package com.ygaps.travelapp;
 public class aTour {
 
     int id;
+
+
+
     int status;
     String  name;
     String minCost;
@@ -11,7 +14,7 @@ public class aTour {
     String endDate;
     String adults;
     String childs;
-   // boolean  isPrivate;
+    boolean  isPrivate;
     String avatar;
 
     public aTour(int id, int status, String name, String minCost, String maxCost, String startDate, String endDate, String adults, String childs,  String avatar) {
@@ -24,7 +27,20 @@ public class aTour {
         this.endDate = endDate;
         this.adults = adults;
         this.childs = childs;
-    //    this.isPrivate = isPrivate;
+        this.isPrivate = false;
+        this.avatar = avatar;
+    }
+    public aTour(int id, int status, String name, String minCost, String maxCost, String startDate, String endDate, String adults, String childs,boolean isPrivate,  String avatar) {
+        this.id = id;
+        this.status = status;
+        this.name = name;
+        this.minCost = minCost;
+        this.maxCost = maxCost;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.adults = adults;
+        this.childs = childs;
+        this.isPrivate = isPrivate;
         this.avatar = avatar;
     }
 
@@ -44,6 +60,9 @@ public class aTour {
         this.status = status;
     }
 
+    public int getStatus() {
+        return status;
+    }
     public String getName() {
         return name;
     }
@@ -100,14 +119,14 @@ public class aTour {
         this.childs = childs;
     }
 
-  /*  public boolean isPrivate() {
+  public boolean isPrivate() {
         return isPrivate;
     }
 
     public void setPrivate(boolean aPrivate) {
         isPrivate = aPrivate;
     }
-   */
+
 
     public String getAvatar() {
         return avatar;

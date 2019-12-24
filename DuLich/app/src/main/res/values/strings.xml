@@ -17,6 +17,7 @@
     <string name="title_password">PASSWORD</string>
     <string name="signin">Sign in</string>
     <string name="signup">Sign up</string>
+    <string name="setting">Setting</string>
     <string name="facebook_app_id">763854984088757</string>
     //facebook key
     <string name="fb_login_protocol_scheme">fb763854984088757</string>
@@ -33,6 +34,12 @@
     <string name="project_ID">122</string>
     <string name="notification">sent you an invitation for tour</string>
 
+    <string-array name="language_arrays">
+        <item>English</item>
+        <item>German</item>
+        <item>French</item>
+        <item>Vietnamese</item>
+    </string-array>
     <string name="city_prompt">Choose a city</string>
     <string-array name="city_arrays">
         <item>Hồ Chí Minh</item>
@@ -101,6 +108,9 @@
     </string-array>
 
     <string name="service_type_prompt">Choose a service type</string>
+    <string name="user_location_permission_explanation">This app needs location permissions in order to show its functionality.</string>
+    <string name="user_location_permission_not_granted">You didn\'t grant location permissions.</string>
+    <string name="access_token">pk.eyJ1IjoiZHV5ODE5OSIsImEiOiJjazRlMTFubXUwNnh4M2xwZWE1MG9rMmV5In0.cFyJPMTMy-CmhsATotfdkA</string>
     <string-array name="service_type_arrays">
         <item>Restaurant</item>
         <item>Hotel</item>

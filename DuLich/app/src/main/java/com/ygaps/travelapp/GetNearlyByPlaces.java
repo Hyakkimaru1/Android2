@@ -15,7 +15,7 @@ import java.util.List;
  * @author Priyanka
  */
 
-class GetNearlyByPlaces extends AsyncTask<Object, String, String> {
+public class GetNearlyByPlaces extends AsyncTask<Object, String, String> {
 
     private String googlePlacesData;
     private GoogleMap mMap;
@@ -67,6 +67,7 @@ class GetNearlyByPlaces extends AsyncTask<Object, String, String> {
             int width = 100;
 
             markerOptions.icon(BitmapDescriptorFactory.fromResource( R.drawable.restaurant ));
+            markerOptions.zIndex( 5.0f );
             marker = mMap.addMarker(markerOptions);
             marker.showInfoWindow();
         }

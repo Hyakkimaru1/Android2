@@ -4,6 +4,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class stopPoint {
+    @SerializedName("id")
+    @Expose
+    private String id;
     @SerializedName("name")
     @Expose
     private String name;
@@ -51,6 +54,22 @@ public class stopPoint {
         this.minCost = minCost;
         this.maxCost = maxCost;
         this.avatar = "";
+        this.id = "";
+    }
+
+    public stopPoint(String id, String name, String address, int provinceId, double lat, double lng, long arrivalAt, long leaveAt, int serviceTypeId, long minCost, long maxCost) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.provinceId = provinceId;
+        this.lat = lat;
+        this.lng = lng;
+        this.arrivalAt = arrivalAt;
+        this.leaveAt = leaveAt;
+        this.serviceTypeId = serviceTypeId;
+        this.minCost = minCost;
+        this.maxCost = maxCost;
+        this.avatar = "";
     }
 
     public stopPoint(String name, String address, int provinceId, double lat, double lng, long minCost, long maxCost,String avatar, int serviceTypeId) {
@@ -67,6 +86,9 @@ public class stopPoint {
         this.serviceTypeId = serviceTypeId;
     }
 
+    public String getId() {
+        return id;
+    }
 
     public String getName() {
         return name;

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
@@ -62,6 +64,8 @@ public class tourDetail extends AppCompatActivity {
     TextView max;
     String check;
     Button rate;
+    SharedPreferences.Editor editor;
+    SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +87,8 @@ public class tourDetail extends AppCompatActivity {
         token = intent.getStringExtra("token");
         id = intent.getStringExtra( "tourId") ;
 
+        preferences = this.getBaseContext().getSharedPreferences("isLogin", Context.MODE_PRIVATE);
+
         Log.e("dddddd",String.valueOf(id));
 
         Log.e("TTTTTTTTTTT",token);
@@ -91,10 +97,29 @@ public class tourDetail extends AppCompatActivity {
         rate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-        DialogRate();
+                DialogRate();
             }
         });
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getBaseContext(), updateTour.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                //intent.putExtra("return check", check);
+                intent.putExtra("token", token);
+                intent.putExtra("id", id);
+                intent.putExtra( "tourName" ,tourname.getText().toString());
+                intent.putExtra( "sStartDay",sStartDay );
+                intent.putExtra( "sEndDay",sEndDay );
+                intent.putExtra( "check",check);
+                intent.putExtra( "adult",Integer.parseInt(adult.getText().toString()) );
+                intent.putExtra( "children",Integer.parseInt( child.getText().toString() ) );
+                intent.putExtra( "minC",Long.parseLong( min.getText().toString() ) );
+                intent.putExtra( "maxC",Long.parseLong( max.getText().toString() ) );
 
+                startActivity(intent);
+            }
+        });
 
 
 
@@ -150,7 +175,7 @@ public class tourDetail extends AppCompatActivity {
                             d = new Date(Long.parseLong(sStartDay));
                         }
 
-                            Log.e("EEEEEEE",String.valueOf(d));
+                        Log.e("EEEEEEE",String.valueOf(d));
                         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
                         start.setText( sdf.format( d ));
@@ -254,19 +279,14 @@ public class tourDetail extends AppCompatActivity {
 
 
 
-                Intent intent2 = new Intent(getApplicationContext(), MainActivity.class);
-                intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss dd.MM.yyyy");
-                String time = sdf.format(new Date());
+                Toast.makeText( getBaseContext(),id,Toast.LENGTH_SHORT ).show();
+                editor = preferences.edit();
+                editor.putInt( "id", Integer.parseInt(id));
+                editor.commit();
 
-
-//                intent2.putExtra("titleContent", editText.getText().toString());
-//                intent2.putExtra("Date", time);
-//                intent2.putExtra("Content", editTextContent.getText().toString());
-//                intent2.putExtra("Tag", editTextTag.getText().toString());
-//                intent2.putExtra("return check", check);
-
-                startActivity(intent2);
+                MyCustomDialog dialog = new MyCustomDialog();
+                dialog.show( getSupportFragmentManager(),"MyCustomDiaLog" );
+                dialog.setCancelable( false );
 
                 return true;
             default:

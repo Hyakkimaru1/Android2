@@ -46,6 +46,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ygaps.travelapp.Adapter.Stop_Point_Adapter;
+import com.ygaps.travelapp.activity.MainActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -600,11 +601,14 @@ public class updateTourNext extends AppCompatActivity implements OnMapReadyCallb
                                             bodyTourCreate = response.body().string();
 
                                             JSONObject tourData = new JSONObject(bodyTourCreate);
-                                             Log.i("JSON",tourID);
+                                            Log.i("JSON",tourID);
 
                                             Toast.makeText( updateTourNext.this, tourID,Toast.LENGTH_SHORT ).show();
                                             Toast.makeText( updateTourNext.this, "Cập nhật tour thành công",Toast.LENGTH_SHORT ).show();
+                                            Intent intent = new Intent(getBaseContext(), MainActivity.class);
 
+
+                                            startActivity(intent);
                                             //Need to kill first activity
 
                                            /* Intent intent = new Intent(getBaseContext(), MapsActivity.class);
@@ -681,26 +685,6 @@ public class updateTourNext extends AppCompatActivity implements OnMapReadyCallb
         return googlePlaceUrl.toString();
     }
 
-
-    private boolean CheckData()
-    {
-        if (editTextStopPoint.getText().toString().isEmpty()||editTextAddress.getText().toString().isEmpty()
-                ||editTextMinC.getText().toString().isEmpty() || editTextMaxC.getText().toString().isEmpty()
-                ||editTextTimeArrive.getText().toString().isEmpty()||editTextSelectDay.getText().toString().isEmpty()
-                || editTextTimeLeave.getText().toString().isEmpty() || editTextSelectDayLeave.getText().toString().isEmpty() )
-        {
-            Toast.makeText( this, "Vui lòng không để trống thông tin",Toast.LENGTH_SHORT ).show();
-            return false;
-        }
-        if (Integer.parseInt(editTextMaxC.getText().toString()) < 0 ||
-                Integer.parseInt(editTextMinC.getText().toString()) < 0 )
-        {
-            Toast.makeText( this, "Vui lòng không nhập số âm",Toast.LENGTH_SHORT ).show();
-            return false;
-        }
-        //Check private or public
-        return true;
-    }
 
     private Address getAddress(double lat,double lng) {
 

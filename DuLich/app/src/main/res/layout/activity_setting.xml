@@ -65,7 +65,7 @@
         android:layout_marginTop="50dp"
         android:layout_marginEnd="20dp"
         android:layout_toEndOf="@+id/textViewSwitchLanguage"
-        android:entries="@array/language_arrays"
+        android:entries="@array/city_arrays"
         android:prompt="@string/city_prompt" />
 
     <Button

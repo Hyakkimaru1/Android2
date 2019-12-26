@@ -36,10 +36,10 @@
         android:id="@+id/textViewListStopPoint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/buttonRate"
+        android:layout_below="@+id/textViewPrice2"
         android:layout_alignParentStart="true"
         android:layout_marginStart="17dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:text="Danh sách điểm dừng"
         android:textDirection="firstStrong"
         android:textSize="21sp"
@@ -67,6 +67,28 @@
         android:text="TextView"
         android:textSize="18sp" />
 
+    <TextView
+        android:id="@+id/textViewTimeEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewTourName"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/textViewTimeStart2"
+        android:text="TextView"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/textViewTimeStart2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewTourName"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/textViewTimeStart"
+        android:text="-"
+        android:textSize="18sp" />
+
     <ImageView
         android:id="@+id/imageView10"
         android:layout_width="26dp"
@@ -78,7 +100,7 @@
         app:srcCompat="@drawable/group" />
 
     <TextView
-        android:id="@+id/textViewGroup"
+        android:id="@+id/textViewAdult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewTimeStart"
@@ -89,14 +111,62 @@
         android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/textViewPrice"
+        android:id="@+id/textViewChild"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewGroup"
+        android:layout_below="@+id/textViewTimeStart"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/textViewAdult2"
+        android:text="TextView"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/textViewAdult2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewTimeStart"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/textViewAdult"
+        android:text="-"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/textViewMax"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewAdult"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="15dp"
+        android:layout_toEndOf="@+id/textViewPrice2"
+        android:text="TextView"
+        android:textColor="#F35858"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewMin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewAdult"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
         android:layout_toEndOf="@+id/imageView11"
         android:text="TextView"
+        android:textColor="#F35858"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewPrice2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewAdult"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="15dp"
+        android:layout_toEndOf="@+id/textViewMin"
+        android:text="-"
         android:textColor="#F35858"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -113,13 +183,15 @@
 
     <Button
         android:id="@+id/buttonRate"
-        android:layout_width="185dp"
-        android:layout_height="37dp"
-        android:layout_below="@+id/textViewPrice"
+        android:layout_width="146dp"
+        android:layout_height="28dp"
+        android:layout_below="@+id/buttonFriend"
         android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="116dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginStart="252dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="13dp"
         android:background="@drawable/signupbt"
         android:backgroundTint="#35BBAE"
         android:text="Đánh giá và nhận xét"
@@ -139,15 +211,22 @@
         android:text="Thành viên"
         android:textColor="#FFFFFF" />
 
+
     <ListView
-        android:layout_width="407dp"
-        android:layout_height="360dp"
+        android:id="@+id/ListViewSP"
+      
+        android:layout_width="match_parent"
+        android:layout_height="398dp"
         android:layout_below="@+id/textViewListStopPoint"
         android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="3dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="-2dp"
+        android:layout_marginBottom="9dp"
+        android:dividerHeight="10dp"
         android:orientation="horizontal"></ListView>
+
+
 </RelativeLayout>

@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/mapLayout"
+        android:layout_width="match_parent"
+        android:visibility="invisible"
+        android:layout_height="match_parent">
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></fragment>
+
+        <SearchView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/map"
+            android:layout_alignTop="@+id/map"
+            android:layout_alignEnd="@+id/map"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/bg_round"
+            android:id="@+id/Search"
+            android:iconifiedByDefault="false"
+            >
+
+        </SearchView>
+        <ListView
+            android:id="@+id/search_SP_in_maps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/Search"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            >
+
+        </ListView>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/formStopPoint"
+        android:background="@android:color/white"
+        android:visibility="visible"
+
+        >
+        <Button
+            android:id="@+id/button_x"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="11dp"
+            android:background="@drawable/button_x"></Button>
+
+        <EditText
+            android:id="@+id/editTextStopPoint"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_below="@+id/TextViewStopPoint0"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="25dp"
+            android:background="@drawable/radiusbutton"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:paddingStart="30px"
+            android:textAlignment="viewStart"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/TextViewStopPoint0"
+            android:layout_width="375dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/TextViewStopPointInfo"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="25dp"
+            android:text="Stop point name" />
+
+        <TextView
+            android:id="@+id/TextViewStopPointInfo"
+            android:layout_width="375dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="25dp"
+            android:text="Stop point information"
+            android:textAlignment="center"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/TextViewServiceType"
+            android:layout_width="386dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editTextStopPoint"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="25dp"
+            android:text="Service type" />
+
+        <TextView
+            android:id="@+id/textViewAddress"
+            android:layout_width="375dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/serviceType"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="25dp"
+            android:text="Address" />
+
+        <EditText
+            android:id="@+id/editTextAddress"
+            android:layout_width="344dp"
+            android:layout_height="26dp"
+            android:layout_below="@+id/textViewAddress"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="57dp"
+            android:background="@drawable/radiusbutton"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:paddingStart="30px"
+            android:text="Ho Chi Minh"
+            android:textAlignment="viewStart"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/TextVievProvince"
+            android:layout_width="375dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editTextAddress"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="25dp"
+            android:text="Province" />
+
+        <TextView
+            android:id="@+id/textViewMinC"
+            android:layout_width="107dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/province"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Min Cost" />
+
+        <TextView
+            android:id="@+id/textViewMaxC"
+            android:layout_width="111dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/province"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="82dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="60dp"
+            android:layout_toEndOf="@+id/textViewAdult"
+            android:text="Max Cost" />
+
+        <EditText
+            android:id="@+id/editTextMinC"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            android:layout_below="@+id/textViewMinC"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="1dp"
+            android:layout_toStartOf="@+id/editTextMaxC"
+            android:background="@drawable/radiusbutton"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:paddingStart="30px"
+            android:text="0"
+            android:textAlignment="viewStart"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/editTextMaxC"
+            android:layout_width="126dp"
+            android:layout_height="27dp"
+            android:layout_below="@+id/textViewMaxC"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="27dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="25dp"
+            android:layout_toEndOf="@+id/editTextAdult"
+            android:background="@drawable/radiusbutton"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:paddingStart="30px"
+            android:text="0"
+            android:textAlignment="viewStart"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/TextVievArriveTime"
+            android:layout_width="375dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editTextMinC"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="25dp"
+            android:text="Arrive at" />
+
+        <EditText
+            android:id="@+id/editTextTimeArrive"
+            android:layout_width="127dp"
+            android:layout_height="36dp"
+            android:layout_below="@+id/TextVievArriveTime"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/radiustext"
+            android:ems="8"
+            android:inputType="textPersonName"
+            android:paddingStart="30px"
+            android:textAlignment="viewStart"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/editTextSelectDay"
+            android:layout_width="106dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/TextVievArriveTime"
+            android:layout_marginStart="11dp"
+            android:layout_marginTop="7dp"
+            android:layout_toEndOf="@+id/editTextTimeArrive"
+            android:ems="8"
+            android:inputType="textPersonName"
+            android:paddingStart="30px"
+            android:textAlignment="viewStart"
+            android:textSize="14sp" />
+
+        <ImageButton
+            android:id="@+id/imageButtonStartTime"
+            android:layout_width="30dp"
+            android:layout_height="29dp"
+            android:layout_below="@+id/TextVievArriveTime"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="9dp"
+            android:layout_toEndOf="@+id/editTextSelectDay"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/calendar" />
+
+        <ImageButton
+            android:id="@+id/imageButtonTimeLeave"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_below="@+id/TextVievLeaveTime"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/editTextSelectDayLeave"
+            android:background="#FFFFFF"
+            android:scaleType="fitXY"
+            android:src="@drawable/calendar" />
+
+        <TextView
+            android:id="@+id/TextVievLeaveTime"
+            android:layout_width="375dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editTextSelectDay"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="11dp"
+            android:layout_marginEnd="25dp"
+            android:text="Leave at" />
+
+        <EditText
+            android:id="@+id/editTextTimeLeave"
+            android:layout_width="128dp"
+            android:layout_height="36dp"
+            android:layout_below="@+id/TextVievLeaveTime"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/radiustext"
+            android:ems="8"
+            android:inputType="textPersonName"
+            android:paddingStart="30px"
+            android:textAlignment="viewStart"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/editTextSelectDayLeave"
+            android:layout_width="102dp"
+            android:layout_height="41dp"
+            android:layout_below="@+id/TextVievLeaveTime"
+            android:layout_marginStart="13dp"
+            android:layout_marginTop="6dp"
+            android:layout_toEndOf="@+id/editTextTimeLeave"
+            android:ems="8"
+            android:inputType="textPersonName"
+            android:paddingStart="30px"
+            android:textAlignment="viewStart"
+            android:textSize="14sp" />
+
+        <Spinner
+            android:id="@+id/province"
+            android:layout_width="350dp"
+            android:layout_height="30dp"
+            android:layout_below="@+id/TextVievProvince"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="25dp"
+            android:entries="@array/city_arrays"
+            android:prompt="@string/city_prompt" />
+
+        <Spinner
+            android:id="@+id/serviceType"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_below="@+id/TextViewServiceType"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="25dp"
+            android:entries="@array/service_type_arrays"
+            android:prompt="@string/service_type_prompt" />
+
+        <Button
+            android:id="@+id/buttonCreateStopPoint"
+            android:layout_width="wrap_content"
+            android:layout_height="42dp"
+            android:layout_below="@+id/editTextTimeLeave"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="23dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/signupbt"
+            android:backgroundTint="#35BBAE"
+            android:text="create"
+            android:textColor="#EAEBEB"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/imageButtonAddress"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_below="@+id/textViewAddress"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            android:background="#00FFFFFF"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/map" />
+
+    </RelativeLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/makeStopPoint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:src="@drawable/button_list"
+        app:layout_anchor="@id/mapLayout"
+        app:backgroundTint="@color/colorMain"
+        app:layout_anchorGravity="bottom|right|end"/>
+    <LinearLayout
+        android:visibility="invisible"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/listSP">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:background="#FFF"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
+
+
+                <TextView
+                    android:id="@+id/StopPoint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_toEndOf="@+id/imageView2"
+                    android:text="Stop Point"
+                    android:textColor="#000"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+
+                <Button
+                    android:id="@+id/endListSP"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="47dp"
+                    android:layout_marginTop="19dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toEndOf="@+id/createListStopPoint"
+                    android:background="@drawable/button_x" />
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="42dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
+                    android:src="@drawable/person"/>
+
+                <Button
+                    android:id="@+id/createListStopPoint"
+                    android:layout_width="84dp"
+                    android:layout_height="41dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="63dp"
+                    android:layout_marginTop="13dp"
+                    android:layout_toEndOf="@+id/StopPoint"
+                    android:background="@drawable/signupbt"
+                    android:backgroundTint="#B7EAF7"
+                    android:text="CREATE" />
+            </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ListView
+                    android:id="@+id/listStopPoint"
+                    android:layout_width="match_parent"
+                    android:dividerHeight="10dp"
+                    android:layout_height="match_parent" >
+
+                </ListView>
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+

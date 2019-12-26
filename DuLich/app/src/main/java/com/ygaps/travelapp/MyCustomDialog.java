@@ -2,6 +2,7 @@ package com.ygaps.travelapp;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 
@@ -38,14 +40,7 @@ public class MyCustomDialog extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach( context );
-        try {
-            // Instantiate the NoticeDialogListener so we can send events to the host
-            mListener = (NoticeDialogListener) context;
-        } catch (ClassCastException e) {
-            // The activity doesn't implement the interface, throw exception
-            throw new ClassCastException(context.toString()
-                    + " must implement NoticeDialogListener");
-        }
+
     }
 
     @Override
@@ -55,8 +50,8 @@ public class MyCustomDialog extends DialogFragment {
         preferences = super.getContext().getSharedPreferences("isLogin", Context.MODE_PRIVATE);
         token = preferences.getString( "token","" );
         id = String.valueOf(preferences.getInt( "id",-1 )) ;
-     //   Log.i("idddddddddddddddd", id);
-     //   Log.i("token", token);
+        //   Log.i("idddddddddddddddd", id);
+        //   Log.i("token", token);
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -74,7 +69,8 @@ public class MyCustomDialog extends DialogFragment {
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                 //Toast.makeText(getContext(),response.code() , Toast.LENGTH_SHORT).show();
                                 if (response.code()==200) {
-                                    mListener.onDialogPositiveClick(MyCustomDialog.this);
+                                    //  mListener.onDialogPositiveClick(MyCustomDialog.this);
+
                                     try {
                                         String body = response.body().string();
                                         Log.e("respond",body);
@@ -92,7 +88,7 @@ public class MyCustomDialog extends DialogFragment {
                             }
                             @Override
                             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                               Log.i("Fail","Fail");
+                                Log.i("Fail","Fail");
                             }
                         });
 
@@ -101,12 +97,12 @@ public class MyCustomDialog extends DialogFragment {
                 .setNegativeButton(R.string.history_dialog_no, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mListener.onDialogNegativeClick(MyCustomDialog.this);
-                       // Toast.makeText(getContext(), "Canceled!", Toast.LENGTH_SHORT).show();
+                        // mListener.onDialogNegativeClick(MyCustomDialog.this);
+                        // Toast.makeText(getContext(), "Canceled!", Toast.LENGTH_SHORT).show();
                     }
                 });
 
-return builder.create();
+        return builder.create();
         /*View view = inflater.inflate(R.layout.dialog_historytour,container,false);
         button = view.findViewById( R.id.deleteTour );
         button.setOnClickListener( new View.OnClickListener() {

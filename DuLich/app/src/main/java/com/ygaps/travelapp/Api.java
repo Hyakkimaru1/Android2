@@ -214,7 +214,28 @@ public interface Api<I extends Number> {
 
     );
 
-    @POST("tour/suggested-destination-list")
+    @FormUrlEncoded
+    @POST("tour/update-tour")
+    Call<ResponseBody> updateTour(
+            @Header("Authorization") String accessToken,
+            @Field( "id" ) String id,
+            @Field( "name" ) String name,
+            @Field("startDate") long startDate,
+            @Field( "endDate" ) long endDate,
+            @Field("sourceLat") double sourceLat,
+            @Field( "sourceLong" ) double sourceLong,
+            @Field("desLat") double desLat,
+            @Field( "desLong" ) double desLong,
+            @Field( "isPrivate" ) boolean isPrivate,
+            @Field( "adults" ) int  adults,
+            @Field( "childs" ) int  childs,
+            @Field( "minCost" ) long minCost,
+            @Field( "maxCost" ) long maxCost
+            //@Field("avatar") String avatar
+
+    );
+
+    @POST("/tour/suggested-destination-list")
     Call<ResponseBody> suggest_Stoppoint(
             @Header("Authorization") String token,
             @Body getSuggest_Stoppoint getSuggest_stoppoint

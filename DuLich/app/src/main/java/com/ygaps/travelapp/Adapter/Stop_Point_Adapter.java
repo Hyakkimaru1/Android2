@@ -21,7 +21,7 @@ import java.util.Date;
 public class Stop_Point_Adapter extends ArrayAdapter<stopPoint> {
     ArrayList<stopPoint> noteList;
 
-    public Stop_Point_Adapter(@NonNull Context context, int resource, @NonNull ArrayList<stopPoint> objects) {
+    public Stop_Point_Adapter( Context context, int resource,  ArrayList<stopPoint> objects) {
         super( context, resource, objects );
         noteList = objects;
     }

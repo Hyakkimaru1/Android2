@@ -7,10 +7,10 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
-        android:allowBackup="false"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -25,11 +25,22 @@
             </intent-filter>
         </service>
         <activity android:name=".activity.maps_follow_thetour">
-
         </activity>
         <activity android:name=".activity.chat_tour" > </activity>
-        <activity android:name=".activity.searchFriend_Activity"
+        <activity android:name=".updateSP"
+            android:parentActivityName=".tourDetail"/>
+
+        <activity android:name=".updateTourNext" />
+        <activity android:name=".updateTour" />
+        <activity
+            android:name=".activity.createTourActivity"></activity>
+
+        <activity
+            android:name=".activity.searchFriend_Activity"
             android:parentActivityName=".activity.MainActivity" />
+        <activity
+            android:name=".tourDetail"
+            android:parentActivityName=".tourDetail" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -44,10 +55,8 @@
 
         <activity
             android:name=".activity.MapsActivity"
-            android:label="@string/title_activity_maps" />
-        <activity
-            android:name=".activity.createTourActivity"
-            android:parentActivityName=".activity.MainActivity" />
+            android:label="@string/title_activity_maps">
+        </activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -55,8 +64,7 @@
 
         <activity
             android:name=".ui.login.LoginActivity"
-            android:label="@string/title_activity_login"
-            android:theme="@android:style/Theme.Holo.DialogWhenLarge" />
+            android:label="@string/title_activity_login" />
         <activity android:name=".activity.SplashActivity" />
         <activity android:name=".activity.MainActivity">
             <intent-filter>

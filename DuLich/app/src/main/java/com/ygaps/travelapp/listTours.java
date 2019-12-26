@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,7 +41,8 @@ public class listTours extends Fragment {
     TextView tours;
     String token;
     FloatingActionButton buttonAddTour;
-    int pageNum = 1;
+    SearchView search_tour_in_main;
+    int pageNum = 20;
     boolean flag_loading = false;
 
     @Nullable
@@ -50,7 +52,7 @@ public class listTours extends Fragment {
         listView =(ListView) view.findViewById( R.id.listTours);
         buttonAddTour = view.findViewById(R.id.button_input);
         preferences = this.getActivity().getSharedPreferences("isLogin", Context.MODE_PRIVATE);
-
+        search_tour_in_main = view.findViewById( R.id.search_tour_in_main );
         token = preferences.getString( "token","" );
         buttonAddTour.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,6 +88,26 @@ public class listTours extends Fragment {
                         additems();
                     }
                 }
+            }
+        } );
+
+        search_tour_in_main.setOnQueryTextListener( new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                if (s.equals( "" )||s.isEmpty()){
+                    flag_loading = false;
+                }
+                else {
+                    myAdapter.getFilter().filter( s );
+                    flag_loading = true;
+                }
+
+                return false;
             }
         } );
         return view;
@@ -181,6 +203,7 @@ public class listTours extends Fragment {
 
                             }
                             myAdapter.notifyDataSetChanged();
+                            myAdapter.updateNoteListFull();
                         }
                     } catch (IOException e) {
                         e.printStackTrace();

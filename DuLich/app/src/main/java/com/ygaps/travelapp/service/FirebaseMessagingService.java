@@ -11,16 +11,15 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.Settings;
 import android.util.Log;
-import android.provider.Settings.Secure;
 
 import androidx.core.app.NotificationCompat;
 
-import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.ygaps.travelapp.activity.MainActivity;
 import com.ygaps.travelapp.R;
 import com.ygaps.travelapp.RetrofitClient;
+import com.ygaps.travelapp.activity.MainActivity;
 
 import java.io.IOException;
 
@@ -29,50 +28,34 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MyFirebaseService extends FirebaseMessagingService {
+public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
     private static final String TAG = "MyFirebaseService";
-    SharedPreferences preferences;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-
-        Log.e(TAG, "Firebase: " + remoteMessage.getFrom());
-        // Check if message contains a data payload.
-        if (remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-            if (/* Check if data needs to be processed by long running job */ true) {
-                // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
-               // scheduleJob();
-            } else {
-                // Handle message within 10 seconds
-               // handleNow();
-            }
-        }
-        // Check if message contains a notification payload.
+        // handle a notification payload.
+        Log.e("From: ",remoteMessage.getFrom());
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+
             sendNotification(remoteMessage.getNotification().getBody());
         }
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
     }
-
-
     @Override
     public void onNewToken(String token) {
-        Log.i("AAAAAAAAAAA OKOK: ", token);
+        Log.d(TAG, "Refreshed token: " + token);
+
         sendRegistrationToServer(token);
     }
 
     private void sendRegistrationToServer(String token) {
-        // TODO: Implement this method to send token to your app server.
-        preferences = getSharedPreferences("isLogin", Context.MODE_PRIVATE);
-
-
-        String android_id = Secure.getString(getContentResolver(), Secure.ANDROID_ID);
-        String Authorization = preferences.getString( "token","" );
-        if (!Authorization.equals( "" )){
-
+        String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        SharedPreferences sharedPreferences =  getSharedPreferences("isLogin",MODE_PRIVATE);
+        String Authorization = sharedPreferences.getString( "token","" );
+        if (!Authorization.equals(""))
+        {
+            //Log.e("AAAAAAAAA",Authorization);
+            //Log.e( "TOKENNNNNNNNNNNNNNNNN", token );
             Call<ResponseBody> call = RetrofitClient
                     .getInstance()
                     .getApi()
@@ -84,11 +67,13 @@ public class MyFirebaseService extends FirebaseMessagingService {
                     if (response.code()==200){
                         try {
                             String body = response.body().string();
-                            Log.i("OKOKOKOKOKO", body);
+                            Log.i("Firebase", body);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-
+                    }
+                    else {
+                        Log.i("Firebase", "false");
                     }
                 }
 
@@ -98,7 +83,7 @@ public class MyFirebaseService extends FirebaseMessagingService {
                 }
             });
         }
-
+        // TODO: Implement this method to send token to your app server.
     }
 
     private void sendNotification(String messageBody) {
@@ -106,25 +91,30 @@ public class MyFirebaseService extends FirebaseMessagingService {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
-
-
-        String channelId = getString(R.string.project_ID);
+        String channelId = getString( R.string.project_id);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(R.drawable.ic_launcher_background)
-                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_background))
-                        .setContentTitle(messageBody)
-                        .setContentText("AAA")
+                        .setLargeIcon( BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_background))
+                        .setContentTitle(getString(R.string.project_id))
+                        .setContentText(messageBody)
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
                         .setContentIntent(pendingIntent)
-                        .setDefaults(Notification.DEFAULT_ALL)
-                        .setPriority(NotificationManager.IMPORTANCE_HIGH);
+                        .setDefaults( Notification.DEFAULT_ALL)
+                        .setPriority( NotificationManager.IMPORTANCE_HIGH)
+                        .addAction(new NotificationCompat.Action(
+                                android.R.drawable.sym_call_missed,
+                                "Cancel",
+                                PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)))
+                        .addAction(new NotificationCompat.Action(
+                                android.R.drawable.sym_call_outgoing,
+                                "OK",
+                                PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)));
 
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) getSystemService( Context.NOTIFICATION_SERVICE);
 
         // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

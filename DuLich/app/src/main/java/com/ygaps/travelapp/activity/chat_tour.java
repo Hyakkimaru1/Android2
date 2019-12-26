@@ -11,6 +11,7 @@ import android.support.v4.media.MediaBrowserCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -32,7 +33,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -47,7 +47,6 @@ public class chat_tour extends AppCompatActivity   {
     ArrayList<Message> messages;
     MessageAdapter messageAdapter;
     SharedPreferences preferences;
-
     String token;
     int tourID;
     int Id_Login;
@@ -63,6 +62,7 @@ public class chat_tour extends AppCompatActivity   {
     private MediaPlayer player = null;
     private String [] permissions = {Manifest.permission.RECORD_AUDIO};
     String storeComment;
+    int indexRecord = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +77,6 @@ public class chat_tour extends AppCompatActivity   {
         token = preferences.getString( "token","" );
         Id_Login = preferences.getInt( "userID",-1 );
         textView.setText(preferences.getString( "nameTour","" ));
-        fileName = getExternalCacheDir().getAbsolutePath();
-        fileName += "/wow_recordtour.3gp";
 
         //get tourID from Intent
         //
@@ -127,6 +125,25 @@ public class chat_tour extends AppCompatActivity   {
             }
         } );
 
+        listView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (messages.get( i ).getIsRecord()){
+                        player = new MediaPlayer();
+                        try {
+                            player.setDataSource(messages.get( i ).getComment());
+                            player.prepare();
+                            player.start();
+                        } catch (IOException e) {
+                            Log.e(LOG_TAG, "prepare() failed");
+                        }
+                }
+                else if(player!=null) {
+                    player.release();
+                    player = null;
+                }
+            }
+        } );
 
         recordFile.setOnTouchListener( new View.OnTouchListener() {
             @Override
@@ -151,6 +168,12 @@ public class chat_tour extends AppCompatActivity   {
             }
         } );
 
+    }
+    private String createFileName(){
+
+        fileName = getExternalCacheDir().getAbsolutePath()+"/" + String.valueOf( indexRecord )+"recordtour.3gp";
+        indexRecord++;
+        return fileName;
     }
 
     @Override
@@ -204,7 +227,7 @@ public class chat_tour extends AppCompatActivity   {
         recorder = new MediaRecorder();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        recorder.setOutputFile(fileName);
+        recorder.setOutputFile(createFileName());
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
         try {
@@ -220,28 +243,9 @@ public class chat_tour extends AppCompatActivity   {
         recorder.stop();
         recorder.release();
         recorder = null;
-
-        Call<ResponseBody> call = RetrofitClient
-                .getInstance()
-                .getApi()
-                .sendRecordFile(token,new File(fileName),3874,"DUY","",101,100);
-
-        call.enqueue( new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.code()==200){
-                    Log.e("OKE","this sent file record ok");
-                }
-                else {
-                    Log.e("ERROR","this sent file record error");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e("NOTHINGS", "eeeeeee");
-            }
-        } );
+        messages.add(new Message( fileName,"","",Id_Login,true,true ));
+        messageAdapter.notifyDataSetChanged();
+        listView.setSelection(listView.getCount() - 1);
     }
 
 

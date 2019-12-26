@@ -101,6 +101,73 @@ public interface Api<I extends Number> {
     );
 
     @FormUrlEncoded
+    @POST("tour/current-users-coordinate")
+    Call<ResponseBody> sendCoordinate (
+            @Header("Authorization") String Authorization,
+            @Field( "userId" ) int userId,
+            @Field( "tourId" ) int tourId,
+            @Field( "lat" ) double lat,
+            @Field( "long" ) double lng
+
+    );
+
+    @FormUrlEncoded
+    @POST("tour/add/notification-on-road")
+    Call<ResponseBody> sendNotification (
+            @Header("Authorization") String Authorization,
+            @Field( "lat" ) double lat,
+            @Field( "long" ) double lng,
+            @Field( "tourId" ) int tourId,
+            @Field( "userId" ) int userId,
+            @Field( "notificationType" ) int type,
+            @Field( "speed" ) int speed,
+            @Field( "note" ) String note
+    );
+    @FormUrlEncoded
+    @POST("tour/add/notification-on-road")
+    Call<ResponseBody> sendNotification (
+            @Header("Authorization") String Authorization,
+            @Field( "lat" ) double lat,
+            @Field( "long" ) double lng,
+            @Field( "tourId" ) int tourId,
+            @Field( "userId" ) int userId,
+            @Field( "notificationType" ) int type,
+            @Field( "note" ) String note
+    );
+
+    @GET("tour/get/noti-on-road")
+    Call<ResponseBody> getNotification(
+            @Header("Authorization") String Authorization,
+            @Query( "tourId" )  int tourId,
+            @Query( "pageIndex" )  int pageIndex,
+            @Query( "pageSize" )  int pageSize
+    );
+
+    @FormUrlEncoded
+    @POST("tour/notification")
+    Call<ResponseBody> sendChatChat (
+            @Header("Authorization") String Authorization,
+            @Field( "tourId" ) int tourId,
+            @Field( "userId" ) int userId,
+            @Field( "noti" ) String noti
+    );
+
+    @FormUrlEncoded
+    @POST("tour/finish-trip")
+    Call<ResponseBody> finshTrip (
+            @Header("Authorization") String Authorization,
+            @Field( "tourId" ) int tourId
+    );
+
+    @GET("tour/notification-list")
+    Call<ResponseBody> getChatChat(
+            @Header("Authorization") String Authorization,
+            @Query( "tourId" )  int tourId,
+            @Query( "pageIndex" )  int pageIndex,
+            @Query( "pageSize" )  int pageSize
+    );
+
+    @FormUrlEncoded
     @POST("/tour/recording")
     Call<ResponseBody> sendRecordFile(
             @Header("Authorization") String Authorization,

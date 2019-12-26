@@ -1,8 +1,10 @@
 package com.ygaps.travelapp.activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -192,6 +194,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 stop_point_adapter = null;
                 mMap.addMarker( markerOptions );
                 mMap.moveCamera( CameraUpdateFactory.newLatLngZoom( latLng,18F) );
+            }
+        } );
+        listView.setOnItemLongClickListener( new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int index, long l) {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder( MapsActivity.this );
+                alertDialog.setTitle( "Delete the stop point" );
+                alertDialog.setMessage( "Are you sure to delete the stop point" );
+
+                alertDialog.setPositiveButton( "YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        noteList.remove( index );
+                        myAdapter.notifyDataSetChanged();
+                        if (noteList.size()==0){
+                            LinearLayout linearLayout = findViewById( R.id.listSP );
+                            RelativeLayout relativeLayout1 = findViewById( R.id.mapLayout );
+                            relativeLayout1.setVisibility(View.VISIBLE);
+                            linearLayout.setVisibility( View.INVISIBLE );
+                        }
+                    }
+                } );
+
+                alertDialog.setNegativeButton( "NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                } );
+
+                alertDialog.show();
+
+                return false;
             }
         } );
         makeStopPoint.setOnClickListener(new View.OnClickListener() {
@@ -507,6 +542,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if(firstVisibleItem+visibleItemCount == totalItemCount && totalItemCount!=0)
                 {
+                    Log.e("pageIndex: ", String.valueOf( pageIndex ));
+
                     if(flag_loading == false)
                     {
                         flag_loading = true;
@@ -515,7 +552,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             public void run() {
                                 additems(searchString);
                             }
-                        } );
+                        } ).start();
                     }
                 }
             }
@@ -533,6 +570,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.code() == 200) {
                     pageIndex++;
+                    Log.e("pageIndex: ", String.valueOf( pageIndex ));
                     flag_loading = false;
                     try {
                         String body = response.body().string();

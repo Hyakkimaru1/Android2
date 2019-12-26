@@ -1,28 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    android:layout_height="match_parent">
 
-    <SearchView
-        android:id="@+id/searchStopPoint"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="20dp"
-        android:focusable="auto"
-        android:background="@drawable/bg_round"
-        android:queryHint="Search stop point"
-        android:iconifiedByDefault="false">
-
-    </SearchView>
-    <ListView
-        android:id="@+id/listExplorePoint"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </ListView>
 
-</LinearLayout>
+        <fragment
+            android:id="@+id/mapExplore"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <SearchView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/mapExplore"
+            android:layout_alignTop="@+id/mapExplore"
+            android:layout_alignEnd="@+id/mapExplore"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/bg_round"
+            android:id="@+id/SearchExplore"
+            android:iconifiedByDefault="false"
+            >
+
+        </SearchView>
+        <ListView
+            android:id="@+id/search_SP_in_mapsExplore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/SearchExplore"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            >
+        </ListView>
+    </RelativeLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

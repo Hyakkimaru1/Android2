@@ -10,6 +10,7 @@
 
 
         <SearchView
+            android:id="@+id/search_tour_in_main"
             android:layout_width="match_parent"
             android:layout_height="59dp"
             android:background="#FFF"

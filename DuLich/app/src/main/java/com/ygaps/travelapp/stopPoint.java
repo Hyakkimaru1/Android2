@@ -42,7 +42,7 @@ public class stopPoint {
     private String serviceId;
 
 
-    public stopPoint(String name, String address, int provinceId, double latitude, double lat, double lng, long arrivalAt, long leaveAt, long minCost, long maxCost, String serviceId) {
+    public stopPoint(String name, String address, int provinceId, double lat, double lng, long arrivalAt, long leaveAt, long minCost, long maxCost, String serviceId) {
         this.name = name;
         this.address = address;
         this.provinceId = provinceId;
@@ -56,6 +56,21 @@ public class stopPoint {
         this.serviceId = serviceId;
 
     }
+
+    public stopPoint(String name, String address, int provinceId,  double lat, double lng,  long minCost, long maxCost,int serviceTypeId) {
+        this.name = name;
+        this.address = address;
+        this.provinceId = provinceId;
+        this.lat = lat;
+        this.lng = lng;
+        this.arrivalAt = arrivalAt;
+        this.leaveAt = leaveAt;
+        this.minCost = minCost;
+        this.maxCost = maxCost;
+        this.serviceTypeId = serviceTypeId;
+        this.serviceId = null;
+    }
+
 
     public stopPoint(String id, String name,String address,int provinceId, double lat, double lng, long arrivalAt, long leaveAt, long minCost, long maxCost, int serviceTypeId, String serviceId) {
         this.id = id;
@@ -80,6 +95,20 @@ public class stopPoint {
         this.lng = lng;
         this.arrivalAt = 0;
         this.leaveAt = 0;
+        this.minCost = minCost;
+        this.maxCost = maxCost;
+        this.serviceId = serviceId;
+        this.serviceTypeId = serviceTypeId;
+    }
+
+    public stopPoint(String name, String address, int provinceId, double lat, double lng,long arrivalAt,long leaveAt, long minCost, long maxCost, int serviceTypeId,String serviceId) {
+        this.name = name;
+        this.address = address;
+        this.provinceId = provinceId;
+        this.lat = lat;
+        this.lng = lng;
+        this.arrivalAt = arrivalAt;
+        this.leaveAt = leaveAt;
         this.minCost = minCost;
         this.maxCost = maxCost;
         this.serviceId = serviceId;

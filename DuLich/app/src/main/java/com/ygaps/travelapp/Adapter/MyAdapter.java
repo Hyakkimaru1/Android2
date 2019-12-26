@@ -120,7 +120,7 @@ public class MyAdapter extends ArrayAdapter<aTour> implements Filterable {
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
             ArrayList <aTour> filterNotes = new ArrayList<>();
-            if (charSequence==null || charSequence=="")
+            if (charSequence==null || charSequence=="" || charSequence.toString().toLowerCase().trim().equals( "" ) ||charSequence.length()==0)
             {
                 filterNotes.addAll(noteListFull);
             }

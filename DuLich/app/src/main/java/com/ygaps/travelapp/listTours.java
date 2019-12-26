@@ -99,7 +99,8 @@ public class listTours extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                if (s.equals( "" )||s.isEmpty()){
+               // Log.e("String S: ",s);
+                if (s.isEmpty() ||s.trim().toLowerCase().equals( "" )){
                     flag_loading = false;
                 }
                 else {

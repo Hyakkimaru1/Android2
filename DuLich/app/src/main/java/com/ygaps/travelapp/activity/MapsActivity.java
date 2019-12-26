@@ -504,7 +504,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                                     list_searchSP.add( new stopPoint( object.getString( "name" ),object.getString( "address" ),object.getInt( "provinceId" ),
                                             object.getDouble( "lat") ,object.getDouble( "long" ),object.getLong( "minCost" ),
-                                            object.getLong( "maxCost" ),object.getInt( "serviceTypeId" ),object.getString( "serviceId" )) );
+                                            object.getLong( "maxCost" ),object.getInt( "serviceTypeId" )) );
                                 }
                                 if (stop_point_adapter == null)
                                 {
@@ -570,7 +570,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.code() == 200) {
                     pageIndex++;
-                    Log.e("pageIndex: ", String.valueOf( pageIndex ));
+                   // Log.e("pageIndex: ", String.valueOf( pageIndex ));
                     flag_loading = false;
                     try {
                         String body = response.body().string();
@@ -584,7 +584,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                                 list_searchSP.add( new stopPoint( object.getString( "name" ), object.getString( "address" ), object.getInt( "provinceId" ),
                                         object.getDouble( "lat" ), object.getDouble( "long" ), object.getLong( "minCost" ),
-                                        object.getLong( "maxCost" ), object.getInt( "serviceTypeId" ), object.getString( "serviceId" ) ) );
+                                        object.getLong( "maxCost" ), object.getInt( "serviceTypeId" ) ) );
                             }
                             stop_point_adapter.notifyDataSetChanged();
 
@@ -981,7 +981,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     e.printStackTrace();
                                 }
                                 noteList.add( new stopPoint( editTextStopPoint.getText().toString(),editTextAddress.getText().toString(),
-                                        1,address.getLatitude(),address.getLongitude(),54441556456456L,416548454151L, Long.parseLong( editTextMinC.getText().toString() ),Long.parseLong(  editTextMaxC.getText().toString() ),2,"") );
+                                        1,address.getLatitude(),address.getLongitude(),54441556456456L,416548454151L, Long.parseLong( editTextMinC.getText().toString() ),Long.parseLong(  editTextMaxC.getText().toString() ),"") );
                                 myAdapter = new Stop_Point_Adapter( MapsActivity.this,R.layout.item_stoppoint_layout,noteList );
 
                                 listView.setAdapter( myAdapter );

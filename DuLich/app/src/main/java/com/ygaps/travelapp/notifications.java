@@ -20,6 +20,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -30,6 +33,7 @@ public class notifications extends Fragment {
 
     ListView listView;
     ArrayList<Tour_Invitation> noteList;
+    ArrayList<Tour_Invitation> noteListMain;
     notification_Adapter notificationAdapter;
     SharedPreferences preferences;
     String token;
@@ -74,6 +78,18 @@ public class notifications extends Fragment {
                                             object.getString( "avatar" ),object.getLong( "createdOn" ) ) );
 
                                 }
+                                //Đảo list
+                                // Collections.reverse(noteList);
+                                Collections.sort( noteList, new Comparator<Tour_Invitation>() {
+                                    @Override
+                                    public int compare(Tour_Invitation tour_invitation, Tour_Invitation t1) {
+                                        if (tour_invitation.getCreateOn() == 0 || t1.getCreateOn()==0)
+                                            return 0;
+                                        Date date = new Date( tour_invitation.getCreateOn() );
+                                        Date date1 = new Date( t1.getCreateOn() );
+                                        return date1.compareTo( date );
+                                    }
+                                } );
                                 notificationAdapter = new notification_Adapter( getContext(), R.layout.item_notification, noteList );
                                 listView.setAdapter( notificationAdapter );
 

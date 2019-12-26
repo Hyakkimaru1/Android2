@@ -4,6 +4,7 @@ public class Message {
     private String comment; // message body
     private String avatar;
     private String name;
+    private boolean isRecord = false;
     private int userId;
     private boolean belongsToCurrentUser; // is this message sent by us?
 
@@ -15,6 +16,17 @@ public class Message {
         this.userId = userId;
         this.belongsToCurrentUser = belongsToCurrentUser;
     }
+    public Message(String comment, String avatar, String name, int userId, boolean belongsToCurrentUser,boolean isRecord ) {
+        this.comment = comment;
+        this.avatar = avatar;
+        this.name = name;
+        this.userId = userId;
+        this.belongsToCurrentUser = belongsToCurrentUser;
+        this.isRecord = isRecord;
+    }
+
+    public boolean getIsRecord(){ return isRecord;}
+
     public String getComment() {
         return comment;
     }

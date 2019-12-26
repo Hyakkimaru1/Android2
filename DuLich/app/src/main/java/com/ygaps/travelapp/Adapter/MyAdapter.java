@@ -32,14 +32,11 @@ public class MyAdapter extends ArrayAdapter<aTour> implements Filterable {
         noteListFull = new ArrayList<>(noteList);
     }
 
-    public void delete(ArrayList<aTour> objects)
-    {
-        noteList	=	objects;
-        noteListFull.clear();
-        noteListFull.addAll(noteList);
-        notifyDataSetChanged();
-    }
 
+    public void updateNoteListFull(){
+        noteListFull.clear();
+        noteListFull = new ArrayList<>(noteList);
+    }
 
     @Override
     public int getCount() {

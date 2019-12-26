@@ -174,27 +174,29 @@ public class fragment_explore extends Fragment implements OnMapReadyCallback,
                             for (int i = 0; i<jsonArray.length();i++){
                                 JSONObject object = jsonArray.getJSONObject( i );
 
-                                        noteList.add( new stopPoint( object.getString( "name" ),object.getString( "address" ),object.getInt( "provinceId" ),
-                                                object.getDouble( "lat") ,object.getDouble( "long" ),object.getLong( "minCost" ),
-                                                object.getLong( "maxCost" ),object.getInt( "serviceTypeId" ),object.getString( "serviceId" )) );
-                                    }
-                                    if (!noteList.isEmpty())
-                                    {
-                                        stop_point_adapter = new Stop_Point_Adapter( getContext(),R.layout.item_stoppoint_layout,noteList );
-                                        listView.setAdapter( stop_point_adapter );
-                                    }
-
-                                }
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                                list_searchSP.add( new stopPoint( object.getString( "name" ),object.getString( "address" ),object.getInt( "provinceId" ),
+                                        object.getDouble( "lat") ,object.getDouble( "long" ),object.getLong( "minCost" ),
+                                        object.getLong( "maxCost" ),object.getInt( "serviceTypeId" ),object.getString( "serviceId" )) );
+                            }
+                            if (stop_point_adapter == null)
+                            {
+                                stop_point_adapter = new Stop_Point_Adapter( getContext(),R.layout.item_stoppoint_layout,list_searchSP );
+                                search_SP_in_maps.setAdapter( stop_point_adapter );
+                            }
+                            else {
+                                stop_point_adapter.notifyDataSetChanged();
                             }
                         }
-                        else {
-                            Toast.makeText( getContext(),"Có lỗi, vui lòng thử lại sau.",Toast.LENGTH_LONG ).show();
-                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
+                }
+                else {
+                    Toast.makeText(getContext(),"Có lỗi, vui lòng thử lại sau.",Toast.LENGTH_LONG ).show();
+                }
+            }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {

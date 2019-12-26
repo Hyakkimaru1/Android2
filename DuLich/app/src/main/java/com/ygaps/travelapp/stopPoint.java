@@ -37,12 +37,12 @@ public class stopPoint {
     @SerializedName("maxCost")
     @Expose
     private long maxCost;
-    @SerializedName("avatar")
+    @SerializedName("serviceId")
     @Expose
-    private String avatar;
+    private String serviceId;
 
 
-    public stopPoint(String name, String address, int provinceId, double lat, double lng, long arrivalAt, long leaveAt, int serviceTypeId, long minCost, long maxCost) {
+    public stopPoint(String name, String address, int provinceId, double latitude, double lat, double lng, long arrivalAt, long leaveAt, long minCost, long maxCost, String serviceId) {
         this.name = name;
         this.address = address;
         this.provinceId = provinceId;
@@ -53,11 +53,11 @@ public class stopPoint {
         this.serviceTypeId = serviceTypeId;
         this.minCost = minCost;
         this.maxCost = maxCost;
-        this.avatar = "";
-        this.id = "";
+        this.serviceId = serviceId;
+
     }
 
-    public stopPoint(String id, String name,String address, double lat, double lng, long arrivalAt, long leaveAt, int serviceTypeId, long minCost, long maxCost) {
+    public stopPoint(String id, String name,String address,int provinceId, double lat, double lng, long arrivalAt, long leaveAt, long minCost, long maxCost, int serviceTypeId, String serviceId) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -69,10 +69,10 @@ public class stopPoint {
         this.serviceTypeId = serviceTypeId;
         this.minCost = minCost;
         this.maxCost = maxCost;
-        this.avatar = "";
+        this.serviceId = serviceId;
     }
 
-    public stopPoint(String name, String address, int provinceId, double lat, double lng, long minCost, long maxCost,String avatar, int serviceTypeId) {
+    public stopPoint(String name, String address, int provinceId, double lat, double lng, long minCost, long maxCost, int serviceTypeId,String serviceId) {
         this.name = name;
         this.address = address;
         this.provinceId = provinceId;
@@ -82,7 +82,7 @@ public class stopPoint {
         this.leaveAt = 0;
         this.minCost = minCost;
         this.maxCost = maxCost;
-        this.avatar = avatar;
+        this.serviceId = serviceId;
         this.serviceTypeId = serviceTypeId;
     }
 
@@ -170,12 +170,10 @@ public class stopPoint {
     public void setMaxCost(long maxCost) {
         this.maxCost = maxCost;
     }
-    public String getAvatar() {
-        return avatar;
+    public String getServiceId() {
+        return serviceId;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
+
 
 }

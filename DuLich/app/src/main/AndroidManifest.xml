@@ -51,9 +51,9 @@
 
         <activity
             android:name=".activity.MapsActivity"
-            android:label="@string/title_activity_maps">
+
             android:label="@string/title_activity_maps" />
-        </activity>
+
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

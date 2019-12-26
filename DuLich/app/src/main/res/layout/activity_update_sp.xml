@@ -356,7 +356,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="23dp"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/signupbt"
             android:backgroundTint="#35BBAE"
@@ -377,16 +377,19 @@
             app:srcCompat="@drawable/map" />
 
     </RelativeLayout>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/makeStopPoint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:clickable="true"
+        android:scaleType="fitCenter"
         android:src="@drawable/button_list"
-        app:layout_anchor="@id/mapLayout"
+        android:visibility="visible"
         app:backgroundTint="@color/colorMain"
-        app:layout_anchorGravity="bottom|right|end"/>
+        app:layout_anchor="@id/mapLayout"
+        app:layout_anchorGravity="bottom|right|end" />
     <LinearLayout
         android:visibility="invisible"
         android:orientation="vertical"
@@ -462,8 +465,8 @@
                 <ListView
                     android:id="@+id/listStopPoint"
                     android:layout_width="match_parent"
-                    android:dividerHeight="10dp"
-                    android:layout_height="match_parent" >
+                    android:layout_height="match_parent"
+                    android:dividerHeight="10dp">
 
                 </ListView>
             </LinearLayout>

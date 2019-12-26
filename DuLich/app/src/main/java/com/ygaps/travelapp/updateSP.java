@@ -206,6 +206,7 @@ public class updateSP extends AppCompatActivity implements OnMapReadyCallback,
                 relativeLayout1.setVisibility(View.VISIBLE);
 
 
+
             }
         });
 
@@ -250,7 +251,7 @@ public class updateSP extends AppCompatActivity implements OnMapReadyCallback,
         createListStopP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                serviceStopPoints = new serviceStopPoints(tourID,noteList);
+                serviceStopPoints = new serviceStopPoints(id,noteList);
                 //Toast.makeText(updateSP.this, tourID, Toast.LENGTH_SHORT).show();
                 sendNetworkRequest(serviceStopPoints);
             }
@@ -286,7 +287,7 @@ public class updateSP extends AppCompatActivity implements OnMapReadyCallback,
     }
 
     private void sendNetworkRequest(serviceStopPoints svStopPoint){
-
+        Log.e("AAAA23223",token);
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
                 .getApi()
@@ -484,7 +485,7 @@ public class updateSP extends AppCompatActivity implements OnMapReadyCallback,
 
                                 list_searchSP.add( new stopPoint( object.getString( "name" ),object.getString( "address" ),object.getInt( "provinceId" ),
                                         object.getDouble( "lat") ,object.getDouble( "long" ),object.getLong( "minCost" ),
-                                        object.getLong( "maxCost" ),object.getString( "avatar" ),object.getInt( "serviceTypeId" )) );
+                                        object.getLong( "maxCost" ),object.getInt( "serviceTypeId" ),object.getString( "serviceId" )) );
                             }
                             if (stop_point_adapter == null)
                             {
@@ -561,7 +562,7 @@ public class updateSP extends AppCompatActivity implements OnMapReadyCallback,
 
                                 list_searchSP.add( new stopPoint( object.getString( "name" ), object.getString( "address" ), object.getInt( "provinceId" ),
                                         object.getDouble( "lat" ), object.getDouble( "long" ), object.getLong( "minCost" ),
-                                        object.getLong( "maxCost" ), object.getString( "avatar" ), object.getInt( "serviceTypeId" ) ) );
+                                        object.getLong( "maxCost" ), object.getInt( "serviceTypeId" ),object.getString( "serviceId" ) ) );
                             }
                             stop_point_adapter.notifyDataSetChanged();
 
@@ -845,6 +846,7 @@ public class updateSP extends AppCompatActivity implements OnMapReadyCallback,
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
+                                Log.e("date",dateTime.toString());
                                 String dateInString2 = editTextSelectDayLeave.getText().toString();
 
                                 Date dateTime2 = null;
@@ -853,8 +855,10 @@ public class updateSP extends AppCompatActivity implements OnMapReadyCallback,
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                noteList.add( new stopPoint( editTextStopPoint.getText().toString(),editTextAddress.getText().toString(),
-                                        1,address.getLatitude(),address.getLongitude(),54441556456456L,416548454151L,1, Integer.parseInt( editTextMinC.getText().toString() ),Integer.parseInt( editTextMaxC.getText().toString() )) );
+
+                                stopPoint stopPoint = new stopPoint(noteList.get(position).getId(), editTextStopPoint.getText().toString(),editTextAddress.getText().toString(),
+                                        1,address.getLatitude(),address.getLongitude(),dateTime.getTime(),dateTime2.getTime(), Integer.parseInt( editTextMinC.getText().toString() ),Integer.parseInt( editTextMaxC.getText().toString() ),noteList.get(position).getServiceTypeId(),noteList.get(position).getServiceId()) ;
+                                noteList.set(position,stopPoint);
                                 myAdapter = new Stop_Point_Adapter( updateSP.this,R.layout.item_stoppoint_layout,noteList );
 
                                 listView.setAdapter( myAdapter );
@@ -1008,9 +1012,9 @@ public class updateSP extends AppCompatActivity implements OnMapReadyCallback,
                             for (int i = 0; i < responseArray.length(); i++) {
                                 JSONObject jb = responseArray.getJSONObject( i );
                                 final Address address = getAddress(jb.getDouble("lat"),jb.getDouble("long"));
-                                noteList.add( new stopPoint( jb.getString( "id" ),jb.getString( "name" ),address.getAddressLine(0) , jb.getDouble("lat"),
-                                        jb.getDouble("long"), jb.getLong( "leaveAt" ), jb.getLong( "arrivalAt" ), jb.getInt( "serviceTypeId" ),
-                                        jb.getLong( "minCost" ),  jb.getLong( "maxCost" ) ) );
+                                noteList.add( new stopPoint( jb.getString( "id" ),jb.getString( "name" ),address.getAddressLine(0) ,59, jb.getDouble("lat"),
+                                        jb.getDouble("long"), jb.getLong( "leaveAt" ), jb.getLong( "arrivalAt" ),
+                                        jb.getLong( "minCost" ),  jb.getLong( "maxCost" ), jb.getInt( "serviceTypeId" ),jb.getString( "serviceId" )  ) );
 
 
                             }
@@ -1029,21 +1033,24 @@ public class updateSP extends AppCompatActivity implements OnMapReadyCallback,
                         e.printStackTrace();
                     }
 
+                    stopPoint stopPoint = noteList.get(position);
 
-                    editTextStopPoint = findViewById(R.id.editTextStopPoint);
-                    editTextAddress = findViewById(R.id.editTextAddress);
-                    editTextTimeLeave = findViewById(R.id.editTextTimeLeave);
-                    editTextMinC = findViewById(R.id.editTextMinC);
-                    editTextMaxC = findViewById(R.id.editTextMaxC);
-                    editTextSelectDay = findViewById(R.id.editTextSelectDay);
-                    editTextTimeArrive = findViewById(R.id.editTextTimeArrive);
-                    editTextSelectDayLeave = findViewById(R.id.editTextSelectDayLeave);
-                    editAddress = findViewById(R.id.imageButtonAddress);
+                    editTextStopPoint.setText(stopPoint.getName());
+                    editTextAddress.setText(stopPoint.getAddress());
+                    editTextTimeLeave.setText("11:30");
+                    editTextTimeArrive.setText("17:00");
+                    editTextMinC.setText(String.valueOf(stopPoint.getMinCost()));
+                    editTextMaxC.setText(String.valueOf(stopPoint.getMaxCost()));
+                    Date d = null;
+                        d = new Date(stopPoint.getArrivalAt());
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
-                    arrive = findViewById(R.id.imageButtonStartTime);
-                    leave = findViewById(R.id.imageButtonTimeLeave);
-                    edtArrive = findViewById(R.id.editTextSelectDay);
-                    edtLeave = findViewById(R.id.editTextSelectDayLeave);
+                    editTextSelectDay.setText( sdf.format( d ));
+                    d = new Date(stopPoint.getLeaveAt());
+
+                    editTextSelectDayLeave.setText( sdf.format( d ) );
+
+
 
 
 

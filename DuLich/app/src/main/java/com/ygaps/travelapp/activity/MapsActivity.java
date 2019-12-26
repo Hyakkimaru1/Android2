@@ -469,7 +469,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                                     list_searchSP.add( new stopPoint( object.getString( "name" ),object.getString( "address" ),object.getInt( "provinceId" ),
                                             object.getDouble( "lat") ,object.getDouble( "long" ),object.getLong( "minCost" ),
-                                            object.getLong( "maxCost" ),object.getString( "avatar" ),object.getInt( "serviceTypeId" )) );
+                                            object.getLong( "maxCost" ),object.getInt( "serviceTypeId" ),object.getString( "serviceId" )) );
                                 }
                                 if (stop_point_adapter == null)
                                 {
@@ -546,7 +546,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                                 list_searchSP.add( new stopPoint( object.getString( "name" ), object.getString( "address" ), object.getInt( "provinceId" ),
                                         object.getDouble( "lat" ), object.getDouble( "long" ), object.getLong( "minCost" ),
-                                        object.getLong( "maxCost" ), object.getString( "avatar" ), object.getInt( "serviceTypeId" ) ) );
+                                        object.getLong( "maxCost" ), object.getInt( "serviceTypeId" ), object.getString( "serviceId" ) ) );
                             }
                             stop_point_adapter.notifyDataSetChanged();
 
@@ -943,7 +943,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     e.printStackTrace();
                                 }
                                 noteList.add( new stopPoint( editTextStopPoint.getText().toString(),editTextAddress.getText().toString(),
-                                        1,address.getLatitude(),address.getLongitude(),54441556456456L,416548454151L,1, Integer.parseInt( editTextMinC.getText().toString() ),Integer.parseInt( editTextMaxC.getText().toString() )) );
+                                        1,address.getLatitude(),address.getLongitude(),54441556456456L,416548454151L, Long.parseLong( editTextMinC.getText().toString() ),Long.parseLong(  editTextMaxC.getText().toString() ),2,"") );
                                 myAdapter = new Stop_Point_Adapter( MapsActivity.this,R.layout.item_stoppoint_layout,noteList );
 
                                 listView.setAdapter( myAdapter );

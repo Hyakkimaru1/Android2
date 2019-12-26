@@ -86,7 +86,7 @@ public class tourDetail extends AppCompatActivity {
         Intent intent = getIntent();
         token = intent.getStringExtra("token");
         id = intent.getStringExtra( "tourId") ;
-
+        Log.i("DDDdđ",id);
         preferences = this.getBaseContext().getSharedPreferences("isLogin", Context.MODE_PRIVATE);
 
 
@@ -157,10 +157,11 @@ public class tourDetail extends AppCompatActivity {
                         // Log.i("JSON",tourData.getString("total"));
                         tourname.setText( stopPointData.getString("name"));
 
-                        Date d = null;
+
                         sStartDay = stopPointData.getString("startDate");
                         sEndDay = stopPointData.getString("endDate");
                         check = stopPointData.getString("isPrivate");
+                        Date d = null;
                         if (sStartDay.equals( "null" ))
                         {
                             d = new Date(0);
@@ -189,8 +190,8 @@ public class tourDetail extends AppCompatActivity {
                                 JSONObject jb = responseArray.getJSONObject( i );
                                 final Address address = getAddress(jb.getDouble("lat"),jb.getDouble("long"));
                                 list.add( new stopPoint( jb.getString( "name" ),address.getAddressLine(0) , 0, jb.getDouble("lat"),
-                                        jb.getDouble("long"), jb.getLong( "leaveAt" ), jb.getLong( "arrivalAt" ), jb.getInt( "serviceTypeId" ),
-                                        jb.getLong( "minCost" ),  jb.getLong( "maxCost" ) ) );
+                                        jb.getDouble("long"), jb.getLong( "leaveAt" ), jb.getLong( "arrivalAt" ),
+                                        jb.getLong( "minCost" ),  jb.getLong( "maxCost" ), jb.getInt( "serviceTypeId" ), jb.getString( "serviceId" ) ) );
 
 
                             }

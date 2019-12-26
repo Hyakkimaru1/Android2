@@ -64,8 +64,7 @@ public class Stop_Point_Adapter extends ArrayAdapter<stopPoint> {
             group.setText(p.getAddress());
 
             ImageView imageView = (ImageView)v.findViewById( R.id.mainPicSP);
-            if (!p.getAvatar().equals("") && !p.getAvatar().equals( "null" ) && !p.getAvatar().isEmpty() )
-                Picasso.get().load(p.getAvatar()).into(imageView);
+
         }
         return v;
     }

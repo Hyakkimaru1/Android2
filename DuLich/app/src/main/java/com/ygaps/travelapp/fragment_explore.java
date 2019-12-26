@@ -75,7 +75,7 @@ public class fragment_explore extends Fragment {
 
                                         noteList.add( new stopPoint( object.getString( "name" ),object.getString( "address" ),object.getInt( "provinceId" ),
                                                 object.getDouble( "lat") ,object.getDouble( "long" ),object.getLong( "minCost" ),
-                                                object.getLong( "maxCost" ),object.getString( "avatar" ),object.getInt( "serviceTypeId" )) );
+                                                object.getLong( "maxCost" ),object.getInt( "serviceTypeId" ),object.getString( "serviceId" )) );
                                     }
                                     if (!noteList.isEmpty())
                                     {
@@ -154,7 +154,7 @@ public class fragment_explore extends Fragment {
 
                                 noteList.add( new stopPoint( object.getString( "name" ), object.getString( "address" ), object.getInt( "provinceId" ),
                                         object.getDouble( "lat" ), object.getDouble( "long" ), object.getLong( "minCost" ),
-                                        object.getLong( "maxCost" ), object.getString( "avatar" ), object.getInt( "serviceTypeId" ) ) );
+                                        object.getLong( "maxCost" ), object.getInt( "serviceTypeId" ), object.getString( "serviceId" ) ) );
                             }
                             stop_point_adapter.notifyDataSetChanged();
 

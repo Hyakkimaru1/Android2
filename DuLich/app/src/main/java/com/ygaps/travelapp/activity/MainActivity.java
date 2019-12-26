@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements MyCustomDialog.No
         {
             //Log.e("AAAAAAAAA",Authorization);
             String token = FirebaseInstanceId.getInstance().getToken();
-            Log.e( "TOKENNNNNNNNNNNNNNNNN", token );
+            //Log.e( "TOKENNNNNNNNNNNNNNNNN", token );
             Call<ResponseBody> call = RetrofitClient
                     .getInstance()
                     .getApi()

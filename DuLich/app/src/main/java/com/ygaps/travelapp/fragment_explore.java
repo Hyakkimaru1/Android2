@@ -176,7 +176,7 @@ public class fragment_explore extends Fragment implements OnMapReadyCallback,
 
                                 list_searchSP.add( new stopPoint( object.getString( "name" ),object.getString( "address" ),object.getInt( "provinceId" ),
                                         object.getDouble( "lat") ,object.getDouble( "long" ),object.getLong( "minCost" ),
-                                        object.getLong( "maxCost" ),object.getInt( "serviceTypeId" ),object.getString( "serviceId" )) );
+                                        object.getLong( "maxCost" ),object.getInt( "serviceTypeId" )) );
                             }
                             if (stop_point_adapter == null)
                             {
@@ -253,7 +253,7 @@ public class fragment_explore extends Fragment implements OnMapReadyCallback,
 
                                 list_searchSP.add( new stopPoint( object.getString( "name" ), object.getString( "address" ), object.getInt( "provinceId" ),
                                         object.getDouble( "lat" ), object.getDouble( "long" ), object.getLong( "minCost" ),
-                                        object.getLong( "maxCost" ), object.getInt( "serviceTypeId" ), object.getString( "serviceId" ) ) );
+                                        object.getLong( "maxCost" ), object.getInt( "serviceTypeId" )) );
                             }
                             stop_point_adapter.notifyDataSetChanged();
 

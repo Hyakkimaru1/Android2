@@ -89,9 +89,7 @@ public class tourDetail extends AppCompatActivity {
 
         preferences = this.getBaseContext().getSharedPreferences("isLogin", Context.MODE_PRIVATE);
 
-        Log.e("dddddd",String.valueOf(id));
 
-        Log.e("TTTTTTTTTTT",token);
         readJson();
 
         rate.setOnClickListener(new View.OnClickListener() {
@@ -100,25 +98,21 @@ public class tourDetail extends AppCompatActivity {
                 DialogRate();
             }
         });
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getBaseContext(), updateTour.class);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id2) {
+                Log.i("1111111111",String.valueOf(id));
+                Intent intent = new Intent(getBaseContext(), updateSP.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 //intent.putExtra("return check", check);
                 intent.putExtra("token", token);
                 intent.putExtra("id", id);
-                intent.putExtra( "tourName" ,tourname.getText().toString());
-                intent.putExtra( "sStartDay",sStartDay );
-                intent.putExtra( "sEndDay",sEndDay );
-                intent.putExtra( "check",check);
-                intent.putExtra( "adult",Integer.parseInt(adult.getText().toString()) );
-                intent.putExtra( "children",Integer.parseInt( child.getText().toString() ) );
-                intent.putExtra( "minC",Long.parseLong( min.getText().toString() ) );
-                intent.putExtra( "maxC",Long.parseLong( max.getText().toString() ) );
+                intent.putExtra( "position" ,position);
 
                 startActivity(intent);
             }
+
         });
 
 

@@ -57,7 +57,7 @@ public class stopPoint {
         this.id = "";
     }
 
-    public stopPoint(String id, String name, String address, int provinceId, double lat, double lng, long arrivalAt, long leaveAt, int serviceTypeId, long minCost, long maxCost) {
+    public stopPoint(String id, String name,String address, double lat, double lng, long arrivalAt, long leaveAt, int serviceTypeId, long minCost, long maxCost) {
         this.id = id;
         this.name = name;
         this.address = address;

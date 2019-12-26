@@ -18,7 +18,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".updateSP"></activity>
+        <activity android:name=".updateSP"
+            android:parentActivityName=".tourDetail"/>
+
+
 
         <service android:name=".service.MyFirebaseService" />
         <service android:name=".service.MyFirebaseService" />

@@ -211,16 +211,22 @@
         android:text="Thành viên"
         android:textColor="#FFFFFF" />
 
+
     <ListView
         android:id="@+id/ListViewSP"
-        android:layout_width="407dp"
-        android:layout_height="360dp"
+      
+        android:layout_width="match_parent"
+        android:layout_height="398dp"
         android:layout_below="@+id/textViewListStopPoint"
         android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="3dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="-2dp"
+        android:layout_marginBottom="9dp"
+        android:dividerHeight="10dp"
         android:orientation="horizontal"></ListView>
+
+
 </RelativeLayout>

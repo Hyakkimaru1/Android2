@@ -98,7 +98,7 @@ public class updateSP extends AppCompatActivity implements OnMapReadyCallback,
     EditText editTextSelectDay;
     EditText editTextMinC;
     EditText editTextMaxC;
-
+    Button buttonCreateStopPoint;
 
 
     String token;
@@ -129,10 +129,11 @@ public class updateSP extends AppCompatActivity implements OnMapReadyCallback,
     Stop_Point_Adapter stop_point_adapter = null;
     ListView listView;
     ListView search_SP_in_maps;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-
+getSupportActionBar().hide();
         setContentView( R.layout.activity_update_sp );
 
         Intent intent = getIntent();
@@ -161,10 +162,18 @@ public class updateSP extends AppCompatActivity implements OnMapReadyCallback,
         listView = findViewById( R.id.listStopPoint );
         search_SP_in_maps = findViewById( R.id.search_SP_in_maps );
         makeStopPoint = findViewById(R.id.makeStopPoint);
-
+         buttonCreateStopPoint = findViewById( R.id.buttonCreateStopPoint );
         createListStopP = findViewById(R.id.createListStopPoint);
 
+
+
         readJson();
+        createStoppoint();
+        final RelativeLayout relativeLayout1 =findViewById(R.id.mapLayout);
+         relativeLayout1.setVisibility(View.INVISIBLE);
+        final RelativeLayout relativeLayout = findViewById(R.id.formStopPoint);
+        relativeLayout.setVisibility(View.VISIBLE);
+
 
         search_SP_in_maps.setOnItemClickListener( new AdapterView.OnItemClickListener() {
             @Override
@@ -832,7 +841,7 @@ public class updateSP extends AppCompatActivity implements OnMapReadyCallback,
                             relativeLayout1.setVisibility(View.VISIBLE);
                         }
                     } );
-                    Button buttonCreateStopPoint = findViewById( R.id.buttonCreateStopPoint );
+
                     buttonCreateStopPoint.setOnClickListener( new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -864,7 +873,7 @@ public class updateSP extends AppCompatActivity implements OnMapReadyCallback,
                                 listView.setAdapter( myAdapter );
                                 relativeLayout.setVisibility(View.INVISIBLE);
                                 relativeLayout1.setVisibility(View.VISIBLE);
-                                Toast.makeText( updateSP.this,"Đã thêm stop point",Toast.LENGTH_SHORT ).show();
+                                Toast.makeText( updateSP.this,"Đã sửa stop point",Toast.LENGTH_SHORT ).show();
                             }
                         }
 
@@ -1069,6 +1078,59 @@ public class updateSP extends AppCompatActivity implements OnMapReadyCallback,
 
 
     }
+    void createStoppoint(){
+
+        final RelativeLayout relativeLayout = findViewById(R.id.formStopPoint);
+        relativeLayout.setVisibility(View.VISIBLE);
+        final RelativeLayout relativeLayout1 =findViewById(R.id.mapLayout);
+        relativeLayout1.setVisibility(View.INVISIBLE);
+        Button button_x = findViewById( R.id.button_x );
+        button_x.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                relativeLayout.setVisibility(View.INVISIBLE);
+                relativeLayout1.setVisibility(View.VISIBLE);
+            }
+        } );
+
+        buttonCreateStopPoint.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(CheckData())
+                {
+                    String dateInString = editTextSelectDay.getText().toString();
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+                    Date dateTime = null;
+                    try {
+                        dateTime = sdf.parse( dateInString );
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    Log.e("date",dateTime.toString());
+                    String dateInString2 = editTextSelectDayLeave.getText().toString();
+
+                    Date dateTime2 = null;
+                    try {
+                        dateTime2 = sdf.parse( dateInString2 );
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    stopPoint stopPoint = new stopPoint(noteList.get(position).getId(), editTextStopPoint.getText().toString(),editTextAddress.getText().toString(),
+                            1,noteList.get(position).getLat(),noteList.get(position).getLng(),dateTime.getTime(),dateTime2.getTime(), Integer.parseInt( editTextMinC.getText().toString() ),Integer.parseInt( editTextMaxC.getText().toString() ),noteList.get(position).getServiceTypeId(),noteList.get(position).getServiceId()) ;
+                    noteList.set(position,stopPoint);
+                    myAdapter = new Stop_Point_Adapter( updateSP.this,R.layout.item_stoppoint_layout,noteList );
+
+                    listView.setAdapter( myAdapter );
+                    relativeLayout.setVisibility(View.INVISIBLE);
+                    relativeLayout1.setVisibility(View.VISIBLE);
+                    Toast.makeText( updateSP.this,"Đã sửa stop point",Toast.LENGTH_SHORT ).show();
+                }
+            }
+
+        } );
+    }
+
 
 
 

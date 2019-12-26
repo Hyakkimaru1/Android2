@@ -981,7 +981,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     e.printStackTrace();
                                 }
                                 noteList.add( new stopPoint( editTextStopPoint.getText().toString(),editTextAddress.getText().toString(),
-                                        1,address.getLatitude(),address.getLongitude(),54441556456456L,416548454151L, Long.parseLong( editTextMinC.getText().toString() ),Long.parseLong(  editTextMaxC.getText().toString() ),2,"") );
+                                        1,address.getLatitude(),address.getLongitude(),54441556456456L,416548454151L, Long.parseLong( editTextMinC.getText().toString() ),Long.parseLong(  editTextMaxC.getText().toString() ),2) );
                                 myAdapter = new Stop_Point_Adapter( MapsActivity.this,R.layout.item_stoppoint_layout,noteList );
 
                                 listView.setAdapter( myAdapter );

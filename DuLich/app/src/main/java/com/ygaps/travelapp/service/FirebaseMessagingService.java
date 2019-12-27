@@ -14,6 +14,7 @@ import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.RemoteMessage;
@@ -22,6 +23,7 @@ import com.ygaps.travelapp.RetrofitClient;
 import com.ygaps.travelapp.activity.MainActivity;
 
 import java.io.IOException;
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -32,15 +34,26 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     private static final String TAG = "MyFirebaseService";
 
     @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
-        // handle a notification payload.
-        Log.e("From: ",remoteMessage.getFrom());
-        if (remoteMessage.getNotification() != null) {
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
 
-            sendNotification(remoteMessage.getNotification().getBody());
+        if (remoteMessage.getData().size() > 0) {
+            Map data=remoteMessage.getData();
+            Log.d(TAG, "Key Data : " +  remoteMessage.getData().get("key")); //Get specific key data
+            if (data.isEmpty()) { // message type is notification.
+                Log.e("data", "isNull");
+                //  sendNotification(remoteMessage.getNotification().getBody());
+                sendNotification(remoteMessage.getNotification().getBody());
+            } else { // message type is data.
+                StringBuilder temp = new StringBuilder();
+                temp.append(data.get("From ")).append(" invites you to Tour: ").append(data.get("name"));
+                String body = temp.toString();
+                sendNotification( body);
+            }
         }
+
+        super.onMessageReceived( remoteMessage );
     }
+
     @Override
     public void onNewToken(String token) {
         Log.d(TAG, "Refreshed token: " + token);

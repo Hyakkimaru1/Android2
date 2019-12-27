@@ -72,6 +72,20 @@ public class stopPoint {
         this.serviceTypeId = serviceTypeId;
     }
 
+    public stopPoint(String id,String name, String address, int provinceId,  double lat, double lng,  long minCost, long maxCost,int serviceTypeId) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.provinceId = provinceId;
+        this.lat = lat;
+        this.lng = lng;
+        this.arrivalAt = 0;
+        this.leaveAt = 0;
+        this.minCost = minCost;
+        this.maxCost = maxCost;
+        this.serviceTypeId = serviceTypeId;
+    }
+
     public stopPoint(String name, String address, int provinceId, double lat, double lng, long arrivalAt, long leaveAt, long minCost, long maxCost, int serviceTypeId) {
 
         this.name = name;
@@ -86,6 +100,7 @@ public class stopPoint {
         this.serviceTypeId = serviceTypeId;
 
     }
+
 
     public stopPoint(String name, String address, int provinceId, double lat, double lng, long arrivalAt, long leaveAt, long minCost, long maxCost, int serviceTypeId, String serviceId) {
 

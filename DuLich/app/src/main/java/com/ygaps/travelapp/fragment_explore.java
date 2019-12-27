@@ -1,20 +1,25 @@
 package com.ygaps.travelapp;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -64,6 +69,23 @@ public class fragment_explore extends Fragment implements OnMapReadyCallback,
     MarkerOptions markerOptions;
     LatLng latLng;
     View mMapView;
+
+    //Dialog stop point
+    ImageButton reviews_sp;
+    TextView nameSP;
+    TextView place;
+    TextView group;
+    TextView priceMin;
+    TextView priceMax;
+    TextView textView6;
+    TextView textView7;
+    TextView textView2;
+    TextView textView3;
+    TextView textView4;
+    TextView textView5;
+    RatingBar ratingBar2;
+    int total;
+
     private GoogleMap mMap;
     private GoogleApiClient googleApiClient;
     private Location lastLocation;
@@ -95,6 +117,8 @@ public class fragment_explore extends Fragment implements OnMapReadyCallback,
                 latLng = new LatLng( stop_point.getLat(),stop_point.getLng() );
                 markerOptions.position( latLng );
                 markerOptions.title(stop_point.getName());
+                markerOptions.zIndex( Float.valueOf( stop_point.getId() ) );
+
                 if (stop_point.getProvinceId()==1){
                     markerOptions.icon( BitmapDescriptorFactory.fromResource(R.drawable.restaurant) );
                 }
@@ -111,6 +135,129 @@ public class fragment_explore extends Fragment implements OnMapReadyCallback,
                 stop_point_adapter = null;
                 mMap.addMarker( markerOptions );
                 mMap.moveCamera( CameraUpdateFactory.newLatLngZoom( latLng,18F) );
+            }
+        } );
+
+        search_SP_in_maps.setOnItemLongClickListener( new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                final stopPoint stop_point = list_searchSP.get( i );
+
+                Dialog dialog = new Dialog( getContext() );
+                dialog.setContentView( R.layout.dialog_rw_stop_point );
+                reviews_sp = dialog.findViewById( R.id.reviewsStopPoint );
+                nameSP = dialog.findViewById( R.id.place );
+                place = dialog.findViewById( R.id.calendar );
+                group = dialog.findViewById( R.id.group);
+                priceMin = dialog.findViewById( R.id.priceMin );
+                priceMax = dialog.findViewById( R.id.priceMax );
+                textView6 = dialog.findViewById( R.id.textView6 );
+                textView7 = dialog.findViewById( R.id.textView7 );
+                textView2 = dialog.findViewById( R.id.textView2 );
+                textView3 = dialog.findViewById( R.id.textView3 );
+                textView4 = dialog.findViewById( R.id.textView4 );
+                textView5 = dialog.findViewById( R.id.textView5 );
+                ratingBar2 = dialog.findViewById( R.id.ratingBar2 );
+                Call<ResponseBody> call = RetrofitClient
+                        .getInstance()
+                        .getApi()
+                        .getDetailSP( token, Integer.valueOf( stop_point.getId()) );
+                call.enqueue( new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.code() == 200){
+                            String body;
+                            try {
+                                body = response.body().string();
+
+                                JSONObject object = new JSONObject( body );
+                                nameSP.setText( object.getString( "name" ) );
+                                place.setText( object.getString( "address" ) );
+                                String serviceTypeId;
+                                switch (object.getInt( "serviceTypeId" )){
+                                    case 1:
+                                        serviceTypeId = "Restaurant";
+                                        break;
+                                    case 2:
+                                        serviceTypeId = "Hotel";
+                                        break;
+                                    case 3:
+                                        serviceTypeId = "Rest Station";
+                                        break;
+                                    case 4:
+                                        serviceTypeId = "Other";
+                                        break;
+                                    default:
+                                        throw new IllegalStateException( "Unexpected value: " + object.getInt( "serviceTypeId" ) );
+                                }
+                                group.setText( serviceTypeId );
+                                priceMin.setText( object.getString( "minCost" ) );
+                                priceMax.setText( object.getString( "maxCost" ) );
+
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else {
+                            Toast.makeText( getContext(),"SERVER ERROR",Toast.LENGTH_SHORT ).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                } );
+
+                call = RetrofitClient
+                        .getInstance()
+                        .getApi()
+                        .getPointStatusSP( token, Integer.valueOf( stop_point.getId()));
+                call.enqueue( new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.code() == 200){
+                            String body;
+                            try {
+
+                                body = response.body().string();
+                                JSONObject object = new JSONObject( body );
+
+
+                                JSONArray jsonArray = object.getJSONArray( "pointStats" );
+                                textView7.setText( jsonArray.getJSONObject( 4 ).getString( "total" ) );
+                                textView2.setText( jsonArray.getJSONObject( 3 ).getString( "total" ) );
+                                textView3.setText( jsonArray.getJSONObject( 2 ).getString( "total" ) );
+                                textView4.setText( jsonArray.getJSONObject( 1 ).getString( "total" ) );
+                                textView5.setText( jsonArray.getJSONObject( 0 ).getString( "total" ) );
+                                total = jsonArray.getJSONObject( 4 ).getInt( "total" )*5 + jsonArray.getJSONObject( 3 ).getInt( "total" )*4+
+                                        jsonArray.getJSONObject( 2 ).getInt( "total" )*3+jsonArray.getJSONObject( 1 ).getInt( "total" )*2+jsonArray.getJSONObject( 0 ).getInt( "total" )*1;
+                                textView6.setText( String.valueOf( total/5) );
+                                ratingBar2.setRating(  total/5.0f );
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else {
+                            Toast.makeText( getContext(),"SERVER ERROR",Toast.LENGTH_SHORT ).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                } );
+
+                dialog.show();
+                return false;
             }
         } );
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
@@ -174,10 +321,11 @@ public class fragment_explore extends Fragment implements OnMapReadyCallback,
                             for (int i = 0; i<jsonArray.length();i++){
                                 JSONObject object = jsonArray.getJSONObject( i );
 
-                                list_searchSP.add( new stopPoint( object.getString( "name" ),object.getString( "address" ),object.getInt( "provinceId" ),
+                                list_searchSP.add( new stopPoint(object.getString( "id" ), object.getString( "name" ),object.getString( "address" ),object.getInt( "provinceId" ),
                                         object.getDouble( "lat") ,object.getDouble( "long" ),object.getLong( "minCost" ),
                                         object.getLong( "maxCost" ),object.getInt( "serviceTypeId" )) );
                             }
+
                             if (stop_point_adapter == null)
                             {
                                 stop_point_adapter = new Stop_Point_Adapter( getContext(),R.layout.item_stoppoint_layout,list_searchSP );
@@ -306,14 +454,14 @@ public class fragment_explore extends Fragment implements OnMapReadyCallback,
         }
 
         latLng = new LatLng( location.getLatitude(),location.getLongitude() );
-        double latitude = location.getLatitude();
-        double longitude = location.getLongitude();
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position( latLng );
-        markerOptions.title( "Vị trí hiện tại" );
-        markerOptions.icon( BitmapDescriptorFactory.fromResource(R.drawable.location_choose) );
+      //  double latitude = location.getLatitude();
+      //  double longitude = location.getLongitude();
+      //  MarkerOptions markerOptions = new MarkerOptions();
+      //  markerOptions.position( latLng );
+      //  markerOptions.title( "Vị trí hiện tại" );
+      //  markerOptions.icon( BitmapDescriptorFactory.fromResource(R.drawable.location_choose) );
 
-        currentUserLocationMarker = mMap.addMarker( markerOptions );
+       // currentUserLocationMarker = mMap.addMarker( markerOptions );
         if (  token != null && !token.equals( "" ))
         {
 
@@ -349,20 +497,18 @@ public class fragment_explore extends Fragment implements OnMapReadyCallback,
                                     LatLng latLngStopPoint = new LatLng( jb.getDouble( "lat" ),jb.getDouble( "long" ) );
                                     markerOptions.position( latLngStopPoint );
                                     markerOptions.title( jb.getString( "name" ));
+                                    markerOptions.zIndex( Float.valueOf( jb.getString( "id" ) ) );
+                                    //Log.e("EEEE",String.valueOf( markerOptions.getZIndex() ));
                                     if (jb.getInt( "serviceTypeId" )==1){
-                                        markerOptions.zIndex( 1.0f );
                                         markerOptions.icon( BitmapDescriptorFactory.fromResource(R.drawable.restaurant) );
                                     }
                                     else if (jb.getInt( "serviceTypeId" )==2){
-                                        markerOptions.zIndex( 2.0f );
                                         markerOptions.icon( BitmapDescriptorFactory.fromResource( R.drawable.hotel ));
                                     }
                                     else if (jb.getInt( "serviceTypeId" )==3){
-                                        markerOptions.zIndex( 3.0f );
                                         markerOptions.icon( BitmapDescriptorFactory.fromResource( R.drawable.rest_station ) );
                                     }
                                     else {
-                                        markerOptions.zIndex( 4.0f );
                                         markerOptions.icon( BitmapDescriptorFactory.fromResource( R.drawable.other ) );
                                     }
 
@@ -396,8 +542,147 @@ public class fragment_explore extends Fragment implements OnMapReadyCallback,
             LocationServices.FusedLocationApi.removeLocationUpdates( googleApiClient,this );
 
         }
-    }
 
+        mMap.setOnMarkerClickListener( new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(final Marker marker) {
+               // Log.e("serviceID: ",String.valueOf( marker.getZIndex() ));
+                Dialog dialog = new Dialog( getContext() );
+                dialog.setContentView( R.layout.dialog_rw_stop_point );
+                reviews_sp = dialog.findViewById( R.id.reviewsStopPoint );
+                nameSP = dialog.findViewById( R.id.place );
+                place = dialog.findViewById( R.id.calendar );
+                group = dialog.findViewById( R.id.group);
+                priceMin = dialog.findViewById( R.id.priceMin );
+                priceMax = dialog.findViewById( R.id.priceMax );
+                textView6 = dialog.findViewById( R.id.textView6 );
+                textView7 = dialog.findViewById( R.id.textView7 );
+                textView2 = dialog.findViewById( R.id.textView2 );
+                textView3 = dialog.findViewById( R.id.textView3 );
+                textView4 = dialog.findViewById( R.id.textView4 );
+                textView5 = dialog.findViewById( R.id.textView5 );
+                ratingBar2 = dialog.findViewById( R.id.ratingBar2 );
+                Call<ResponseBody> call = RetrofitClient
+                        .getInstance()
+                        .getApi()
+                        .getDetailSP( token, (int) marker.getZIndex());
+                call.enqueue( new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.code() == 200){
+                            String body;
+                            try {
+                                body = response.body().string();
+
+                                JSONObject object = new JSONObject( body );
+                                nameSP.setText( object.getString( "name" ) );
+                                place.setText( object.getString( "address" ) );
+                                String serviceTypeId;
+                                switch (object.getInt( "serviceTypeId" )){
+                                    case 1:
+                                        serviceTypeId = "Restaurant";
+                                        break;
+                                    case 2:
+                                        serviceTypeId = "Hotel";
+                                        break;
+                                    case 3:
+                                        serviceTypeId = "Rest Station";
+                                        break;
+                                    case 4:
+                                        serviceTypeId = "Other";
+                                        break;
+                                    default:
+                                        throw new IllegalStateException( "Unexpected value: " + object.getInt( "serviceTypeId" ) );
+                                }
+                                group.setText( serviceTypeId );
+                                priceMin.setText( object.getString( "minCost" ) );
+                                priceMax.setText( object.getString( "maxCost" ) );
+
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else {
+                            Toast.makeText( getContext(),"SERVER ERROR",Toast.LENGTH_SHORT ).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                } );
+
+                call = RetrofitClient
+                        .getInstance()
+                        .getApi()
+                        .getPointStatusSP( token, (int) marker.getZIndex());
+                call.enqueue( new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.code() == 200){
+                            String body;
+                            try {
+
+                                body = response.body().string();
+                                JSONObject object = new JSONObject( body );
+
+                                JSONArray jsonArray = object.getJSONArray( "pointStats" );
+                                textView7.setText( jsonArray.getJSONObject( 4 ).getString( "total" ) );
+                                textView2.setText( jsonArray.getJSONObject( 3 ).getString( "total" ) );
+                                textView3.setText( jsonArray.getJSONObject( 2 ).getString( "total" ) );
+                                textView4.setText( jsonArray.getJSONObject( 1 ).getString( "total" ) );
+                                textView5.setText( jsonArray.getJSONObject( 0 ).getString( "total" ) );
+                                total = jsonArray.getJSONObject( 4 ).getInt( "total" )*5 + jsonArray.getJSONObject( 3 ).getInt( "total" )*4+
+                                        jsonArray.getJSONObject( 2 ).getInt( "total" )*3+jsonArray.getJSONObject( 1 ).getInt( "total" )*2+jsonArray.getJSONObject( 0 ).getInt( "total" )*1;
+                                textView6.setText( String.valueOf( total/5 ) );
+                                ratingBar2.setRating(  total/5.0f );
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else {
+                            Toast.makeText( getContext(),"SERVER ERROR",Toast.LENGTH_SHORT ).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                } );
+                reviews_sp.setOnClickListener( new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        DialogRate();
+                    }
+                } );
+                dialog.show();
+
+                return false;
+            }
+        } );
+
+
+    }
+    private void DialogRate(){
+        Context context;
+        Dialog dialog= new Dialog(getContext());
+        dialog.setContentView(R.layout.send_rv_stoppoint);
+        dialog.show();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
+        dialog.getWindow().setLayout((9*width)/10,(9*height)/10);
+    }
     public boolean checkUserLocationPermission(){
         if (ContextCompat.checkSelfPermission( getContext(),Manifest.permission.ACCESS_FINE_LOCATION )!=PackageManager.PERMISSION_GRANTED){
             if (ActivityCompat.shouldShowRequestPermissionRationale( getActivity(),Manifest.permission.ACCESS_FINE_LOCATION )){

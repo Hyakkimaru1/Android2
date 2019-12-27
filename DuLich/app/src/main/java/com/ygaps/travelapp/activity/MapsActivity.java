@@ -574,7 +574,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.code() == 200) {
                     pageIndex++;
-                    Log.e("pageIndex: ", String.valueOf( pageIndex ));
+
                     flag_loading = false;
                     try {
                         String body = response.body().string();

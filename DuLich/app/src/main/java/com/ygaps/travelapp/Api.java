@@ -167,6 +167,18 @@ public interface Api<I extends Number> {
             @Query( "pageSize" )  int pageSize
     );
 
+    @GET("tour/get/service-detail")
+    Call<ResponseBody> getDetailSP(
+            @Header("Authorization") String Authorization,
+            @Query( "serviceId" )  int serviceId
+    );
+
+    @GET("tour/get/feedback-point-stats")
+    Call<ResponseBody> getPointStatusSP(
+            @Header("Authorization") String Authorization,
+            @Query( "serviceId" )  int serviceId
+    );
+
     @FormUrlEncoded
     @POST("/tour/recording")
     Call<ResponseBody> sendRecordFile(

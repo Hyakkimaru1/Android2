@@ -195,7 +195,7 @@ public class tourDetail extends AppCompatActivity {
                                 final Address address = getAddress(jb.getDouble("lat"),jb.getDouble("long"));
                                 list.add( new stopPoint( jb.getString( "name" ),address.getAddressLine(0) , 0, jb.getDouble("lat"),
                                         jb.getDouble("long"), jb.getLong( "leaveAt" ), jb.getLong( "arrivalAt" ),
-                                        jb.getLong( "minCost" ),  jb.getLong( "maxCost" ), jb.getInt( "serviceTypeId" ), jb.getString( "serviceId" ) ) );
+                                        jb.getLong( "minCost" ),  jb.getLong( "maxCost" ), jb.getInt( "serviceTypeId" )) );
 
 
                             }

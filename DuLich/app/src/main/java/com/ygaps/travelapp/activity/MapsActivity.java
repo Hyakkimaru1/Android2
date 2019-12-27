@@ -508,7 +508,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                                     list_searchSP.add( new stopPoint( object.getString( "name" ),object.getString( "address" ),object.getInt( "provinceId" ),
                                             object.getDouble( "lat") ,object.getDouble( "long" ),object.getLong( "minCost" ),
-                                            object.getLong( "maxCost" ),object.getInt( "serviceTypeId" )) );
+                                            object.getLong( "maxCost" ),object.getInt( "serviceTypeId" ),"") );
                                 }
                                 if (stop_point_adapter == null)
                                 {
@@ -546,7 +546,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if(firstVisibleItem+visibleItemCount == totalItemCount && totalItemCount!=0)
                 {
-                    Log.e("pageIndex: ", String.valueOf( pageIndex ));
+                    //Log.e("pageIndex: ", String.valueOf( pageIndex ));
 
                     if(flag_loading == false)
                     {
@@ -574,7 +574,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.code() == 200) {
                     pageIndex++;
-                   // Log.e("pageIndex: ", String.valueOf( pageIndex ));
+                    Log.e("pageIndex: ", String.valueOf( pageIndex ));
                     flag_loading = false;
                     try {
                         String body = response.body().string();
@@ -588,7 +588,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                                 list_searchSP.add( new stopPoint( object.getString( "name" ), object.getString( "address" ), object.getInt( "provinceId" ),
                                         object.getDouble( "lat" ), object.getDouble( "long" ), object.getLong( "minCost" ),
-                                        object.getLong( "maxCost" ), object.getInt( "serviceTypeId" ) ) );
+                                        object.getLong( "maxCost" ), object.getInt( "serviceTypeId" ),"" ) );
                             }
                             stop_point_adapter.notifyDataSetChanged();
 
@@ -839,7 +839,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera( CameraUpdateFactory.newLatLngZoom( latLng,18F) );
         mMap.setOnMarkerClickListener( new GoogleMap.OnMarkerClickListener() {
             @Override
-            public boolean onMarkerClick(Marker marker) {
+            public boolean onMarkerClick(final Marker marker) {
                 if (tourID.equals( "" )){
                     final Dialog dialog = new Dialog( MapsActivity.this );
                     dialog.setTitle( "Get place" );
@@ -850,15 +850,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     final Address address = getAddress( marker.getPosition().latitude,marker.getPosition().longitude );
                     if (checkPlaceTour){
                         source = address;
-                        editTextDeparture.setText( address.getAddressLine( 0 ));
+                        if (address!=null){
+                            editTextDeparture.setText( address.getAddressLine( 0 ));
+                        }
+                        else {
+                            source.setLatitude( marker.getPosition().latitude );
+                            source.setLongitude( marker.getPosition().longitude );
+                            editTextDeparture.setText( marker.getTitle());
+                        }
 
                         if (des!=null){
                             editTextDestinate.setText( des.getAddressLine( 0 ));
                         }
+
+
                     }
                     else {
                         des = address;
-                        editTextDestinate.setText( address.getAddressLine( 0 ));
+                        if (address!=null){
+                            editTextDestinate.setText( address.getAddressLine( 0 ));
+                        }
+                        else {
+                            des.setLatitude( marker.getPosition().latitude );
+                            des.setLongitude( marker.getPosition().longitude );
+                            editTextDestinate.setText(  marker.getTitle());
+                        }
                         if (source!=null)
                         {
                             editTextDeparture.setText( source.getAddressLine( 0 ));
@@ -949,7 +965,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     // Toast.makeText( MapsActivity.this, marker.getTitle(),Toast.LENGTH_SHORT).show();
                     editTextStopPoint.setText( marker.getTitle() );
                     final Address address = getAddress( marker.getPosition().latitude,marker.getPosition().longitude );
-                    editTextAddress.setText( address.getAddressLine( 0 ) );
+                    if (address!=null){
+                        editTextAddress.setText( address.getAddressLine( 0 ) );
+                    }
+                    else {
+                        editTextAddress.setText(marker.getTitle() );
+                    }
+
                     final RelativeLayout relativeLayout = findViewById(R.id.formStopPoint);
                     relativeLayout.setVisibility(View.VISIBLE);
                     final RelativeLayout relativeLayout1 =findViewById(R.id.mapLayout);
@@ -988,8 +1010,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 long leaveAt = Long.valueOf( editTextTimeLeave.getText().toString() ) + dateTime2.getTime();
                                 String prov =  province.getSelectedItem().toString();
                                 String serviceTyp = serviceType.getSelectedItem().toString();
-                                noteList.add( new stopPoint( editTextStopPoint.getText().toString(),editTextAddress.getText().toString(),
-                                        getProvince(prov),address.getLatitude(),address.getLongitude(),arrivalAt,leaveAt, Long.parseLong( editTextMinC.getText().toString() ),Long.parseLong(  editTextMaxC.getText().toString() ),getService(serviceTyp),"") );
+                                if (address!=null){
+                                    noteList.add( new stopPoint( editTextStopPoint.getText().toString(),editTextAddress.getText().toString(),
+                                            getProvince(prov),address.getLatitude(),address.getLongitude(),arrivalAt,leaveAt, Long.parseLong( editTextMinC.getText().toString() ),Long.parseLong(  editTextMaxC.getText().toString() ),getService(serviceTyp),"") );
+                                }
+                                else {
+                                    noteList.add( new stopPoint( editTextStopPoint.getText().toString(),editTextAddress.getText().toString(),
+                                            getProvince(prov), marker.getPosition().latitude,marker.getPosition().longitude,arrivalAt,leaveAt, Long.parseLong( editTextMinC.getText().toString() ),Long.parseLong(  editTextMaxC.getText().toString() ),getService(serviceTyp),"") );
+                                }
+
+
                                 myAdapter = new Stop_Point_Adapter( MapsActivity.this,R.layout.item_stoppoint_layout,noteList );
 
                                 listView.setAdapter( myAdapter );

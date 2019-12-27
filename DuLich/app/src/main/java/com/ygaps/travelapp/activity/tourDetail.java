@@ -82,6 +82,7 @@ public class tourDetail extends AppCompatActivity {
     TextView ratingBar4;
     TextView ratingBar5;
     TextView textViewRate;
+    TextView textViewtotalRV;
 
 
     RatingBar ratingBarRate;
@@ -161,6 +162,8 @@ public class tourDetail extends AppCompatActivity {
                 ratingBar3 = dialog.findViewById(R.id.textView33);
                 ratingBar4 = dialog.findViewById(R.id.textView44);
                 ratingBar5 = dialog.findViewById(R.id.textView55);
+                textViewtotalRV = dialog.findViewById(R.id.textViewTotalRV);
+
                 textViewRate = dialog.findViewById(R.id.textViewRate);
                 ratingBarMain = dialog.findViewById(R.id.ratingBarMain);
                 RV = dialog.findViewById(R.id.editTextRV);
@@ -368,9 +371,10 @@ public class tourDetail extends AppCompatActivity {
                             ratingBar4.setText(String.valueOf(ratetotal[4]));
                             ratingBar5.setText(String.valueOf(ratetotal[0]));
                             double totalR = ratetotal[0]+ratetotal[1]+ratetotal[2]+ratetotal[3]+ratetotal[4];
+                           // textViewtotalRV.setText(new DecimalFormat("##").format(totalR));
                             double rateStar= (ratetotal[0]*5+ratetotal[4]*4+ratetotal[3]*3+ratetotal[2]*2+ratetotal[1])/totalR;
                             ratingBarRate.setRating(Float.parseFloat(new DecimalFormat("##.##").format(rateStar)));
-                            textViewRate.setText(new DecimalFormat("##.##").format(rateStar));
+                            textViewRate.setText(new DecimalFormat("##.#").format(rateStar));
                                 adapterRV = new rate_adapter( getBaseContext(), R.layout.item_rate, listRV );
                                 listViewRV.setAdapter(adapterRV) ;
 

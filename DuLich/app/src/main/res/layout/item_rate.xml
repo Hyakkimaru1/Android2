@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="255dp"
+    android:clickable="false"
+    android:focusable="false"
+    android:descendantFocusability="blocksDescendants"
+    android:background="@drawable/button_radius">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="91dp">
+
+
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="37dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="11dp"
+            android:layout_marginTop="13dp"
+            app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />
+
+        <TextView
+            android:id="@+id/textViewfeedback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewName"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="20dp"
+            android:layout_toEndOf="@+id/imageView8"
+            android:text="TextView"
+            android:textColor="#1D1B1B"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/textViewcreatedOn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewfeedback"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="0dp"
+            android:layout_toEndOf="@+id/imageView8"
+            android:text="25/12/2019"
+            android:textSize="8sp" />
+
+        <TextView
+            android:id="@+id/textViewName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="14dp"
+            android:layout_toEndOf="@+id/imageView8"
+            android:text="TextView"
+            android:textColor="#0390A3"
+            android:textSize="10sp" />
+
+        <RatingBar
+            android:id="@+id/ratingBar8"
+            android:layout_width="321dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewName"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="38dp"
+            android:layout_toEndOf="@+id/imageView8"
+            android:isIndicator="true"
+            android:max="5"
+            android:mirrorForRtl="false"
+            android:numStars="5"
+            android:scaleX="0.3"
+            android:scaleY="0.3"
+            android:scrollbarSize="1dp"
+            android:textAlignment="textStart"
+            android:transformPivotX="0dp"
+            android:transformPivotY="0dp" />
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

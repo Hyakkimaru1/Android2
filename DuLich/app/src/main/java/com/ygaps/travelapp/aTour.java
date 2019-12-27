@@ -16,6 +16,7 @@ public class aTour {
     String childs;
     boolean  isPrivate;
     String avatar;
+    boolean isHost;
 
     public aTour(int id, int status, String name, String minCost, String maxCost, String startDate, String endDate, String adults, String childs,  String avatar) {
         this.id = id;
@@ -29,6 +30,21 @@ public class aTour {
         this.childs = childs;
         this.isPrivate = false;
         this.avatar = avatar;
+    }
+
+    public aTour(int id, int status, String name, String minCost, String maxCost, String startDate, String endDate, String adults, String childs,  String avatar, boolean isHost) {
+        this.id = id;
+        this.status = status;
+        this.name = name;
+        this.minCost = minCost;
+        this.maxCost = maxCost;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.adults = adults;
+        this.childs = childs;
+        this.isPrivate = false;
+        this.avatar = avatar;
+        this.isHost = isHost;
     }
     public aTour(int id, int status, String name, String minCost, String maxCost, String startDate, String endDate, String adults, String childs,boolean isPrivate,  String avatar) {
         this.id = id;
@@ -134,5 +150,8 @@ public class aTour {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+    public Boolean getisHost() {
+        return isHost;
     }
 }

@@ -494,7 +494,7 @@ getSupportActionBar().hide();
 
                                 list_searchSP.add( new stopPoint( object.getString( "name" ),object.getString( "address" ),object.getInt( "provinceId" ),
                                         object.getDouble( "lat") ,object.getDouble( "long" ),object.getLong( "minCost" ),
-                                        object.getLong( "maxCost" ),object.getInt( "serviceTypeId" ),object.getString( "serviceId" )) );
+                                        object.getLong( "maxCost" ),object.getInt( "serviceTypeId" )) );
                             }
                             if (stop_point_adapter == null)
                             {
@@ -571,7 +571,7 @@ getSupportActionBar().hide();
 
                                 list_searchSP.add( new stopPoint( object.getString( "name" ), object.getString( "address" ), object.getInt( "provinceId" ),
                                         object.getDouble( "lat" ), object.getDouble( "long" ), object.getLong( "minCost" ),
-                                        object.getLong( "maxCost" ), object.getInt( "serviceTypeId" ),object.getString( "serviceId" ) ) );
+                                        object.getLong( "maxCost" ), object.getInt( "serviceTypeId" ) ) );
                             }
                             stop_point_adapter.notifyDataSetChanged();
 
@@ -866,7 +866,7 @@ getSupportActionBar().hide();
                                 }
 
                                 stopPoint stopPoint = new stopPoint(noteList.get(position).getId(), editTextStopPoint.getText().toString(),editTextAddress.getText().toString(),
-                                        1,address.getLatitude(),address.getLongitude(),dateTime.getTime(),dateTime2.getTime(), Integer.parseInt( editTextMinC.getText().toString() ),Integer.parseInt( editTextMaxC.getText().toString() ),noteList.get(position).getServiceTypeId(),noteList.get(position).getServiceId()) ;
+                                        1,address.getLatitude(),address.getLongitude(),dateTime.getTime(),dateTime2.getTime(), Integer.parseInt( editTextMinC.getText().toString() ),Integer.parseInt( editTextMaxC.getText().toString() ),noteList.get(position).getServiceTypeId()) ;
                                 noteList.set(position,stopPoint);
                                 myAdapter = new Stop_Point_Adapter( updateSP.this,R.layout.item_stoppoint_layout,noteList );
 
@@ -1023,7 +1023,7 @@ getSupportActionBar().hide();
                                 final Address address = getAddress(jb.getDouble("lat"),jb.getDouble("long"));
                                 noteList.add( new stopPoint( jb.getString( "id" ),jb.getString( "name" ),address.getAddressLine(0) ,59, jb.getDouble("lat"),
                                         jb.getDouble("long"), jb.getLong( "leaveAt" ), jb.getLong( "arrivalAt" ),
-                                        jb.getLong( "minCost" ),  jb.getLong( "maxCost" ), jb.getInt( "serviceTypeId" ),jb.getString( "serviceId" )  ) );
+                                        jb.getLong( "minCost" ),  jb.getLong( "maxCost" ), jb.getInt( "serviceTypeId" )  ) );
 
 
                             }
@@ -1117,7 +1117,7 @@ getSupportActionBar().hide();
                     }
 
                     stopPoint stopPoint = new stopPoint(noteList.get(position).getId(), editTextStopPoint.getText().toString(),editTextAddress.getText().toString(),
-                            1,noteList.get(position).getLat(),noteList.get(position).getLng(),dateTime.getTime(),dateTime2.getTime(), Integer.parseInt( editTextMinC.getText().toString() ),Integer.parseInt( editTextMaxC.getText().toString() ),noteList.get(position).getServiceTypeId(),noteList.get(position).getServiceId()) ;
+                            1,noteList.get(position).getLat(),noteList.get(position).getLng(),dateTime.getTime(),dateTime2.getTime(), Integer.parseInt( editTextMinC.getText().toString() ),Integer.parseInt( editTextMaxC.getText().toString() ),noteList.get(position).getServiceTypeId()) ;
                     noteList.set(position,stopPoint);
                     myAdapter = new Stop_Point_Adapter( updateSP.this,R.layout.item_stoppoint_layout,noteList );
 

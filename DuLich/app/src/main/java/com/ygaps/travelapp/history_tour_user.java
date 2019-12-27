@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -20,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.ygaps.travelapp.Adapter.MyAdapter;
+import com.ygaps.travelapp.activity.tourDetail;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -74,7 +73,7 @@ public class history_tour_user extends Fragment{
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(),tourDetail.class);
+                Intent intent = new Intent(getActivity(), tourDetail.class);
                 intent.putExtra("token", token);
                 intent.putExtra("tourId", String.valueOf(noteList.get(position).getId()));
 

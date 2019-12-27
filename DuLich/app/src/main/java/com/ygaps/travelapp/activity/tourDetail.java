@@ -1,7 +1,4 @@
-package com.ygaps.travelapp;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+package com.ygaps.travelapp.activity;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -12,35 +9,36 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
-import com.ygaps.travelapp.Adapter.MyAdapter;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.ygaps.travelapp.Adapter.Stop_Point_Adapter;
+import com.ygaps.travelapp.MyCustomDialog;
+import com.ygaps.travelapp.R;
+import com.ygaps.travelapp.RetrofitClient;
+import com.ygaps.travelapp.stopPoint;
+import com.ygaps.travelapp.updateSP;
+import com.ygaps.travelapp.updateTour;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Console;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -70,7 +68,7 @@ public class tourDetail extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tour_detail);
+        setContentView( R.layout.activity_tour_detail);
         tourDetail.this.setTitle("Tour Detail");
 
         listView = findViewById(R.id.ListViewSP);
@@ -86,7 +84,7 @@ public class tourDetail extends AppCompatActivity {
         Intent intent = getIntent();
         token = intent.getStringExtra("token");
         id = intent.getStringExtra( "tourId") ;
-        Log.i("DDDdđ",id);
+//        Log.i("DDDdđ",id);
         preferences = this.getBaseContext().getSharedPreferences("isLogin", Context.MODE_PRIVATE);
 
 
@@ -174,7 +172,13 @@ public class tourDetail extends AppCompatActivity {
                         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
                         start.setText( sdf.format( d ));
-                        d = new Date(Long.parseLong(sEndDay));
+                        if (!sEndDay.equals( "null" )){
+                            d = new Date(Long.parseLong(sEndDay));
+                        }
+                        else {
+                            d = new Date( 0 );
+                        }
+
 
                         end.setText( sdf.format( d ) );
 

@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -104,7 +105,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     EditText editTextSelectDay;
     EditText editTextMinC;
     EditText editTextMaxC;
-
+    Spinner province;
+    Spinner serviceType;
 
 
     String token;
@@ -159,6 +161,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         editTextSelectDay = findViewById(R.id.editTextSelectDay);
         editTextTimeArrive = findViewById(R.id.editTextTimeArrive);
         editTextSelectDayLeave = findViewById(R.id.editTextSelectDayLeave);
+        province = findViewById( R.id.province );
+        serviceType = findViewById( R.id.serviceType );
 
         arrive = findViewById(R.id.imageButtonStartTime);
         leave = findViewById(R.id.imageButtonTimeLeave);
@@ -315,7 +319,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.code()==200) {
-                    Toast.makeText( MapsActivity.this, token,Toast.LENGTH_SHORT ).show();
+                   // Toast.makeText( MapsActivity.this, token,Toast.LENGTH_SHORT ).show();
                     Toast.makeText( MapsActivity.this, "Tạo stop points thành công",Toast.LENGTH_SHORT ).show();
                     Intent intentNew = new Intent(MapsActivity.this, MainActivity.class);
                     intentNew.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -965,7 +969,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             if(CheckData())
                             {
                                 String dateInString = editTextSelectDay.getText().toString();
-                                SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                                 Date dateTime = null;
                                 try {
                                     dateTime = sdf.parse( dateInString );
@@ -980,8 +984,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
+                                long arrivalAt = Long.valueOf( editTextTimeArrive.getText().toString() ) + dateTime.getTime();
+                                long leaveAt = Long.valueOf( editTextTimeLeave.getText().toString() ) + dateTime2.getTime();
+                                String prov =  province.getSelectedItem().toString();
+                                String serviceTyp = serviceType.getSelectedItem().toString();
                                 noteList.add( new stopPoint( editTextStopPoint.getText().toString(),editTextAddress.getText().toString(),
-                                        1,address.getLatitude(),address.getLongitude(),54441556456456L,416548454151L, Long.parseLong( editTextMinC.getText().toString() ),Long.parseLong(  editTextMaxC.getText().toString() ),"") );
+                                        getProvince(prov),address.getLatitude(),address.getLongitude(),arrivalAt,leaveAt, Long.parseLong( editTextMinC.getText().toString() ),Long.parseLong(  editTextMaxC.getText().toString() ),getService(serviceTyp),"") );
                                 myAdapter = new Stop_Point_Adapter( MapsActivity.this,R.layout.item_stoppoint_layout,noteList );
 
                                 listView.setAdapter( myAdapter );
@@ -1003,6 +1011,151 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
 
+    }
+    private int getProvince(String prov){
+        switch (prov){
+            case "Hồ Chí Minh":
+                return 1;
+            case "Hà Nội":
+                return 2;
+            case "Đà Nẵng":
+                return 3;
+            case "Bình Dương":
+                return 4;
+            case "Đồng Nai":
+                return 5;
+            case "Khánh Hòa":
+                return 6;
+            case "Hải Phòng":
+                return 7;
+            case "Long An":
+                return 8;
+            case "Quảng Nam":
+                return 9;
+            case "Bà Rịa Vũng Tàu":
+                return 10;
+            case "Đắk Lắk":
+                return 11;
+            case "Cần Thơ":
+                return 12;
+            case "Bình Thuận":
+                return 13;
+            case "Lâm Đồng":
+                return 14;
+            case "Thừa Thiên Huế":
+                return 15;
+            case "Kiên Giang":
+                return 16;
+            case "Bắc Ninh":
+                return 17;
+            case "Quảng Ninh":
+                return 18;
+            case "Thanh Hóa":
+                return 19;
+            case "Nghệ An":
+                return 20;
+            case "Hải Dương":
+                return 21;
+            case "Gia Lai":
+                return 22;
+            case "Bình Phước":
+                return 23;
+            case "Hưng Yên":
+                return 24;
+            case "Bình Định":
+                return 25;
+            case "Tiền Giang":
+                return 26;
+            case "Thái Bình":
+                return 27;
+            case "Bắc Giang":
+                return 28;
+            case "Hòa Bình":
+                return 29;
+            case "An Giang":
+                return 30;
+            case "Vĩnh Phúc":
+                return 31;
+            case "Tây Ninh":
+                return 32;
+            case "Thái Nguyên":
+                return 33;
+            case "Lào Cai":
+                return 34;
+            case "Nam Định":
+                return 35;
+            case "Quảng Ngãi":
+                return 36;
+            case "Bến Tre":
+                return 37;
+            case "Đắk Nông":
+                return 38;
+            case "Cà Mau":
+                return 39;
+            case "Vĩnh Long":
+                return 40;
+            case "Ninh Bình":
+                return 41;
+            case "Phú Thọ":
+                return 42;
+            case "Ninh Thuận":
+                return 43;
+            case "Phú Yên":
+                return 44;
+            case "Hà Nam":
+                return 45;
+            case "Hà Tĩnh":
+                return 46;
+            case "Đồng Tháp":
+                return 47;
+            case "Sóc Trăng":
+                return 48;
+            case "Kon Tum":
+                return 49;
+            case "Quảng Bình":
+                return 50;
+            case "Quảng Trị":
+                return 51;
+            case "Trà Vinh":
+                return 52;
+            case "Hậu Giang":
+                return 53;
+            case "Sơn La":
+                return 54;
+            case "Bạc Liêu":
+                return 55;
+            case "TYên Bái":
+                return 56;
+            case "Tuyên Quang":
+                return 57;
+            case "Điện Biên":
+                return 58;
+            case "Lai Châu":
+                return 59;
+            case "Lạng Sơn":
+                return 60;
+            case "Hà Giang":
+                return 61;
+            case "Bắc Kạn":
+                return 62;
+            case "Cao Bằng":
+                return 63;
+        }
+        return 0;
+    }
+
+    private int getService(String serviceTyp){
+        switch (serviceTyp){
+            case "Restaurant":
+                return 1;
+            case "Hotel":
+                return 2;
+            case "Rest Station":
+                return 3;
+            case "Other":
+                return 4;
+        }
+        return 4;
     }
 
     private void findPlaceNearly(double latitude, double longitude)

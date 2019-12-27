@@ -28,7 +28,7 @@
         </activity>
         <activity android:name=".activity.chat_tour" > </activity>
         <activity android:name=".updateSP"
-            android:parentActivityName=".tourDetail"/>
+            android:parentActivityName=".activity.tourDetail"/>
 
         <activity android:name=".updateTourNext" />
         <activity android:name=".updateTour" />
@@ -39,8 +39,8 @@
             android:name=".activity.searchFriend_Activity"
             android:parentActivityName=".activity.MainActivity" />
         <activity
-            android:name=".tourDetail"
-            android:parentActivityName=".tourDetail" />
+            android:name=".activity.tourDetail"
+            android:parentActivityName=".activity.tourDetail" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

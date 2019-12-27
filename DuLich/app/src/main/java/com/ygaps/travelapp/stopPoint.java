@@ -50,7 +50,7 @@ public class stopPoint {
         this.lng = lng;
         this.arrivalAt = arrivalAt;
         this.leaveAt = leaveAt;
-        this.serviceTypeId = serviceTypeId;
+        this.serviceTypeId = 0;
         this.minCost = minCost;
         this.maxCost = maxCost;
         this.serviceId = serviceId;

@@ -34,7 +34,7 @@
         android:layout_marginEnd="0dp"
         android:numStars="5"
         android:progressTint="#F1D703"
-        android:rating="2"
+        android:rating="5"
         android:stepSize="1">
 
     </RatingBar>
@@ -86,9 +86,9 @@
         android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ratingBarMain"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="-30dp"
         android:layout_marginTop="43dp"
-        android:layout_toEndOf="@+id/textViewRate"
+        android:layout_toEndOf="@+id/ratingBarRate"
         android:text="555" />
 
     <TextView
@@ -96,9 +96,9 @@
         android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView55"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="-30dp"
         android:layout_marginTop="10dp"
-        android:layout_toEndOf="@+id/textViewRate"
+        android:layout_toEndOf="@+id/ratingBarRate"
         android:text="4" />
 
     <TextView
@@ -106,9 +106,9 @@
         android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView44"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="-30dp"
         android:layout_marginTop="10dp"
-        android:layout_toEndOf="@+id/textViewRate"
+        android:layout_toEndOf="@+id/ratingBarRate"
         android:text="3" />
 
     <TextView
@@ -116,9 +116,9 @@
         android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView33"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="-30dp"
         android:layout_marginTop="10dp"
-        android:layout_toEndOf="@+id/textViewRate"
+        android:layout_toEndOf="@+id/ratingBarRate"
         android:text="2" />
 
     <TextView
@@ -126,9 +126,9 @@
         android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView22"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="-30dp"
         android:layout_marginTop="10dp"
-        android:layout_toEndOf="@+id/textViewRate"
+        android:layout_toEndOf="@+id/ratingBarRate"
         android:text="1" />
 
     <RatingBar
@@ -227,7 +227,7 @@
         android:transformPivotY="0dp" />
 
     <ListView
-        android:id="@+id/listViewRV"
+        android:id="@+id/listViewCM"
         android:layout_width="409dp"
         android:layout_height="243dp"
         android:layout_below="@+id/ratingBarRate"
@@ -242,7 +242,7 @@
         android:id="@+id/editTextRV"
         android:layout_width="360dp"
         android:layout_height="44dp"
-        android:layout_below="@+id/listViewRV"
+        android:layout_below="@+id/listViewCM"
         android:layout_alignParentStart="true"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="11dp"

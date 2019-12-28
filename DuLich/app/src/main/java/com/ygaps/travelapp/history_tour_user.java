@@ -75,17 +75,14 @@ public class history_tour_user extends Fragment{
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), tourDetail.class);
+                intent.putExtra("token", token);
+                intent.putExtra("tourId", String.valueOf(noteList.get(position).getId()));
+                intent.putExtra("status", noteList.get(position).getStatus());
+                intent.putExtra("isHost", noteList.get(position).getisHost());
 
-                if (noteList.get(position).getisHost()) {
-                    Intent intent = new Intent(getActivity(), tourDetail.class);
-                    intent.putExtra("token", token);
-                    intent.putExtra("tourId", String.valueOf(noteList.get(position).getId()));
+                startActivity(intent);
 
-                    startActivity(intent);
-                }
-                else{
-                    Toast.makeText(getContext(), "Chỉ host tour mới có thể chỉnh sửa tour!", Toast.LENGTH_SHORT).show();
-                }
             }
 
         });

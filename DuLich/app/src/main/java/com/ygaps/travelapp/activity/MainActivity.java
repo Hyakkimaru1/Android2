@@ -108,16 +108,16 @@ public class MainActivity extends AppCompatActivity implements MyCustomDialog.No
                 case R.id.navigation_home:
                     selectedFragment = new listTours();
 
-                    textView.setText("Travel Assistant");
+                    textView.setText("Home");
                     break;
                 case R.id.navigation_history:
                     selectedFragment = new history_tour_user();
 
-                    textView.setText("Tour Detail");
+                    textView.setText("History");
                     break;
                 case R.id.navigation_map:
                     selectedFragment = new fragment_explore();
-                    textView.setText("Map");
+                    textView.setText("Explore");
                     break;
                 case R.id.navigation_notifications:
                     selectedFragment = new notifications();

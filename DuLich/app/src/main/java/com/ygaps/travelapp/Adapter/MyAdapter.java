@@ -100,10 +100,6 @@ public class MyAdapter extends ArrayAdapter<aTour> implements Filterable {
             }
 
 
-            ImageView imageView = (ImageView)v.findViewById( R.id.mainPic);
-            if (!p.getAvatar().equals(""))
-                Picasso.get().load(p.getAvatar()).into(imageView);
-
 
         }
         return v;

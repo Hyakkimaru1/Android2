@@ -36,10 +36,10 @@
         android:id="@+id/textViewListStopPoint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewPrice2"
+        android:layout_below="@+id/buttonRate"
         android:layout_alignParentStart="true"
         android:layout_marginStart="17dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="5dp"
         android:text="Danh sách điểm dừng"
         android:textDirection="firstStrong"
         android:textSize="21sp"
@@ -52,7 +52,7 @@
         android:layout_below="@+id/textViewTourName"
         android:layout_alignParentStart="true"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="7dp"
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/calendar" />
 
@@ -96,7 +96,7 @@
         android:layout_below="@+id/imageView9"
         android:layout_alignParentStart="true"
         android:layout_marginStart="19dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="3dp"
         app:srcCompat="@drawable/group" />
 
     <TextView
@@ -105,7 +105,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewTimeStart"
         android:layout_marginStart="13dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/imageView10"
         android:text="TextView"
         android:textSize="18sp" />
@@ -116,7 +116,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewTimeStart"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/textViewAdult2"
         android:text="TextView"
         android:textSize="18sp" />
@@ -127,7 +127,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewTimeStart"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/textViewAdult"
         android:text="-"
         android:textSize="18sp" />
@@ -138,7 +138,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewAdult"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/textViewPrice2"
         android:text="TextView"
         android:textColor="#F35858"
@@ -151,7 +151,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewAdult"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/imageView11"
         android:text="TextView"
         android:textColor="#F35858"
@@ -164,7 +164,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewAdult"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/textViewMin"
         android:text="-"
         android:textColor="#F35858"
@@ -178,20 +178,35 @@
         android:layout_below="@+id/imageView10"
         android:layout_alignParentStart="true"
         android:layout_marginStart="19dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="0dp"
         app:srcCompat="@drawable/price" />
 
     <Button
         android:id="@+id/buttonRate"
-        android:layout_width="146dp"
-        android:layout_height="28dp"
-        android:layout_below="@+id/buttonFriend"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="76dp"
-        android:layout_marginEnd="13dp"
+        android:layout_width="157dp"
+        android:layout_height="27dp"
+        android:layout_below="@+id/textViewPrice2"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="9dp"
         android:background="@drawable/signupbt"
         android:backgroundTint="#35BBAE"
         android:text="Đánh giá và nhận xét"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/buttonFollowTour"
+        android:layout_width="157dp"
+        android:layout_height="27dp"
+        android:layout_below="@+id/textViewPrice2"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/signupbt"
+        android:backgroundTint="#F0CB64"
+        android:text="Theo dõi tour"
         android:textColor="#FFFFFF"
         android:textSize="12sp" />
 
@@ -204,23 +219,36 @@
         android:layout_marginTop="18dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/signupbt"
-        android:backgroundTint="#8EB4B0"
+        android:backgroundTint="#35BBAE"
         android:text="Thành viên"
         android:textColor="#FFFFFF" />
 
 
+    <Button
+        android:id="@+id/buttonChatFriend"
+        android:layout_width="126dp"
+        android:layout_height="31dp"
+        android:layout_below="@+id/buttonFriend"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/signupbt"
+        android:backgroundTint="#03A9F4"
+        android:text="Chat"
+        android:textColor="#FFFFFF" />
+
     <ListView
         android:id="@+id/ListViewSP"
-      
-        android:layout_width="match_parent"
-        android:layout_height="398dp"
+
+        android:layout_width="404dp"
+        android:layout_height="390dp"
         android:layout_below="@+id/textViewListStopPoint"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="7dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginEnd="-2dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="0dp"
         android:layout_marginBottom="9dp"
         android:dividerHeight="10dp"
         android:orientation="horizontal"></ListView>

@@ -49,6 +49,14 @@ public interface Api<I extends Number> {
             @Query( "pageSize" ) int pageSize
     );
 
+    @GET("tour/get/review-list")
+    Call<ResponseBody > getlistComment(
+            @Header("Authorization") String Authorization,
+            @Query( "tourId" ) int tourId,
+            @Query( "pageIndex" ) int pageIndex,
+            @Query( "pageSize" ) int pageSize
+    );
+
     @GET("tour/history-user")
     Call<ResponseBody > getHistoryTourUser(
             @Header("Authorization") String Authorization,
@@ -114,6 +122,15 @@ public interface Api<I extends Number> {
             @Field( "serviceId" ) int serviceId,
             @Field( "feedback" ) String feedback,
              @Field( "point" ) int point
+    );
+
+    @FormUrlEncoded
+    @POST("tour/add/review")
+    Call<ResponseBody> sendCommentTour(
+            @Header("Authorization") String Authorization,
+            @Field( "tourId" ) int serviceId,
+            @Field( "review" ) String feedback,
+            @Field( "point" ) int point
     );
 
     @FormUrlEncoded

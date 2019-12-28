@@ -27,7 +27,7 @@ public class rate_adapter extends ArrayAdapter<aRate> {
 
     @Override
     public int getCount() {
-        // TODO Auto-generated method stub
+        // TODO Auto-generated method stubrate_adapter
         return noteList.size();
     }
     @Override

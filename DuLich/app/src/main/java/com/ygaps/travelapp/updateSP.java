@@ -305,8 +305,8 @@ getSupportActionBar().hide();
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.code()==200) {
-                    Toast.makeText( updateSP.this, token,Toast.LENGTH_SHORT ).show();
-                    Toast.makeText( updateSP.this, "Tạo stop points thành công",Toast.LENGTH_SHORT ).show();
+
+                    Toast.makeText( updateSP.this, "Sửa stop points thành công",Toast.LENGTH_SHORT ).show();
                     Intent intentNew = new Intent(updateSP.this, MainActivity.class);
                     intentNew.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity( intentNew );

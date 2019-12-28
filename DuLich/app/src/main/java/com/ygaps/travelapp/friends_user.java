@@ -7,6 +7,7 @@ public class friends_user {
     String email;
     String phone;
     String avatar;
+    boolean isHost;
 
 
     public friends_user(int id, String fullName, String email, String phone, String avatar) {
@@ -16,6 +17,25 @@ public class friends_user {
         this.phone = phone;
     //    this.isPrivate = isPrivate;
         this.avatar = avatar;
+         this.isHost = false;
+    }
+    public friends_user(int id, String fullName, String phone, String avatar, boolean isHost) {
+        this.id = id;
+        this.fullName = fullName;
+        this.email = email;
+        this.phone = phone;
+        //    this.isPrivate = isPrivate;
+        this.avatar = avatar;
+        this.isHost = isHost;
+    }
+
+
+    public boolean isHost() {
+        return isHost;
+    }
+
+    public void setHost(boolean host) {
+        isHost = host;
     }
 
     public int getId() {

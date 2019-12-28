@@ -155,7 +155,7 @@ public class fragment_explore extends Fragment implements OnMapReadyCallback,
 
                 final stopPoint stop_point = list_searchSP.get( i );
 
-                Dialog dialog = new Dialog( getContext() );
+                final Dialog dialog = new Dialog( getContext() );
                 dialog.setContentView( R.layout.dialog_rw_stop_point );
                 reviews_sp = dialog.findViewById( R.id.reviewsStopPoint );
                 nameSP = dialog.findViewById( R.id.place );
@@ -249,6 +249,9 @@ public class fragment_explore extends Fragment implements OnMapReadyCallback,
                                         jsonArray.getJSONObject( 2 ).getInt( "total" )*3+jsonArray.getJSONObject( 1 ).getInt( "total" )*2+jsonArray.getJSONObject( 0 ).getInt( "total" )*1;
                                 sum = jsonArray.getJSONObject( 4 ).getInt( "total" ) + jsonArray.getJSONObject( 3 ).getInt( "total" )+
                                         jsonArray.getJSONObject( 2 ).getInt( "total" )+jsonArray.getJSONObject( 1 ).getInt( "total" )+jsonArray.getJSONObject( 0 ).getInt( "total" );
+                                if (sum == 0){
+                                    sum = 1;
+                                }
                                 textView6.setText( String.valueOf( total/sum ) );
                                 ratingBar2.setRating(  total/sum );
 
@@ -271,9 +274,15 @@ public class fragment_explore extends Fragment implements OnMapReadyCallback,
                 reviews_sp.setOnClickListener( new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        dialog.cancel();
                         DialogRate(Integer.valueOf(  stop_point.getId() ));
                     }
                 } );
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int height = displayMetrics.heightPixels;
+                int width = displayMetrics.widthPixels;
+                dialog.getWindow().setLayout((9*width)/10,(9*height)/10);
                 dialog.show();
                 return false;
             }
@@ -688,6 +697,11 @@ public class fragment_explore extends Fragment implements OnMapReadyCallback,
                         DialogRate((int) marker.getZIndex());
                     }
                 } );
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int height = displayMetrics.heightPixels;
+                int width = displayMetrics.widthPixels;
+                dialog.getWindow().setLayout((9*width)/10,(9*height)/10);
                 dialog.show();
 
                 return false;
@@ -759,10 +773,9 @@ public class fragment_explore extends Fragment implements OnMapReadyCallback,
         button2.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int result = sendReview( id,editText3.getText().toString(), Math.round(ratingBar.getRating()));
-                if (result == 1){
-                    dialog1.dismiss();
-                }
+                sendReview( id,editText3.getText().toString(), Math.round(ratingBar.getRating()));
+                editText3.setText( "" );
+
             }
         } );
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -773,19 +786,14 @@ public class fragment_explore extends Fragment implements OnMapReadyCallback,
         dialog1.getWindow().setLayout((9*width)/10,(9*height)/10);
         dialog1.show();
 
-
-
-
-
     }
 
-    public int sendReview(int serviceId, String feedback1, int point){
+    public void sendReview(int serviceId, String feedback1, int point){
 
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
                 .getApi()
                 .sendFeedback(token,serviceId,feedback1,point);
-        final int[] result = {0};
         call.enqueue( new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -795,8 +803,6 @@ public class fragment_explore extends Fragment implements OnMapReadyCallback,
                         bodyTourCreate = response.body().string();
 
                         JSONObject tourData = new JSONObject(bodyTourCreate);
-
-                        result[0] = 0;
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -817,7 +823,58 @@ public class fragment_explore extends Fragment implements OnMapReadyCallback,
             }
         } );
 
-        return result[0];
+        call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .getlistReview( token, serviceId,1,100);
+        call.enqueue( new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.code()==200) {
+                    String bodyListTour = null;
+                    try {
+                        bodyListTour = response.body().string();
+                        noteList.clear();
+                        noteList = new ArrayList<>( );
+                        JSONObject stopPointData = new JSONObject(bodyListTour);
+                        // Log.i("JSON",tourData.getString("total"));
+
+
+                        JSONArray responseArray = stopPointData.getJSONArray("feedbackList");
+                        //Log.e("feedbackList",String.valueOf(responseArray.length()));
+                        if (responseArray.length() > 0) {
+
+                            for (int i = 0; i < responseArray.length(); i++) {
+                                JSONObject jb = responseArray.getJSONObject( i );
+                                noteList.add( new aRate( jb.getInt( "id" ),jb.getString( "name" ) , jb.getInt( "point" ),jb.getString( "feedback" ),
+                                        jb.getString( "createdOn" )) );
+
+
+                            }
+                            if (adapter != null){
+                                adapter.clear();
+                            }
+                            adapter = new rate_adapter( getContext(), R.layout.item_rate, noteList );
+                            list_review_SP.setAdapter(adapter) ;
+
+
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else Log.e("RRRRRRRRrr",String.valueOf(response.code()));
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        } );
+
 
     }
 

@@ -31,11 +31,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
-    private static final String TAG = "MyFirebaseService";
+    private static final String TAG = "TTTTTTTTT";
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
 
+        Log.d( TAG, "onMessageReceived: Nhận" );
         if (remoteMessage.getData().size() > 0) {
             Map data=remoteMessage.getData();
             Log.d(TAG, "Key Data : " +  remoteMessage.getData().get("key")); //Get specific key data
@@ -58,7 +59,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     public void onNewToken(String token) {
         Log.d(TAG, "Refreshed token: " + token);
 
-        sendRegistrationToServer(token);
+//        sendRegistrationToServer(token);
     }
 
     private void sendRegistrationToServer(String token) {

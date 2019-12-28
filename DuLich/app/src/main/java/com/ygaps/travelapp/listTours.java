@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ygaps.travelapp.Adapter.MyAdapter;
 import com.ygaps.travelapp.activity.createTourActivity;
+import com.ygaps.travelapp.activity.tourPublicDetail;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -90,6 +92,15 @@ public class listTours extends Fragment {
                 }
             }
         } );
+        listView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Intent intent = new Intent(getActivity(), tourPublicDetail.class);
+                    intent.putExtra("token", token);
+                    intent.putExtra("tourId", String.valueOf(noteList.get(i).getId()));
+                    startActivity(intent);
+            }
+        } );
 
         search_tour_in_main.setOnQueryTextListener( new SearchView.OnQueryTextListener() {
             @Override
@@ -145,7 +156,6 @@ public class listTours extends Fragment {
                                     noteList.add( new aTour( jb.getInt( "id" ), jb.getInt( "status" ), jb.getString( "name" ), jb.getString( "minCost" ),
                                             jb.getString( "maxCost" ), jb.getString( "startDate" ), jb.getString( "endDate" ), jb.getString( "adults" ),
                                             jb.getString( "childs" ),  jb.getString( "avatar" ) ) );
-
                                 }
                                 if (!noteList.isEmpty())
                                 {

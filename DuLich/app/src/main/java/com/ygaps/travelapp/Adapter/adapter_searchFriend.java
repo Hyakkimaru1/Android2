@@ -44,11 +44,17 @@ public class adapter_searchFriend extends ArrayAdapter<friends_user> implements 
         if (p!=null) {
             TextView fullNameSearch = (TextView) v.findViewById( R.id.fullNameSearch );
             fullNameSearch.setText( p.getFullName());
+            if (p.isHost()){
+                TextView isHost = v.findViewById( R.id.isHost );
+                isHost.setText( "Host" );
+            }
 
 
-            ImageView imgSearch = (ImageView)v.findViewById( R.id.imgSearch);
-            if (!p.getAvatar().equals("null"))
+
+            if (!p.getAvatar().equals("null") && !p.getAvatar().isEmpty()){
+                ImageView imgSearch = (ImageView)v.findViewById( R.id.imgSearch);
                 Picasso.get().load(p.getAvatar()).into(imgSearch);
+            }
 
 
         }

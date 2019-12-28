@@ -118,6 +118,8 @@ public class maps_follow_thetour extends AppCompatActivity implements OnMapReady
     ArrayList<Message> messages;
     MessageAdapter messageAdapter;
     String storeComment;
+
+    int leadTour;
     int indexRecord = 0;
     private static final String LOG_TAG = "AudioRecordFile";
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
@@ -571,8 +573,10 @@ public class maps_follow_thetour extends AppCompatActivity implements OnMapReady
                     String bodyListTour = null;
                     try {
                         bodyListTour = response.body().string();
+
                        // Log.i("Suggest stoppoint:", bodyListTour);
                         JSONObject tourData = new JSONObject(bodyListTour);
+                        leadTour = tourData.getInt( "hostId" );
                         JSONArray responseArray = tourData.getJSONArray("stopPoints");
                         //    Log.i("Suggest Length:", String.valueOf(responseArray.length()));
                         IconFactory iconFactory = IconFactory.getInstance( maps_follow_thetour.this );
@@ -733,6 +737,7 @@ public class maps_follow_thetour extends AppCompatActivity implements OnMapReady
                                 index++;
                                 if (index >= pointList.size()){
                                     isEndTrip = false;
+                                    if (userId == leadTour){
                                     Call<ResponseBody> call = RetrofitClient
                                             .getInstance()
                                             .getApi()
@@ -753,6 +758,9 @@ public class maps_follow_thetour extends AppCompatActivity implements OnMapReady
                                                     }
                                                 } );
                                             }
+                                            else {
+                                                Toast.makeText( maps_follow_thetour.this,"Thông báo tới tour thất bại",Toast.LENGTH_SHORT ).show();
+                                            }
                                         }
 
                                         @Override
@@ -760,7 +768,18 @@ public class maps_follow_thetour extends AppCompatActivity implements OnMapReady
 
                                         }
                                     } );
-
+                                    }
+                                    AlertDialog.Builder aleartDialog = new AlertDialog.Builder( maps_follow_thetour.this );
+                                    aleartDialog.setTitle( "Tour finshed" );
+                                    aleartDialog.setMessage( "Congratulations!!!" );
+                                    aleartDialog.setPositiveButton( "OK!", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            Intent intent = new Intent( getBaseContext(), MainActivity.class );
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            startActivity(intent);
+                                        }
+                                    } );
                                 }
                                 else {
                                     getRoute(originPoint,pointList.get(index));

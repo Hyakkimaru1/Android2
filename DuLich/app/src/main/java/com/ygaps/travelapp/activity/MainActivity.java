@@ -46,13 +46,13 @@ public class MainActivity extends AppCompatActivity implements MyCustomDialog.No
         super.onCreate(savedInstanceState);
         setContentView( R.layout.activity_main);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-
         getSupportActionBar().setCustomView(R.layout.titlebar);
         textView = findViewById(R.id.titleBar);
         textView.setText("Travel Assistant");
         sharedPreferences = getSharedPreferences("isLogin",MODE_PRIVATE);
         check = sharedPreferences.getBoolean("isLogIn", false);
-        //Log.e("CHECKK", String.valueOf( check ));
+//        sendRegistrationToServer( FirebaseInstanceId.getInstance().getToken());
+        Log.e("CHECKK", String.valueOf( check ));
         //check xem tai khoan da duoc dang nhap hay chua
         if (check){
             new Thread(new Runnable() {
@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements MyCustomDialog.No
                             String fmcToken = task.getResult().getToken();
                             // Log and toast
                            // Log.e("FMC Token",fmcToken);
+                            Log.d( "TTT", "onComplete: " + fmcToken +'-'+ sharedPreferences.getString( "token","" ));
                             sendRegistrationToServer(fmcToken);
                         }
                     });
@@ -86,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements MyCustomDialog.No
             }
         } );
         */
+
 
         //xu ly bottom navigation
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -200,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements MyCustomDialog.No
                 .registerFirebase(Authorization,fcmToken, android_id,1 , "1.0");
         Log.e("Authorization",Authorization);
         Log.e("fcmToken",fcmToken);
+        Log.e("deviceId",Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

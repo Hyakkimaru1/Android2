@@ -34,7 +34,8 @@
         <activity android:name=".updateTour" />
         <activity
             android:name=".activity.createTourActivity"></activity>
-
+        <activity
+            android:name=".activity.tourPublicDetail"></activity>
         <activity
             android:name=".activity.searchFriend_Activity"
             android:parentActivityName=".activity.MainActivity" />

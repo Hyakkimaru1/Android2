@@ -68,6 +68,15 @@ public interface Api<I extends Number> {
             @Query( "tourId" )  int tourId
     );
 
+    @GET("tour/get/review-list")
+    Call<ResponseBody> getReviewTour(
+            @Header("Authorization") String Authorization,
+            @Query( "tourId" )  int tourId,
+            @Query( "pageIndex" ) int pageIndex,
+            @Query( "pageSize" ) int pageSize
+    );
+
+
     @GET("tour/get/invitation")
     Call<ResponseBody> getTourInvitation(
             @Header("Authorization") String Authorization,
@@ -105,6 +114,15 @@ public interface Api<I extends Number> {
             @Field( "serviceId" ) int serviceId,
             @Field( "feedback" ) String feedback,
              @Field( "point" ) int point
+    );
+
+    @FormUrlEncoded
+    @POST("tour/add/review")
+    Call<ResponseBody> sendReviewTour(
+            @Header("Authorization") String Authorization,
+            @Field( "tourId" ) int serviceId,
+            @Field( "review" ) String feedback,
+            @Field( "point" ) int point
     );
 
     @FormUrlEncoded

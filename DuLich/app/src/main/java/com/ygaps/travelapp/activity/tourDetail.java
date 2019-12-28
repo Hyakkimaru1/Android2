@@ -25,11 +25,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ygaps.travelapp.Adapter.Stop_Point_Adapter;
+import com.ygaps.travelapp.Adapter.adapter_searchFriend;
 import com.ygaps.travelapp.Adapter.rate_adapter;
 import com.ygaps.travelapp.MyCustomDialog;
 import com.ygaps.travelapp.R;
 import com.ygaps.travelapp.RetrofitClient;
 import com.ygaps.travelapp.aRate;
+import com.ygaps.travelapp.friends_user;
 import com.ygaps.travelapp.stopPoint;
 import com.ygaps.travelapp.updateSP;
 import com.ygaps.travelapp.updateTour;
@@ -84,6 +86,16 @@ public class tourDetail extends AppCompatActivity {
     TextView textViewtotalRV;
 
 
+    Button buttonFriend;
+    Button button2;
+    Button inviteFriends;
+    Button cancel;
+    ListView listFriend;
+    ArrayList <friends_user> listFR;
+    adapter_searchFriend adapterSearchFriend;
+    boolean isPrivate;
+    int id_user;
+    int Host;
     RatingBar ratingBarRate;
     RatingBar ratingBarMain;
 
@@ -109,16 +121,26 @@ public class tourDetail extends AppCompatActivity {
         child = findViewById(R.id.textViewChild);
         min = findViewById(R.id.textViewMin);
         max = findViewById(R.id.textViewMax);
-
+            buttonFriend = findViewById( R.id.buttonFriend );
 
 
         rate = findViewById(R.id.buttonRate);
         Intent intent = getIntent();
         token = intent.getStringExtra("token");
         id = intent.getStringExtra( "tourId") ;
+
+
+        final Dialog dialogInvite = new Dialog( tourDetail.this );
+        dialogInvite.setTitle( "Thành viên" );
+        dialogInvite.setCancelable( false );
+        dialogInvite.setContentView(R.layout.dialog_list_friends_in_tour );
+        inviteFriends = dialogInvite.findViewById( R.id.inviteFriends );
+        cancel = dialogInvite.findViewById( R.id.cancel );
+        listFriend = dialogInvite.findViewById( R.id.listFriend );
 //        Log.i("DDDdđ",id);
         preferences = this.getBaseContext().getSharedPreferences("isLogin", Context.MODE_PRIVATE);
-
+        id_user = preferences.getInt( "userID",-1 );
+        //Log.e("userID",String.valueOf( id_user ));
 
         readJson();
 
@@ -195,26 +217,39 @@ public class tourDetail extends AppCompatActivity {
 
         });
 
-
+        buttonFriend.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int height = displayMetrics.heightPixels;
+                int width = displayMetrics.widthPixels;
+                inviteFriends.setOnClickListener( new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialogInvite.cancel();
+                        Intent intent = new Intent(getBaseContext(), searchFriend_Activity.class);
+                        intent.putExtra("tourId", id);
+                        intent.putExtra( "isPrivate",isPrivate );
+                        startActivity(intent);
+                    }
+                } );
+                if (Host == id_user)
+                {
+                    inviteFriends.setVisibility( View.VISIBLE );
+                }
+                dialogInvite.getWindow().setLayout((9*width)/10,(9*height)/10);
+                dialogInvite.show();
+                cancel.setOnClickListener( new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialogInvite.hide();
+                    }
+                } );
+            }
+        } );
 
     }
-
-
-    private void DialogRate(){
-        Context context;
-        Dialog dialog= new Dialog(this);
-        dialog.setContentView(R.layout.activity_rate_tour);
-        listViewRV = dialog.findViewById(R.id.listViewRV);
-        dialog.show();
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int height = displayMetrics.heightPixels;
-        int width = displayMetrics.widthPixels;
-
-        dialog.getWindow().setLayout((9*width)/10,(9*height)/10);
-    }
-
-
 
 
     void readJson(){
@@ -238,7 +273,9 @@ public class tourDetail extends AppCompatActivity {
                         // Log.i("JSON",tourData.getString("total"));
                         tourname.setText( stopPointData.getString("name"));
 
-
+                        Host = stopPointData.getInt("hostId");
+                        //Log.e("userID",String.valueOf( Host ));
+                        isPrivate = stopPointData.getBoolean( "isPrivate" );
                         sStartDay = stopPointData.getString("startDate");
                         sEndDay = stopPointData.getString("endDate");
                         check = stopPointData.getString("isPrivate");
@@ -290,6 +327,16 @@ public class tourDetail extends AppCompatActivity {
                             }
 
                         }
+
+                        listFR = new ArrayList<>(  );
+                        JSONArray array = stopPointData.getJSONArray( "members" );
+                        for (int i =0;i<array.length();i++){
+                            JSONObject object = array.getJSONObject( i );
+                            listFR.add( new friends_user( object.getInt( "id" ),object.getString( "name" ),object.getString( "phone" ),
+                                    object.getString( "avatar" ),object.getBoolean( "isHost" )) );
+                        }
+                        adapterSearchFriend = new adapter_searchFriend( tourDetail.this,R.layout.layout_searchfriend,listFR );
+                        listFriend.setAdapter( adapterSearchFriend );
                     } catch (IOException e) {
                         e.printStackTrace();
 

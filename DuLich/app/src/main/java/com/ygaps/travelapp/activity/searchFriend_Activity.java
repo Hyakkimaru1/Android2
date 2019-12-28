@@ -3,8 +3,10 @@ package com.ygaps.travelapp.activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -36,6 +38,8 @@ public class searchFriend_Activity extends AppCompatActivity {
     ArrayList<friends_user> noteList;
     adapter_searchFriend myAdapter;
     SharedPreferences preferences;
+    String tourID;
+    boolean isPrivate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
@@ -43,6 +47,9 @@ public class searchFriend_Activity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        Intent intent = getIntent();
+        isPrivate = intent.getBooleanExtra("isPrivate",false);
+        tourID = intent.getStringExtra( "tourId") ;
         listView = findViewById( R.id.list_SearchFriend );
         searchView = findViewById( R.id.search_Friend );
         searchView.setOnQueryTextListener( new SearchView.OnQueryTextListener() {
@@ -109,20 +116,20 @@ public class searchFriend_Activity extends AppCompatActivity {
 
         listView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(final AdapterView<?> adapterView, final View view, int i, long l) {
+            public void onItemClick(final AdapterView<?> adapterView, final View view, final int i, long l) {
                 SharedPreferences preferences = getSharedPreferences( "isLogin", Context.MODE_PRIVATE );
                 final String Authorization = preferences.getString( "token","" );
-                final String tourID =  preferences.getString( "tourID","" );
                 final AlertDialog.Builder builder = new AlertDialog.Builder( searchFriend_Activity.this );
                 builder.setTitle( "Xác nhận" );
                 builder.setMessage( "Bạn có muốn mời người này vào tour ?" );
                 builder.setPositiveButton( "YES", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    public void onClick(DialogInterface dialogInterface, int index) {
+                        Log.e("IIIIIIIIII",String.valueOf( i ));
                         Call<ResponseBody> call = RetrofitClient
                                 .getInstance()
                                 .getApi()
-                                .invite_friend( Authorization,tourID, String.valueOf( noteList.get( i ).getId() ) ,false );
+                                .invite_friend( Authorization,tourID, String.valueOf( noteList.get( i ).getId() ) ,isPrivate );
                         call.enqueue( new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

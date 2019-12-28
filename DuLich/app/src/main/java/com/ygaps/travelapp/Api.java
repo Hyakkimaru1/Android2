@@ -41,6 +41,14 @@ public interface Api<I extends Number> {
             @Query( "pageNum" ) int pageNum
             );
 
+    @GET("tour/get/feedback-service")
+    Call<ResponseBody > getlistReview(
+            @Header("Authorization") String Authorization,
+            @Query( "serviceId" ) int serviceId,
+            @Query( "pageIndex" ) int pageIndex,
+            @Query( "pageSize" ) int pageSize
+    );
+
     @GET("tour/history-user")
     Call<ResponseBody > getHistoryTourUser(
             @Header("Authorization") String Authorization,
@@ -90,6 +98,14 @@ public interface Api<I extends Number> {
             @Field("accessToken") String accessToken
     );
 
+    @FormUrlEncoded
+    @POST("tour/add/feedback-service")
+    Call<ResponseBody> sendFeedback(
+            @Header("Authorization") String Authorization,
+            @Field( "serviceId" ) int serviceId,
+            @Field( "feedback" ) String feedback,
+             @Field( "point" ) int point
+    );
 
     @FormUrlEncoded
     @POST("tour/comment")
@@ -177,6 +193,16 @@ public interface Api<I extends Number> {
     Call<ResponseBody> getPointStatusSP(
             @Header("Authorization") String Authorization,
             @Query( "serviceId" )  int serviceId
+    );
+
+    @FormUrlEncoded
+    @POST("/user/notification/put-token")
+    Call<ResponseBody> registerFirebase(
+            @Header("Authorization") String Authorization,
+            @Field("fcmToken") String fcmToken,
+            @Field("deviceId") String deviceId,
+            @Field("platform") Number platform,
+            @Field("appVersion") String appVersion
     );
 
     @FormUrlEncoded

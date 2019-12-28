@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -73,12 +75,19 @@ public class history_tour_user extends Fragment{
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), tourDetail.class);
-                intent.putExtra("token", token);
-                intent.putExtra("tourId", String.valueOf(noteList.get(position).getId()));
 
-                startActivity(intent);
+                if (noteList.get(position).getisHost()) {
+                    Intent intent = new Intent(getActivity(), tourDetail.class);
+                    intent.putExtra("token", token);
+                    intent.putExtra("tourId", String.valueOf(noteList.get(position).getId()));
+
+                    startActivity(intent);
+                }
+                else{
+                    Toast.makeText(getContext(), "Chỉ host tour mới có thể chỉnh sửa tour!", Toast.LENGTH_SHORT).show();
+                }
             }
+
         });
 
 
@@ -131,7 +140,7 @@ public class history_tour_user extends Fragment{
                                     JSONObject jb = responseArray.getJSONObject( i );
                                     noteList.add( new aTour( jb.getInt( "id" ), jb.getInt( "status" ), jb.getString( "name" ), jb.getString( "minCost" ),
                                             jb.getString( "maxCost" ), jb.getString( "startDate" ), jb.getString( "endDate" ), jb.getString( "adults" ),
-                                            jb.getString( "childs" ),  jb.getString( "avatar" ) ) );
+                                            jb.getString( "childs" ),  jb.getString( "avatar" ), jb.getBoolean( "isHost" ) ) );
 
                                 }
                                 if (!noteList.isEmpty())

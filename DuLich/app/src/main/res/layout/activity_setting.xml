@@ -69,7 +69,7 @@
         android:prompt="@string/city_prompt" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/buttonSendRV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewSwitchLanguage"

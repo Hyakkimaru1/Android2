@@ -9,11 +9,13 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RatingBar;
@@ -41,6 +43,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.ygaps.travelapp.Adapter.Stop_Point_Adapter;
+import com.ygaps.travelapp.Adapter.rate_adapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -85,6 +88,14 @@ public class fragment_explore extends Fragment implements OnMapReadyCallback,
     TextView textView5;
     RatingBar ratingBar2;
     int total;
+    int sum;
+    ListView list_review_SP;
+    TextView editText3;
+    RatingBar ratingBar;
+    Button button2;
+    rate_adapter adapter;
+    ArrayList<aRate> noteList;
+
 
     private GoogleMap mMap;
     private GoogleApiClient googleApiClient;
@@ -236,8 +247,10 @@ public class fragment_explore extends Fragment implements OnMapReadyCallback,
                                 textView5.setText( jsonArray.getJSONObject( 0 ).getString( "total" ) );
                                 total = jsonArray.getJSONObject( 4 ).getInt( "total" )*5 + jsonArray.getJSONObject( 3 ).getInt( "total" )*4+
                                         jsonArray.getJSONObject( 2 ).getInt( "total" )*3+jsonArray.getJSONObject( 1 ).getInt( "total" )*2+jsonArray.getJSONObject( 0 ).getInt( "total" )*1;
-                                textView6.setText( String.valueOf( total/5) );
-                                ratingBar2.setRating(  total/5.0f );
+                                sum = jsonArray.getJSONObject( 4 ).getInt( "total" ) + jsonArray.getJSONObject( 3 ).getInt( "total" )+
+                                        jsonArray.getJSONObject( 2 ).getInt( "total" )+jsonArray.getJSONObject( 1 ).getInt( "total" )+jsonArray.getJSONObject( 0 ).getInt( "total" );
+                                textView6.setText( String.valueOf( total/sum ) );
+                                ratingBar2.setRating(  total/sum );
 
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -255,7 +268,12 @@ public class fragment_explore extends Fragment implements OnMapReadyCallback,
 
                     }
                 } );
-
+                reviews_sp.setOnClickListener( new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        DialogRate(Integer.valueOf(  stop_point.getId() ));
+                    }
+                } );
                 dialog.show();
                 return false;
             }
@@ -547,7 +565,7 @@ public class fragment_explore extends Fragment implements OnMapReadyCallback,
             @Override
             public boolean onMarkerClick(final Marker marker) {
                // Log.e("serviceID: ",String.valueOf( marker.getZIndex() ));
-                Dialog dialog = new Dialog( getContext() );
+                final Dialog dialog = new Dialog( getContext() );
                 dialog.setContentView( R.layout.dialog_rw_stop_point );
                 reviews_sp = dialog.findViewById( R.id.reviewsStopPoint );
                 nameSP = dialog.findViewById( R.id.place );
@@ -638,8 +656,14 @@ public class fragment_explore extends Fragment implements OnMapReadyCallback,
                                 textView5.setText( jsonArray.getJSONObject( 0 ).getString( "total" ) );
                                 total = jsonArray.getJSONObject( 4 ).getInt( "total" )*5 + jsonArray.getJSONObject( 3 ).getInt( "total" )*4+
                                         jsonArray.getJSONObject( 2 ).getInt( "total" )*3+jsonArray.getJSONObject( 1 ).getInt( "total" )*2+jsonArray.getJSONObject( 0 ).getInt( "total" )*1;
-                                textView6.setText( String.valueOf( total/5 ) );
-                                ratingBar2.setRating(  total/5.0f );
+                                sum = jsonArray.getJSONObject( 4 ).getInt( "total" ) + jsonArray.getJSONObject( 3 ).getInt( "total" )+
+                                        jsonArray.getJSONObject( 2 ).getInt( "total" )+jsonArray.getJSONObject( 1 ).getInt( "total" )+jsonArray.getJSONObject( 0 ).getInt( "total" );
+                                if (sum == 0)
+                                {
+                                    sum = 1;
+                                }
+                                textView6.setText( String.valueOf( total/sum ) );
+                                ratingBar2.setRating(  total/sum );
 
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -660,7 +684,8 @@ public class fragment_explore extends Fragment implements OnMapReadyCallback,
                 reviews_sp.setOnClickListener( new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        DialogRate();
+                        dialog.cancel();
+                        DialogRate((int) marker.getZIndex());
                     }
                 } );
                 dialog.show();
@@ -671,18 +696,131 @@ public class fragment_explore extends Fragment implements OnMapReadyCallback,
 
 
     }
-    private void DialogRate(){
-        Context context;
-        Dialog dialog= new Dialog(getContext());
-        dialog.setContentView(R.layout.send_rv_stoppoint);
-        dialog.show();
+    private void DialogRate(final int id){
+
+
+        final Dialog dialog1= new Dialog(getContext());
+        dialog1.setContentView(R.layout.send_rv_stoppoint);
+
+        list_review_SP = dialog1.findViewById( R.id.list_review_SP );
+        editText3 = dialog1.findViewById( R.id.editText3 );
+        ratingBar = dialog1.findViewById( R.id.ratingBar );
+        button2 = dialog1.findViewById( R.id.button2 );
+
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .getlistReview( token, id,1,100);
+        call.enqueue( new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.code()==200) {
+                    String bodyListTour = null;
+                    try {
+                        bodyListTour = response.body().string();
+                        noteList = new ArrayList<>( );
+                        JSONObject stopPointData = new JSONObject(bodyListTour);
+                        // Log.i("JSON",tourData.getString("total"));
+
+
+                        JSONArray responseArray = stopPointData.getJSONArray("feedbackList");
+                        //Log.e("feedbackList",String.valueOf(responseArray.length()));
+                        if (responseArray.length() > 0) {
+
+                            for (int i = 0; i < responseArray.length(); i++) {
+                                JSONObject jb = responseArray.getJSONObject( i );
+                                noteList.add( new aRate( jb.getInt( "id" ),jb.getString( "name" ) , jb.getInt( "point" ),jb.getString( "feedback" ),
+                                        jb.getString( "createdOn" )) );
+
+
+                            }
+
+                            adapter = new rate_adapter( getContext(), R.layout.item_rate, noteList );
+                            list_review_SP.setAdapter(adapter) ;
+
+
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else Log.e("RRRRRRRRrr",String.valueOf(response.code()));
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        } );
+
+        button2.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int result = sendReview( id,editText3.getText().toString(), Math.round(ratingBar.getRating()));
+                if (result == 1){
+                    dialog1.dismiss();
+                }
+            }
+        } );
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
 
-        dialog.getWindow().setLayout((9*width)/10,(9*height)/10);
+        dialog1.getWindow().setLayout((9*width)/10,(9*height)/10);
+        dialog1.show();
+
+
+
+
+
     }
+
+    public int sendReview(int serviceId, String feedback1, int point){
+
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .sendFeedback(token,serviceId,feedback1,point);
+        final int[] result = {0};
+        call.enqueue( new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.code()==200) {
+                    String bodyTourCreate = null;
+                    try {
+                        bodyTourCreate = response.body().string();
+
+                        JSONObject tourData = new JSONObject(bodyTourCreate);
+
+                        result[0] = 0;
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    Toast.makeText( getContext(),"Send error!!!",Toast.LENGTH_SHORT ).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        } );
+
+        return result[0];
+
+    }
+
     public boolean checkUserLocationPermission(){
         if (ContextCompat.checkSelfPermission( getContext(),Manifest.permission.ACCESS_FINE_LOCATION )!=PackageManager.PERMISSION_GRANTED){
             if (ActivityCompat.shouldShowRequestPermissionRationale( getActivity(),Manifest.permission.ACCESS_FINE_LOCATION )){

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -14,9 +15,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.ygaps.travelapp.MyCustomDialog;
 import com.ygaps.travelapp.R;
 import com.ygaps.travelapp.RetrofitClient;
@@ -52,13 +55,25 @@ public class MainActivity extends AppCompatActivity implements MyCustomDialog.No
         //Log.e("CHECKK", String.valueOf( check ));
         //check xem tai khoan da duoc dang nhap hay chua
         if (check){
-            FirebaseApp.initializeApp(this);
-            new Thread( new Runnable() {
+            new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    fireBase();
+                    FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                            if (!task.isSuccessful()) {
+                                Log.v("hihi", "getInstanceId failed", task.getException());
+                                return;
+                            }
+                            // Get new Instance ID token
+                            String fmcToken = task.getResult().getToken();
+                            // Log and toast
+                           // Log.e("FMC Token",fmcToken);
+                            sendRegistrationToServer(fmcToken);
+                        }
+                    });
                 }
-            } ).start();
+            }).start();
 
         }
 
@@ -123,40 +138,44 @@ public class MainActivity extends AppCompatActivity implements MyCustomDialog.No
         }
     };
     void fireBase(){
-        String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        String Authorization = sharedPreferences.getString( "token","" );
+        final String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        final String Authorization = sharedPreferences.getString( "token","" );
         if (!Authorization.equals(""))
-        {
-            //Log.e("AAAAAAAAA",Authorization);
-            String token = FirebaseInstanceId.getInstance().getToken();
-            //Log.e( "TOKENNNNNNNNNNNNNNNNN", token );
-            Call<ResponseBody> call = RetrofitClient
-                    .getInstance()
-                    .getApi()
-                    .register_Firebase(Authorization,token,android_id,1,"1.0");
-
-            call.enqueue( new Callback<ResponseBody>() {
+            {FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener( new OnCompleteListener<InstanceIdResult>() {
                 @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    if (response.code()==200){
-                        try {
-                            String body = response.body().string();
-                            Log.i("Firebase", body);
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                    String token = task.getResult().getToken();
+                    Call<ResponseBody> call = RetrofitClient
+                            .getInstance()
+                            .getApi()
+                            .register_Firebase(Authorization,token,android_id,1,"1.0");
+
+                    call.enqueue( new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.code()==200){
+                                try {
+                                    String body = response.body().string();
+                                    Log.i("Firebase", body);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            else {
+                                Log.i("Firebase", "false");
+                            }
                         }
-                    }
-                    else {
-                        Log.i("Firebase", "false");
-                    }
-                }
 
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
 
+                        }
+                    });
                 }
-            });
+            } );
         }
+
+
     }
 
     @Override
@@ -170,4 +189,32 @@ public class MainActivity extends AppCompatActivity implements MyCustomDialog.No
     public void onDialogNegativeClick(DialogFragment dialog) {
 
     }
+
+    private void sendRegistrationToServer(String fcmToken) {
+        // TODO: Implement this method to send token to your app server.
+        String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        final String Authorization = sharedPreferences.getString( "token","" );
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .registerFirebase(Authorization,fcmToken, android_id,1 , "1.0");
+        Log.e("Authorization",Authorization);
+        Log.e("fcmToken",fcmToken);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(MainActivity.this, "Ready for notification", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "Not ready for notification", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+    }
+
 }

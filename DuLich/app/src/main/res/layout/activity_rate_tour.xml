@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/dialong_radius"
     tools:context=".activity.tourDetail">
 
 
@@ -15,12 +16,12 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="22dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="5dp"
         android:text="Rate this point"
         android:textSize="18sp" />
 
     <RatingBar
-        android:id="@+id/ratingBar"
+        android:id="@+id/ratingBarMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
@@ -42,7 +43,7 @@
         android:id="@+id/textViewRatingAndRv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ratingBar"
+        android:layout_below="@+id/ratingBarMain"
         android:layout_alignParentStart="true"
         android:layout_marginStart="22dp"
         android:layout_marginTop="10dp"
@@ -50,25 +51,26 @@
         android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/textViewRate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewRatingAndRv"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="47dp"
+        android:layout_marginStart="35dp"
         android:layout_marginTop="11dp"
-        android:text="2"
+        android:text="2.5"
         android:textSize="80dp" />
 
     <RatingBar
-        android:id="@+id/ratingBar2"
+        android:id="@+id/ratingBarRate"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
-        android:layout_below="@+id/textView6"
+        android:layout_below="@+id/textViewRate"
         android:layout_alignParentStart="true"
         android:layout_marginStart="-52dp"
         android:layout_marginTop="-12dp"
         android:clickable="false"
+        android:isIndicator="true"
         android:numStars="5"
         android:progressBackgroundTintMode="add"
         android:progressTint="#FFE401"
@@ -76,134 +78,159 @@
         android:saveEnabled="false"
         android:scaleX="0.5"
         android:scaleY="0.5"
-        android:stepSize="1"
+        android:stepSize="0.1"
         android:textAlignment="center" />
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/textView55"
         android:layout_width="30dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ratingBar"
-        android:layout_marginStart="60dp"
+        android:layout_below="@+id/ratingBarMain"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="43dp"
-        android:layout_toEndOf="@+id/textView6"
+        android:layout_toEndOf="@+id/textViewRate"
         android:text="555" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView44"
         android:layout_width="30dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView7"
-        android:layout_marginStart="60dp"
+        android:layout_below="@+id/textView55"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="10dp"
-        android:layout_toEndOf="@+id/textView6"
+        android:layout_toEndOf="@+id/textViewRate"
         android:text="4" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textView33"
         android:layout_width="30dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
-        android:layout_marginStart="60dp"
+        android:layout_below="@+id/textView44"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="10dp"
-        android:layout_toEndOf="@+id/textView6"
+        android:layout_toEndOf="@+id/textViewRate"
         android:text="3" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/textView22"
         android:layout_width="30dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView3"
-        android:layout_marginStart="60dp"
+        android:layout_below="@+id/textView33"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="10dp"
-        android:layout_toEndOf="@+id/textView6"
+        android:layout_toEndOf="@+id/textViewRate"
         android:text="2" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/textView11"
         android:layout_width="30dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView4"
-        android:layout_marginStart="60dp"
+        android:layout_below="@+id/textView22"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="10dp"
-        android:layout_toEndOf="@+id/textView6"
+        android:layout_toEndOf="@+id/textViewRate"
         android:text="1" />
 
     <RatingBar
-        android:id="@+id/ratingBar3"
-        android:layout_width="wrap_content"
+        android:id="@+id/ratingBar55"
+        android:layout_width="290dp"
         android:layout_height="41dp"
-        android:layout_below="@+id/ratingBar"
-        android:layout_marginStart="-46dp"
-        android:layout_marginTop="33dp"
-        android:layout_toEndOf="@+id/textView7"
+        android:layout_below="@+id/ratingBarMain"
+        android:layout_marginStart="-85dp"
+        android:layout_marginTop="46dp"
+        android:layout_toEndOf="@+id/textView55"
+        android:isIndicator="true"
+        android:max="5"
         android:numStars="5"
         android:progressTint="#FFEB3B"
         android:rating="5"
-        android:scaleX=".5"
-        android:scaleY=".4" />
+        android:scaleX=".3"
+        android:scaleY=".3"
+        android:stepSize="1"
+        android:transformPivotX="110dp"
+        android:transformPivotY="0dp" />
 
     <RatingBar
-        android:id="@+id/ratingBar4"
-        android:layout_width="wrap_content"
+        android:id="@+id/ratingBar44"
+        android:layout_width="290dp"
         android:layout_height="41dp"
-        android:layout_below="@+id/ratingBar3"
-        android:layout_marginStart="-46dp"
-        android:layout_marginTop="-12dp"
-        android:layout_toEndOf="@+id/textView2"
+        android:layout_below="@+id/ratingBar55"
+        android:layout_marginStart="-85dp"
+        android:layout_marginTop="-13dp"
+        android:layout_toEndOf="@+id/textView44"
+        android:isIndicator="true"
+        android:max="5"
         android:numStars="5"
         android:progressTint="#FFEB3B"
         android:rating="4"
-        android:scaleX=".5"
-        android:scaleY=".4" />
+        android:scaleX=".3"
+        android:scaleY=".3"
+        android:stepSize="1"
+        android:transformPivotX="110dp"
+        android:transformPivotY="0dp" />
 
     <RatingBar
-        android:id="@+id/ratingBar5"
-        android:layout_width="wrap_content"
+        android:id="@+id/ratingBar33"
+        android:layout_width="290dp"
         android:layout_height="41dp"
-        android:layout_below="@+id/ratingBar4"
-        android:layout_marginStart="-46dp"
-        android:layout_marginTop="-14dp"
-        android:layout_toEndOf="@+id/textView3"
+        android:layout_below="@+id/ratingBar44"
+        android:layout_marginStart="-85dp"
+        android:layout_marginTop="-12dp"
+        android:layout_toEndOf="@+id/textView33"
+        android:isIndicator="true"
+        android:max="5"
         android:numStars="5"
         android:progressTint="#FFEB3B"
         android:rating="3"
-        android:scaleX=".5"
-        android:scaleY=".4" />
+        android:scaleX=".3"
+        android:scaleY=".3"
+        android:stepSize="1"
+        android:transformPivotX="110dp"
+        android:transformPivotY="0dp" />
 
     <RatingBar
-        android:id="@+id/ratingBar6"
-        android:layout_width="wrap_content"
+        android:id="@+id/ratingBar22"
+        android:layout_width="290dp"
         android:layout_height="41dp"
-        android:layout_below="@+id/ratingBar5"
-        android:layout_marginStart="-46dp"
+        android:layout_below="@+id/ratingBar33"
+        android:layout_marginStart="-85dp"
         android:layout_marginTop="-13dp"
-        android:layout_toEndOf="@+id/textView4"
+        android:layout_toEndOf="@+id/textView22"
+        android:isIndicator="true"
+        android:max="5"
         android:numStars="5"
         android:progressTint="#FFEB3B"
         android:rating="2"
-        android:scaleX=".5"
-        android:scaleY=".4" />
+        android:scaleX=".3"
+        android:scaleY=".3"
+        android:stepSize="1"
+        android:transformPivotX="110dp"
+        android:transformPivotY="0dp" />
 
     <RatingBar
-        android:id="@+id/ratingBar7"
-        android:layout_width="wrap_content"
+        android:id="@+id/ratingBar11"
+        android:layout_width="290dp"
         android:layout_height="41dp"
-        android:layout_below="@+id/ratingBar6"
-        android:layout_marginStart="-46dp"
+        android:layout_below="@+id/ratingBar22"
+        android:layout_marginStart="-85dp"
         android:layout_marginTop="-13dp"
-        android:layout_toEndOf="@+id/textView5"
+        android:layout_toEndOf="@+id/textView11"
+        android:isIndicator="true"
+        android:max="5"
         android:numStars="5"
         android:progressTint="#FFEB3B"
         android:rating="1"
-        android:scaleX=".5"
-        android:scaleY=".4" />
+        android:scaleX=".3"
+        android:scaleY=".3"
+        android:stepSize="1"
+        android:transformPivotX="110dp"
+        android:transformPivotY="0dp" />
 
     <ListView
-        android:id="@+id/linarLayout"
+        android:id="@+id/listViewRV"
         android:layout_width="409dp"
-        android:layout_height="214dp"
-        android:layout_below="@+id/ratingBar2"
+        android:layout_height="243dp"
+        android:layout_below="@+id/ratingBarRate"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="2dp"
@@ -212,28 +239,38 @@
         android:orientation="vertical"></ListView>
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/editTextRV"
         android:layout_width="360dp"
         android:layout_height="44dp"
-        android:layout_below="@+id/linarLayout"
+        android:layout_below="@+id/listViewRV"
         android:layout_alignParentStart="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="22dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="2dp"
         android:ems="10"
         android:hint="Write a review..."
         android:inputType="textPersonName" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/buttonSendRV"
         android:layout_width="232dp"
         android:layout_height="31dp"
-        android:layout_below="@+id/editText3"
+        android:layout_below="@+id/editTextRV"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="58dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginStart="46dp"
+        android:layout_marginTop="7dp"
         android:background="@drawable/signupbt"
         android:backgroundTint="#F3D584"
         android:text="Send review" />
+
+    <TextView
+        android:id="@+id/textViewTotalRV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ratingBarMain"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="13dp"
+        android:layout_toEndOf="@+id/textViewRatingAndRv"
+        android:text="TextView" />
 
 </RelativeLayout>

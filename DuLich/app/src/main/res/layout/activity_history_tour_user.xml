@@ -48,7 +48,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/textView44"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_alignParentTop="true"
@@ -59,7 +59,7 @@
                     android:textSize="20dp" />
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/textView33"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_alignParentBottom="true"
@@ -81,11 +81,11 @@
             android:layout_height="match_parent"
             android:layout_margin="20dp">
 
-            <ListView
-                android:id="@+id/listHistoryTour"
-                android:layout_width="match_parent"
-                android:dividerHeight="15dp"
-                android:layout_height="match_parent" />
+                <ListView
+                    android:id="@+id/listHistoryTour"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:dividerHeight="10dp" />
         </LinearLayout>
 
         </LinearLayout>

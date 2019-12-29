@@ -32,6 +32,10 @@
     <string name="switch_language">Switch language</string>
     <string name="title_logout">Log out</string>
     <string name="project_ID">122</string>
+    <string name="updatePass">Update Password</string>
+    <string name="currentPass">Current password</string>
+    <string name="newPass">New password</string>
+    <string name="confirmPass">Confirm new password</string>
     <string name="notification">sent you an invitation for tour</string>
 
     <string-array name="language_arrays">

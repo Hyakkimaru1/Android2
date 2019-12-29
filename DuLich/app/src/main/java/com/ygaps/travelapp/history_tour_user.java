@@ -37,6 +37,7 @@ import retrofit2.Response;
 public class history_tour_user extends Fragment{
     ListView listView;
     ArrayList<aTour> noteList = new ArrayList<aTour>();
+    ArrayList<aTour> noteListFull = new ArrayList<aTour>();
     MyAdapter myAdapter;
     SharedPreferences preferences;
     TextView tours;
@@ -94,7 +95,6 @@ public class history_tour_user extends Fragment{
                 editor = preferences.edit();
                 editor.putInt( "id", noteList.get(i).getId());
                 editor.commit();
-
                 MyCustomDialog dialog = new MyCustomDialog();
                 dialog.show( getFragmentManager(),"MyCustomDiaLog" );
                 dialog.setCancelable( false );
@@ -133,84 +133,26 @@ public class history_tour_user extends Fragment{
                             if (responseArray.length() > 0) {
                                 for (int i = 0; i < responseArray.length(); i++) {
                                     JSONObject jb = responseArray.getJSONObject( i );
-                                    if (jb.getInt( "status" ) != -1){
-                                         total--;
-                                        noteList.add( new aTour( jb.getInt( "id" ), jb.getInt( "status" ), jb.getString( "name" ), jb.getString( "minCost" ),
+                                        noteListFull.add( new aTour( jb.getInt( "id" ), jb.getInt( "status" ), jb.getString( "name" ), jb.getString( "minCost" ),
                                                 jb.getString( "maxCost" ), jb.getString( "startDate" ), jb.getString( "endDate" ), jb.getString( "adults" ),
                                                 jb.getString( "childs" ),  jb.getString( "avatar" ), jb.getBoolean( "isHost" ) ) );
+                                }
+                                if (!noteListFull.isEmpty())
+                                {
+                                    for (int i = 0;i<noteListFull.size();i++)	{
+                                        if (noteListFull.get( i ).getStatus() != -1){
+                                            noteList.add( noteListFull.get( i ));
+                                        }
+                                        else {
+                                            total--;
+                                        }
+                                    }
+                                    if (!noteList.isEmpty()){
+                                        tours.setText( String.valueOf( total ));
+                                        myAdapter = new MyAdapter( getContext(), R.layout.item_layout, noteList );
+                                        listView.setAdapter( myAdapter );
                                     }
                                 }
-                                if (!noteList.isEmpty())
-                                {
-                                    myAdapter = new MyAdapter( getContext(), R.layout.item_layout, noteList );
-                                    listView.setAdapter( myAdapter );
-                                }
-                                tours.setText( String.valueOf( total ) );
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                }
-            } );
-
-
-
-        }
-
-    }
-    void readJsonReload(){
-        if (!token.equals(""))
-        {
-            Map<String, String> params = new HashMap<>();
-            params.put("pageIndex","1");
-            params.put("pageSize","8000");
-            Call<ResponseBody> call = RetrofitClient
-                    .getInstance()
-                    .getApi()
-                    .getHistoryTourUser(token,params);
-
-            call.enqueue( new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    if (response.code()==200) {
-                        String bodyListTour = null;
-                        try {
-                            bodyListTour = response.body().string();
-                            noteList.clear();
-                            noteList = new ArrayList<>(  );
-                            JSONObject tourData = new JSONObject(bodyListTour);
-                            // Log.i("JSON",tourData.getString("total"));
-                            int total = tourData.getInt("total");
-
-                            JSONArray responseArray = tourData.getJSONArray("tours");
-                            if (responseArray.length() > 0) {
-                                for (int i = 0; i < responseArray.length(); i++) {
-                                    JSONObject jb = responseArray.getJSONObject( i );
-                                    if (jb.getInt( "status" ) != -1){
-                                        total--;
-                                        noteList.add( new aTour( jb.getInt( "id" ), jb.getInt( "status" ), jb.getString( "name" ), jb.getString( "minCost" ),
-                                                jb.getString( "maxCost" ), jb.getString( "startDate" ), jb.getString( "endDate" ), jb.getString( "adults" ),
-                                                jb.getString( "childs" ),  jb.getString( "avatar" ), jb.getBoolean( "isHost" ) ) );
-                                    }
-                                }
-                                if (myAdapter==null)
-                                {
-                                    myAdapter = new MyAdapter( getContext(), R.layout.item_layout, noteList );
-                                    listView.setAdapter( myAdapter );
-                                }
-                                else {
-                                    myAdapter.notifyDataSetChanged();
-                                }
-                                tours.setText( String.valueOf( total ) );
                             }
                         } catch (IOException e) {
                             e.printStackTrace();

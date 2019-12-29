@@ -127,7 +127,7 @@ public class ResetPassword extends Fragment {
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
                 .getApi()
-                .Verify_OTP(userId,edtOtp.getText().toString().trim(),edtPassnew.getText().toString().trim());
+                .Verify_OTP(userId,edtPassnew.getText().toString().trim(),edtOtp.getText().toString().trim());
 
         call.enqueue( new Callback<ResponseBody>() {
             @Override

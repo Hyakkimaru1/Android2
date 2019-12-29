@@ -81,7 +81,7 @@ public class UpdateProfileFragment extends Fragment {
                     return;
                 }
                 int gt = -1;
-                if(rdName.isChecked()==true){
+                if(rdName.isChecked()== true){
                     gt = 1;
                 }else {
                     gt = 0;
@@ -89,7 +89,7 @@ public class UpdateProfileFragment extends Fragment {
                 Call<ResponseBody> call = RetrofitClient
                         .getInstance()
                         .getApi()
-                        .update_profile( token,edtName.getText().toString(),edtEmail.getText().toString(),gt,edtBod.getText().toString() );
+                        .update_profile( token,edtName.getText().toString(),edtEmail.getText().toString(),gt ,edtBod.getText().toString() );
                 call.enqueue( new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

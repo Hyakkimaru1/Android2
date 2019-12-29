@@ -50,6 +50,7 @@ public class setting extends Fragment {
     int RC_SIGN_IN = 001;
     GoogleSignInClient mGoogleSignInClient;
     SignInButton signInButton;
+    TextView forgotPass;
     Button login;
     TextView signUp;
     TextView username;
@@ -77,6 +78,19 @@ public class setting extends Fragment {
             @Override
             public void onClick(View view) {
                 Fragment fragment = new register();
+                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                fr.replace(R.id.frame_container,fragment);
+                fr.addToBackStack(null);
+                fr.commit();
+            }
+        } );
+
+        forgotPass = view.findViewById(R.id.forgot);
+        //Chuyen qua man hinh quen mat khau
+        forgotPass.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = new ResetPassword();
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
                 fr.replace(R.id.frame_container,fragment);
                 fr.addToBackStack(null);

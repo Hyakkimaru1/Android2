@@ -2,7 +2,6 @@ package com.ygaps.travelapp;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 
@@ -50,8 +48,8 @@ public class MyCustomDialog extends DialogFragment {
         preferences = super.getContext().getSharedPreferences("isLogin", Context.MODE_PRIVATE);
         token = preferences.getString( "token","" );
         id = String.valueOf(preferences.getInt( "id",-1 )) ;
-        //   Log.i("idddddddddddddddd", id);
-        //   Log.i("token", token);
+           //Log.i("idddddddddddddddd", id);
+           //Log.i("token", token);
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

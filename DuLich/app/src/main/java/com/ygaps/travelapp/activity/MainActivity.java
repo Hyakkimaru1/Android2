@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements MyCustomDialog.No
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(MainActivity.this, "Ready for notification", Toast.LENGTH_LONG).show();
+                    Log.d("Firebase","OK");
                 } else {
                     Toast.makeText(MainActivity.this, "Not ready for notification", Toast.LENGTH_LONG).show();
                 }

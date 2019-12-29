@@ -105,12 +105,14 @@ public class setting extends Fragment {
                                 bodyLogin = response.body().string();
                                 try {
                                 JSONObject jsonObject = new JSONObject(bodyLogin);
-                                editor = preferences.edit();
                                 editor.putString( "token",jsonObject.getString( "token") );
                                 editor.putInt( "userID",jsonObject.getInt( "userId") );
+
                                 editor.putString( "Email",username.getText().toString());
                                 editor.putBoolean( "isLogIn",true );
                                 editor.commit();
+                                int useID = preferences.getInt( "userID",-1);
+                                Log.e("USERID IN LOGIN",String.valueOf(useID  ));
                                 Fragment fragment = new user();
                                 FragmentTransaction fr = getFragmentManager().beginTransaction();
                                 fr.replace(R.id.frame_container,fragment);

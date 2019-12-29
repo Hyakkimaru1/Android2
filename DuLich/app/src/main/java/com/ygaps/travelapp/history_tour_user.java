@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -130,21 +128,24 @@ public class history_tour_user extends Fragment{
 
                             JSONObject tourData = new JSONObject(bodyListTour);
                             // Log.i("JSON",tourData.getString("total"));
-                            tours.setText( tourData.getString("total"));
+                            int total = tourData.getInt("total");
                             JSONArray responseArray = tourData.getJSONArray("tours");
                             if (responseArray.length() > 0) {
                                 for (int i = 0; i < responseArray.length(); i++) {
                                     JSONObject jb = responseArray.getJSONObject( i );
-                                    noteList.add( new aTour( jb.getInt( "id" ), jb.getInt( "status" ), jb.getString( "name" ), jb.getString( "minCost" ),
-                                            jb.getString( "maxCost" ), jb.getString( "startDate" ), jb.getString( "endDate" ), jb.getString( "adults" ),
-                                            jb.getString( "childs" ),  jb.getString( "avatar" ), jb.getBoolean( "isHost" ) ) );
-
+                                    if (jb.getInt( "status" ) != -1){
+                                         total--;
+                                        noteList.add( new aTour( jb.getInt( "id" ), jb.getInt( "status" ), jb.getString( "name" ), jb.getString( "minCost" ),
+                                                jb.getString( "maxCost" ), jb.getString( "startDate" ), jb.getString( "endDate" ), jb.getString( "adults" ),
+                                                jb.getString( "childs" ),  jb.getString( "avatar" ), jb.getBoolean( "isHost" ) ) );
+                                    }
                                 }
                                 if (!noteList.isEmpty())
                                 {
                                     myAdapter = new MyAdapter( getContext(), R.layout.item_layout, noteList );
                                     listView.setAdapter( myAdapter );
                                 }
+                                tours.setText( String.valueOf( total ) );
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -166,34 +167,69 @@ public class history_tour_user extends Fragment{
         }
 
     }
+    void readJsonReload(){
+        if (!token.equals(""))
+        {
+            Map<String, String> params = new HashMap<>();
+            params.put("pageIndex","1");
+            params.put("pageSize","8000");
+            Call<ResponseBody> call = RetrofitClient
+                    .getInstance()
+                    .getApi()
+                    .getHistoryTourUser(token,params);
+
+            call.enqueue( new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if (response.code()==200) {
+                        String bodyListTour = null;
+                        try {
+                            bodyListTour = response.body().string();
+                            noteList.clear();
+                            noteList = new ArrayList<>(  );
+                            JSONObject tourData = new JSONObject(bodyListTour);
+                            // Log.i("JSON",tourData.getString("total"));
+                            int total = tourData.getInt("total");
+
+                            JSONArray responseArray = tourData.getJSONArray("tours");
+                            if (responseArray.length() > 0) {
+                                for (int i = 0; i < responseArray.length(); i++) {
+                                    JSONObject jb = responseArray.getJSONObject( i );
+                                    if (jb.getInt( "status" ) != -1){
+                                        total--;
+                                        noteList.add( new aTour( jb.getInt( "id" ), jb.getInt( "status" ), jb.getString( "name" ), jb.getString( "minCost" ),
+                                                jb.getString( "maxCost" ), jb.getString( "startDate" ), jb.getString( "endDate" ), jb.getString( "adults" ),
+                                                jb.getString( "childs" ),  jb.getString( "avatar" ), jb.getBoolean( "isHost" ) ) );
+                                    }
+                                }
+                                if (myAdapter==null)
+                                {
+                                    myAdapter = new MyAdapter( getContext(), R.layout.item_layout, noteList );
+                                    listView.setAdapter( myAdapter );
+                                }
+                                else {
+                                    myAdapter.notifyDataSetChanged();
+                                }
+                                tours.setText( String.valueOf( total ) );
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                }
+            } );
 
 
-    /*
-    private String docNoiDung_Tu_URL(String theUrl){
-        StringBuilder content = new StringBuilder();
-        try    {
-            // create a url object
-            URL url = new URL(theUrl);
 
-            // create a urlconnection object
-            URLConnection urlConnection = url.openConnection();
-
-            // wrap the urlconnection in a bufferedreader
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-
-            String line;
-
-            // read from the urlconnection via the bufferedreader
-            while ((line = bufferedReader.readLine()) != null){
-                content.append(line + "\n");
-            }
-            bufferedReader.close();
         }
-        catch(Exception e)    {
-            e.printStackTrace();
-        }
-        return content.toString();
+
     }
-
-     */
 }

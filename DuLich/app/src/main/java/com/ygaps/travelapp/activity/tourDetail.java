@@ -126,7 +126,7 @@ public class tourDetail extends AppCompatActivity {
         child = findViewById(R.id.textViewChild);
         min = findViewById(R.id.textViewMin);
         max = findViewById(R.id.textViewMax);
-            buttonFriend = findViewById( R.id.buttonFriend );
+        buttonFriend = findViewById( R.id.buttonFriend );
         buttonFollow = findViewById( R.id.buttonFollowTour );
         buttonChat = findViewById( R.id.buttonChatFriend );
 
@@ -141,20 +141,19 @@ public class tourDetail extends AppCompatActivity {
         buttonChat.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getBaseContext(), chat_tour.class);
-                intent.putExtra("tourId", id);
-
-                startActivity(intent);
+                Intent intentChat = new Intent(getBaseContext(), chat_tour.class);
+                intentChat.putExtra("tourId", id);
+                startActivity(intentChat);
             }
         } );
 
         buttonFollow.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getBaseContext(), maps_follow_thetour.class);
-                intent.putExtra("tourId", id);
+                Intent intentFollow = new Intent(getBaseContext(), maps_follow_thetour.class);
+                intentFollow.putExtra("tourId", id);
 
-                startActivity(intent);
+                startActivity(intentFollow);
             }
         } );
 
@@ -789,8 +788,6 @@ public class tourDetail extends AppCompatActivity {
             case R.id.itemDelete:
 
 
-
-                Toast.makeText( getBaseContext(),id,Toast.LENGTH_SHORT ).show();
                 editor = preferences.edit();
                 editor.putInt( "id", Integer.parseInt(id));
                 editor.commit();

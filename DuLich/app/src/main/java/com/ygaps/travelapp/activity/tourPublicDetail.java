@@ -62,6 +62,8 @@ public class tourPublicDetail extends AppCompatActivity {
     Button button2;
     Button inviteFriends;
     Button cancel;
+    Button buttonChat;
+    Button buttonFollow;
     ListView listFriend;
 
     ListView list_review_SP;
@@ -106,7 +108,8 @@ public class tourPublicDetail extends AppCompatActivity {
         listViewRV = findViewById( R.id.ListViewSP );
         buttonFriend = findViewById( R.id.buttonFriend );
         buttonRate = findViewById(R.id.buttonRate);
-
+        buttonChat = findViewById( R.id.buttonChatFriend );
+        buttonFollow = findViewById( R.id.buttonFollowTour );
 
 
         Intent intent = getIntent();
@@ -124,6 +127,23 @@ public class tourPublicDetail extends AppCompatActivity {
         listFriend = dialogInvite.findViewById( R.id.listFriend );
 
         readJson();
+
+        if (Host != id_user)
+        {
+            buttonChat.setVisibility( View.INVISIBLE );
+            buttonFollow.setVisibility( View.INVISIBLE );
+        }
+    buttonFollow.setOnClickListener( new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        Intent intent = new Intent(getBaseContext(), maps_follow_thetour.class);
+        intent.putExtra("tourId", id);
+
+        startActivity(intent);
+    }
+} );
+
+
         buttonRate.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -456,39 +476,42 @@ public class tourPublicDetail extends AppCompatActivity {
                 //Do some thing to save
 
 
+                if (id_user == Host) {
+                    Intent intent = new Intent( getBaseContext(), updateTour.class );
+                    intent.addFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
+                    //intent.putExtra("return check", check);
+                    intent.putExtra( "token", token );
+                    intent.putExtra( "id", id );
+                    intent.putExtra( "tourName", tourname.getText().toString() );
+                    intent.putExtra( "sStartDay", sStartDay );
+                    intent.putExtra( "sEndDay", sEndDay );
+                    intent.putExtra( "check", check );
+                    intent.putExtra( "adult", Integer.parseInt( adult.getText().toString() ) );
+                    intent.putExtra( "children", Integer.parseInt( child.getText().toString() ) );
+                    intent.putExtra( "minC", Long.parseLong( min.getText().toString() ) );
+                    intent.putExtra( "maxC", Long.parseLong( max.getText().toString() ) );
 
-                Intent intent = new Intent(getBaseContext(), updateTour.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                //intent.putExtra("return check", check);
-                intent.putExtra("token", token);
-                intent.putExtra("id", id);
-                intent.putExtra( "tourName" ,tourname.getText().toString());
-                intent.putExtra( "sStartDay",sStartDay );
-                intent.putExtra( "sEndDay",sEndDay );
-                intent.putExtra( "check",check);
-                intent.putExtra( "adult",Integer.parseInt(adult.getText().toString()) );
-                intent.putExtra( "children",Integer.parseInt( child.getText().toString() ) );
-                intent.putExtra( "minC",Long.parseLong( min.getText().toString() ) );
-                intent.putExtra( "maxC",Long.parseLong( max.getText().toString() ) );
-
-                startActivity(intent);
-
+                    startActivity( intent );
+                }
+                else {
+                    Toast.makeText( tourPublicDetail.this,"Bạn không có quyền",Toast.LENGTH_SHORT ).show();
+                }
                 return true;
 
 
             case R.id.itemDelete:
 
 
+                Toast.makeText( getBaseContext(),"Không được sử dụng",Toast.LENGTH_SHORT ).show();
+                if (id_user==Host){
+                    editor = preferences.edit();
+                    editor.putInt( "id", Integer.parseInt(id));
+                    editor.commit();
 
-                Toast.makeText( getBaseContext(),id,Toast.LENGTH_SHORT ).show();
-                editor = preferences.edit();
-                editor.putInt( "id", Integer.parseInt(id));
-                editor.commit();
-
-                MyCustomDialog dialog = new MyCustomDialog();
-                dialog.show( getSupportFragmentManager(),"MyCustomDiaLog" );
-                dialog.setCancelable( false );
-
+                    MyCustomDialog dialog = new MyCustomDialog();
+                    dialog.show( getSupportFragmentManager(),"MyCustomDiaLog" );
+                    dialog.setCancelable( false );
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -502,6 +525,7 @@ public class tourPublicDetail extends AppCompatActivity {
         inflater.inflate(R.menu.tour_detail,menu);
         MenuItem item = menu.findItem(R.id.itemDelete);
         MenuItem item2 = menu.findItem(R.id.itemEdit);
+
 
         return super.onCreateOptionsMenu(menu);
     }

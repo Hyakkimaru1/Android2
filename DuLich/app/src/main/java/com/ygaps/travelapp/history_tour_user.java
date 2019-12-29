@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -39,6 +37,7 @@ import retrofit2.Response;
 public class history_tour_user extends Fragment{
     ListView listView;
     ArrayList<aTour> noteList = new ArrayList<aTour>();
+    ArrayList<aTour> noteListFull = new ArrayList<aTour>();
     MyAdapter myAdapter;
     SharedPreferences preferences;
     TextView tours;
@@ -96,7 +95,6 @@ public class history_tour_user extends Fragment{
                 editor = preferences.edit();
                 editor.putInt( "id", noteList.get(i).getId());
                 editor.commit();
-
                 MyCustomDialog dialog = new MyCustomDialog();
                 dialog.show( getFragmentManager(),"MyCustomDiaLog" );
                 dialog.setCancelable( false );
@@ -130,20 +128,30 @@ public class history_tour_user extends Fragment{
 
                             JSONObject tourData = new JSONObject(bodyListTour);
                             // Log.i("JSON",tourData.getString("total"));
-                            tours.setText( tourData.getString("total"));
+                            int total = tourData.getInt("total");
                             JSONArray responseArray = tourData.getJSONArray("tours");
                             if (responseArray.length() > 0) {
                                 for (int i = 0; i < responseArray.length(); i++) {
                                     JSONObject jb = responseArray.getJSONObject( i );
-                                    noteList.add( new aTour( jb.getInt( "id" ), jb.getInt( "status" ), jb.getString( "name" ), jb.getString( "minCost" ),
-                                            jb.getString( "maxCost" ), jb.getString( "startDate" ), jb.getString( "endDate" ), jb.getString( "adults" ),
-                                            jb.getString( "childs" ),  jb.getString( "avatar" ), jb.getBoolean( "isHost" ) ) );
-
+                                        noteListFull.add( new aTour( jb.getInt( "id" ), jb.getInt( "status" ), jb.getString( "name" ), jb.getString( "minCost" ),
+                                                jb.getString( "maxCost" ), jb.getString( "startDate" ), jb.getString( "endDate" ), jb.getString( "adults" ),
+                                                jb.getString( "childs" ),  jb.getString( "avatar" ), jb.getBoolean( "isHost" ) ) );
                                 }
-                                if (!noteList.isEmpty())
+                                if (!noteListFull.isEmpty())
                                 {
-                                    myAdapter = new MyAdapter( getContext(), R.layout.item_layout, noteList );
-                                    listView.setAdapter( myAdapter );
+                                    for (int i = 0;i<noteListFull.size();i++)	{
+                                        if (noteListFull.get( i ).getStatus() != -1){
+                                            noteList.add( noteListFull.get( i ));
+                                        }
+                                        else {
+                                            total--;
+                                        }
+                                    }
+                                    if (!noteList.isEmpty()){
+                                        tours.setText( String.valueOf( total ));
+                                        myAdapter = new MyAdapter( getContext(), R.layout.item_layout, noteList );
+                                        listView.setAdapter( myAdapter );
+                                    }
                                 }
                             }
                         } catch (IOException e) {
@@ -166,34 +174,4 @@ public class history_tour_user extends Fragment{
         }
 
     }
-
-
-    /*
-    private String docNoiDung_Tu_URL(String theUrl){
-        StringBuilder content = new StringBuilder();
-        try    {
-            // create a url object
-            URL url = new URL(theUrl);
-
-            // create a urlconnection object
-            URLConnection urlConnection = url.openConnection();
-
-            // wrap the urlconnection in a bufferedreader
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-
-            String line;
-
-            // read from the urlconnection via the bufferedreader
-            while ((line = bufferedReader.readLine()) != null){
-                content.append(line + "\n");
-            }
-            bufferedReader.close();
-        }
-        catch(Exception e)    {
-            e.printStackTrace();
-        }
-        return content.toString();
-    }
-
-     */
 }

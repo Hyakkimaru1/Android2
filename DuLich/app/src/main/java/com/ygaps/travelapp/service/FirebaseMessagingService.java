@@ -24,12 +24,8 @@ import com.ygaps.travelapp.activity.MainActivity;
 import com.ygaps.travelapp.activity.chat_tour;
 import com.ygaps.travelapp.activity.maps_follow_thetour;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;

@@ -5,9 +5,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,8 +32,13 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
+import com.mapbox.api.directions.v5.DirectionsCriteria;
+import com.mapbox.api.directions.v5.MapboxDirections;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
+import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Icon;
@@ -44,8 +52,10 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.style.layers.LineLayer;
+import com.mapbox.mapboxsdk.style.layers.Property;
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
-import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 import com.mapbox.turf.TurfMeasurement;
 import com.ygaps.travelapp.Adapter.MessageAdapter;
 import com.ygaps.travelapp.Message;
@@ -65,6 +75,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.mapbox.core.constants.Constants.PRECISION_6;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineCap;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineJoin;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
 import static java.lang.Thread.sleep;
 
 // classes needed to initialize map
@@ -79,6 +94,8 @@ public class maps_follow_thetour extends AppCompatActivity implements OnMapReady
     private MapView mapView;
     private MapboxMap mapboxMap;
     // variables for adding location layer
+    private static final String ROUTE_SOURCE_ID = "route-source-id";
+    private static final String ROUTE_LAYER_ID = "route-layer-id";
     private PermissionsManager permissionsManager;
     private LocationComponent locationComponent;
     // variables for calculating and drawing a route
@@ -127,6 +144,12 @@ public class maps_follow_thetour extends AppCompatActivity implements OnMapReady
     private MediaRecorder recorder = null;
     private MediaPlayer player = null;
     int Id_Login;
+    boolean one=true;
+
+    private Handler handler = new Handler();
+
+    //getRoude
+    private MapboxDirections client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,9 +162,13 @@ public class maps_follow_thetour extends AppCompatActivity implements OnMapReady
         Authorization = sharedPreferences.getString( "token","" );
         Id_Login = sharedPreferences.getInt( "userID",-1 );
         //Get tourID
-        tourId = 4698;
+        Intent intent = getIntent();
+        String tour = intent.getStringExtra( "tourId") ;
+        tourId = Integer.valueOf( tour );
+
+
         //Get userID
-        userId = 295;
+        userId = Id_Login;
         chatChat = findViewById( R.id.chatChat );
         linearLayout = findViewById( R.id.chatInMap );
         nameTourMoving = findViewById( R.id.nameTourMoving );
@@ -426,9 +453,10 @@ public class maps_follow_thetour extends AppCompatActivity implements OnMapReady
             }
         } );
         mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(this);
+        mapView.getMapAsync( this );
 
     }
+
     private void getChat(){
         messages = new ArrayList<>( );
         Call<ResponseBody> call = RetrofitClient
@@ -454,8 +482,8 @@ public class maps_follow_thetour extends AppCompatActivity implements OnMapReady
                             for (int i=0;i <jsonArr.length();i++){
                                 JSONObject jsonObject = jsonArr.getJSONObject( i );
                                 userID = jsonObject.getInt( "userId" );
-                                //Log.e("userID: ", String.valueOf( userID ));
-                                //Log.e("ID login: ",String.valueOf( Id_Login ));
+                                Log.e("userID: ", String.valueOf( userID ));
+                                Log.e("ID login: ",String.valueOf( Id_Login ));
                                 if (userID == Id_Login){
                                     messages.add( new Message( jsonObject.getString( "notification" ),jsonObject.getString( "avatar" ),
                                             jsonObject.getString( "name" ),userID,true) );
@@ -573,6 +601,81 @@ public class maps_follow_thetour extends AppCompatActivity implements OnMapReady
 
     }
 
+    private void getRoute(final MapboxMap mapboxMap, Point origin, Point destination) {
+        client = MapboxDirections.builder()
+                .origin(origin)
+                .destination(destination)
+                .overview( DirectionsCriteria.OVERVIEW_FULL)
+                .profile(DirectionsCriteria.PROFILE_DRIVING)
+                .accessToken(getString(R.string.access_token))
+                .build();
+
+        client.enqueueCall(new Callback<DirectionsResponse>() {
+            @Override
+            public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
+// You can get the generic HTTP info about the response
+
+                if (response.body() == null) {
+                    Log.e("No routes found",", make sure you set the right user and access token.");
+                    return;
+                } else if (response.body().routes().size() < 1) {
+                    Log.e("No routes found","!!!");
+                    return;
+                }
+
+// Get the directions route
+                currentRoute = response.body().routes().get(0);
+
+// Make a toast which displays the route's distance
+
+                if (mapboxMap != null) {
+                    mapboxMap.getStyle(new Style.OnStyleLoaded() {
+                        @Override
+                        public void onStyleLoaded(@NonNull Style style) {
+
+// Retrieve and update the source designated for showing the directions route
+                            if (one){
+                            style.addSource( new GeoJsonSource(ROUTE_SOURCE_ID,
+                                    FeatureCollection.fromFeatures(new Feature[] {}) ));
+                            LineLayer routeLayer = new LineLayer(ROUTE_LAYER_ID, ROUTE_SOURCE_ID);
+
+                            // Add the LineLayer to the map. This layer will display the directions route.
+                            routeLayer.setProperties(
+                                    lineCap( Property.LINE_CAP_ROUND),
+                                    lineJoin(Property.LINE_JOIN_ROUND),
+                                    lineWidth(7f),
+                                    lineColor( Color.parseColor("#1BA8F0")));
+
+                            style.addLayer( routeLayer );
+                            one = false;
+                            }
+                            GeoJsonSource source = style.getSourceAs( ROUTE_SOURCE_ID );
+// Create a LineString with the directions route's geometry and
+// reset the GeoJSON source for the route LineLayer source
+                            if (source != null) {
+                                //Log.e("NICEEEE","NICEEEE");
+                                source.setGeoJson( FeatureCollection.fromFeature(
+                                        Feature.fromGeometry( LineString.fromPolyline(currentRoute.geometry(), PRECISION_6))));
+                            }
+                            else {
+                                Log.e("AAAAA","AAAAAAAA");
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DirectionsResponse> call, Throwable throwable) {
+                //Timber.e("Error: " + throwable.getMessage());
+                Toast.makeText(maps_follow_thetour.this, "Error: " + throwable.getMessage(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
         this.mapboxMap = mapboxMap;
@@ -665,46 +768,11 @@ public class maps_follow_thetour extends AppCompatActivity implements OnMapReady
 
     }
 
+
     @SuppressWarnings( {"MissingPermission"})
     @Override
     public boolean onMapClick(@NonNull LatLng point) {
         return true;
-    }
-
-    private void getRoute(Point origin, Point destination) {
-        NavigationRoute.builder(this)
-                .accessToken(Mapbox.getAccessToken())
-                .origin(origin)
-                .destination(destination)
-                .build()
-                .getRoute(new Callback<DirectionsResponse>() {
-                    @Override
-                    public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
-                        // You can get the generic HTTP info about the response
-                        // Log.d(TAG, "Response code: " + response.code());
-                        if (response.body() == null) {
-                            Log.e(TAG, "No routes found, make sure you set the right user and access token.");
-                            return;
-                        } else if (response.body().routes().size() < 1) {
-                            Log.e(TAG, "No routes found");
-                            return;
-                        }
-                        currentRoute = response.body().routes().get(0);
-
-                        // Draw the route on the map
-                        if (navigationMapRoute != null) {
-                            navigationMapRoute.removeRoute();
-                        } else {
-                            navigationMapRoute = new NavigationMapRoute(null, mapView, mapboxMap, R.style.NavigationMapRoute);
-                        }
-                        navigationMapRoute.addRoute(currentRoute);
-                    }
-
-                    @Override
-                    public void onFailure(Call<DirectionsResponse> call, Throwable throwable) {
-                        Log.e(TAG, "Error: " + throwable.getMessage());
-                    }
-                });
     }
 
     @SuppressWarnings( {"MissingPermission"})
@@ -716,103 +784,42 @@ public class maps_follow_thetour extends AppCompatActivity implements OnMapReady
             locationComponent = mapboxMap.getLocationComponent();
             locationComponent.activateLocationComponent(this, loadedMapStyle);
             locationComponent.setLocationComponentEnabled(true);
-            // Set the component's camera mode
-            locationComponent.setCameraMode( CameraMode.TRACKING_GPS);
-            //final boolean[] check = {true};
+            // Set the component's camera mod
+                locationComponent.setCameraMode( CameraMode.TRACKING );
+                //final boolean[] check = {true};
             new Thread( new Runnable() {
                 public void run() {
                     try {
-                        while (checkMain || isEndTrip){
-                            sleep(700);
-                            if (locationComponent.getLastKnownLocation() != null){
+                        while (checkMain || isEndTrip) {
 
-                                if (pointList.size()>0){
-                                originPoint = Point.fromLngLat(locationComponent.getLastKnownLocation().getLongitude(),
-                                        locationComponent.getLastKnownLocation().getLatitude());
-                               // Log.i("Size: ",String.valueOf( pointList.size() ));
-                                getRoute(originPoint,pointList.get(index));
-                                //index++;
-                                checkMain = false;
-                                }
-                            }
-                        }
+                            sleep( 1000 );
+                            if (locationComponent.getLastKnownLocation() != null) {
 
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } ).start();
-            new Thread( new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        while (isEndTrip){
-                            sleep(1000);
-                            if (!checkMain){
-                                originPoint = Point.fromLngLat(locationComponent.getLastKnownLocation().getLongitude(),
-                                        locationComponent.getLastKnownLocation().getLatitude());
-                                distanceBetweenLastAndSecondToLastClickPoint = TurfMeasurement.distance( originPoint, pointList.get(index));
-                            }
-                           // Log.e("Space in:",String.valueOf( distanceBetweenLastAndSecondToLastClickPoint ) + "index: " + String.valueOf( index ) );
-                            if (distanceBetweenLastAndSecondToLastClickPoint < 0.01)
-                            {
-                                index++;
-                                if (index >= pointList.size()){
-                                    isEndTrip = false;
-                                    if (userId == leadTour){
-                                    Call<ResponseBody> call = RetrofitClient
-                                            .getInstance()
-                                            .getApi()
-                                            .finshTrip(Authorization,tourId);
-                                    call.enqueue( new Callback<ResponseBody>() {
-                                        @Override
-                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                            if (response.code()==200){
-                                                AlertDialog.Builder aleartDialog = new AlertDialog.Builder( maps_follow_thetour.this );
-                                                aleartDialog.setTitle( "Tour finshed" );
-                                                aleartDialog.setMessage( "Congratulations!!!" );
-                                                aleartDialog.setPositiveButton( "OK!", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                                        Intent intent = new Intent( getBaseContext(), MainActivity.class );
-                                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                                        startActivity(intent);
-                                                    }
-                                                } );
+                                if (pointList.size() > 0) {
+                                    originPoint = Point.fromLngLat( locationComponent.getLastKnownLocation().getLongitude(),
+                                            locationComponent.getLastKnownLocation().getLatitude() );
+                                    // Log.i("Size: ",String.valueOf( pointList.size() ));
+                                    if (isEndTrip) {
+                                        Handler handler1 = new Handler( Looper.getMainLooper() );
+                                        handler1.post( new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                getRoute(mapboxMap, originPoint, pointList.get( index ) );
                                             }
-                                            else {
-                                                Toast.makeText( maps_follow_thetour.this,"Thông báo tới tour thất bại",Toast.LENGTH_SHORT ).show();
-                                            }
-                                        }
+                                        } );
 
-                                        @Override
-                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                                        }
-                                    } );
                                     }
-                                    AlertDialog.Builder aleartDialog = new AlertDialog.Builder( maps_follow_thetour.this );
-                                    aleartDialog.setTitle( "Tour finshed" );
-                                    aleartDialog.setMessage( "Congratulations!!!" );
-                                    aleartDialog.setPositiveButton( "OK!", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            Intent intent = new Intent( getBaseContext(), MainActivity.class );
-                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                            startActivity(intent);
-                                        }
-                                    } );
-                                }
-                                else {
-                                    getRoute(originPoint,pointList.get(index));
-                                }
 
-
+                                    //index++;
+                                    checkMain = false;
+                                }
                             }
                         }
+                        return;
 
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                        return;
                     }
                 }
             } ).start();
@@ -821,157 +828,235 @@ public class maps_follow_thetour extends AppCompatActivity implements OnMapReady
                 public void run() {
                     try {
                         while (isEndTrip) {
-                            if (!checkMain){
+                            sleep( 1000 );
+                            if (!checkMain && isEndTrip) {
+                                originPoint = Point.fromLngLat( locationComponent.getLastKnownLocation().getLongitude(),
+                                        locationComponent.getLastKnownLocation().getLatitude() );
+                                if (isEndTrip==false){
+                                    return;
+                                }
+                                distanceBetweenLastAndSecondToLastClickPoint = TurfMeasurement.distance( originPoint, pointList.get( index ) );
+                            }
+                            //Log.e("Space in:",String.valueOf( distanceBetweenLastAndSecondToLastClickPoint ) + "index: " + String.valueOf( index ) +"LENGTH TOUR"+ pointList.size() );
+                            if (distanceBetweenLastAndSecondToLastClickPoint < 0.01) {
+                                index++;
+                                if (index >= pointList.size()) {
 
-                            Call<ResponseBody> call = RetrofitClient
-                                    .getInstance()
-                                    .getApi()
-                                    .sendCoordinate( Authorization, userId, tourId, locationComponent.getLastKnownLocation().getLatitude(), locationComponent.getLastKnownLocation().getLongitude() );
+                                    isEndTrip = false;
 
-                            call.enqueue( new Callback<ResponseBody>() {
-                                @Override
-                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                    if (response.code() == 200) {
-                                        String bodyListTour = null;
-                                        try {
-                                            bodyListTour = response.body().string();
-
-                                            JSONArray responseArray = new JSONArray( bodyListTour );
-                                            //    Log.i("Suggest Length:", String.valueOf(responseArray.length()));
-                                            IconFactory iconFactory = IconFactory.getInstance( maps_follow_thetour.this );
-                                            Icon icon = null;
-
-                                            LatLng point = null;
-                                            if (responseArray.length() > 0) {
-                                                for (int i = 0; i < responseArray.length(); i++) {
-                                                    JSONObject jb = responseArray.getJSONObject( i );
-                                                    point = new LatLng( jb.getDouble( "lat" ), jb.getDouble( "long" ) );
-                                                   // Log.e( "userID", String.valueOf( userId ) );
-                                                   // Log.e( "userID api", jb.getString( "id" ) );
-                                                    if (jb.getInt( "id" ) != userId) {
-                                                        icon = iconFactory.fromResource( R.drawable.friends );
-                                                        markerView = mapboxMap.addMarker( new MarkerOptions()
-                                                                .position( point )
-                                                                .icon( icon )
-                                                                .title( jb.getString( "id" ) ) );
-                                                    }
-                                                    //friends.add(Point.fromLngLat(jb.getDouble( "long" ),jb.getDouble( "lat" )));
+                                    if (userId == leadTour) {
+                                        Call<ResponseBody> call = RetrofitClient
+                                                .getInstance()
+                                                .getApi()
+                                                .finshTrip( Authorization, tourId );
+                                        call.enqueue( new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                if (response.code() == 200) {
+                                                    handler.post( new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Toast.makeText( maps_follow_thetour.this, "Đã gửi thông báo đến toàn tour", Toast.LENGTH_SHORT ).show();
+                                                        }
+                                                    } );
+                                                } else {
+                                                    handler.post( new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Toast.makeText( maps_follow_thetour.this, "Thông báo tới tour thất bại", Toast.LENGTH_SHORT ).show();
+                                                        }
+                                                    } );
                                                 }
-                                                // curPoint = pointList.get( 0 );
                                             }
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
 
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
 
-                                    } else {
-                                        //   Toast.makeText( MapsActivity.this,"GOOODDD",Toast.LENGTH_SHORT ).show();
-                                        //   Log.i("Suggest stoppoint:", response.toString());
+                                            }
+                                        } );
                                     }
+
+                                    handler.post( new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            AlertDialog.Builder aleartDialog = new AlertDialog.Builder( maps_follow_thetour.this );
+                                            aleartDialog.setTitle( "Tour finshed" );
+                                            aleartDialog.setMessage( "Congratulations!!!" );
+                                            aleartDialog.setPositiveButton( "OK!", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    Intent intent = new Intent( getBaseContext(), MainActivity.class );
+                                                    intent.addFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
+                                                    startActivity( intent );
+                                                }
+                                            } );
+                                            aleartDialog.show();
+                                        }
+                                    } );
+
+
+                                } else {
+                                   // getRoute( originPoint, pointList.get( index ) );
                                 }
 
-                                @Override
-                                public void onFailure(Call<ResponseBody> call, Throwable t) {
 
-                                }
-                            } );
+                            }
+                        }
+                        return;
 
-                            call = RetrofitClient
-                                    .getInstance()
-                                    .getApi()
-                                    .getNotification( Authorization, tourId, 1,200 );
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        return;
+                    }
+                }
+            } ).start();
+            new Thread( new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        while (isEndTrip) {
+                            if (!checkMain) {
+                                Call<ResponseBody> call = RetrofitClient
+                                        .getInstance()
+                                        .getApi()
+                                        .sendCoordinate( Authorization, userId, tourId, locationComponent.getLastKnownLocation().getLatitude(), locationComponent.getLastKnownLocation().getLongitude() );
 
-                            call.enqueue( new Callback<ResponseBody>() {
-                                @Override
-                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                    if (response.code()==200){
-                                        try {
-                                            String body = response.body().string();
-                                           // Log.e("AAAAAA",body);
-                                            JSONObject jsonObject = new JSONObject( body );
-                                            JSONArray jsonArray = jsonObject.getJSONArray( "notiList" );
-                                            IconFactory iconFactory = IconFactory.getInstance( maps_follow_thetour.this );
-                                            Icon icon = null;
-                                            LatLng point = null;
-                                            if (jsonArray.length()>0){
-                                                for (int i = 0 ; i < jsonArray.length();i++){
-                                                    JSONObject object = jsonArray.getJSONObject( i );
+                                call.enqueue( new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        if (response.code() == 200) {
+                                            String bodyListTour = null;
+                                            try {
+                                                bodyListTour = response.body().string();
 
-                                                    if (!object.getString( "notificationType" ).equals( "null" ))
-                                                    {
-                                                        point = new LatLng( object.getDouble( "lat" ), object.getDouble( "long" ) );
+                                                JSONArray responseArray = new JSONArray( bodyListTour );
+                                                //    Log.i("Suggest Length:", String.valueOf(responseArray.length()));
+                                                IconFactory iconFactory = IconFactory.getInstance( maps_follow_thetour.this );
+                                                Icon icon = null;
 
-                                                        if (object.getInt( "notificationType" ) == 1){
-                                                            icon = iconFactory.fromResource( R.drawable.police );
+                                                LatLng point = null;
+                                                if (responseArray.length() > 0) {
+                                                    for (int i = 0; i < responseArray.length(); i++) {
+                                                        JSONObject jb = responseArray.getJSONObject( i );
+                                                        point = new LatLng( jb.getDouble( "lat" ), jb.getDouble( "long" ) );
+                                                        // Log.e( "userID", String.valueOf( userId ) );
+                                                        // Log.e( "userID api", jb.getString( "id" ) );
+                                                        if (jb.getInt( "id" ) != userId) {
+                                                            icon = iconFactory.fromResource( R.drawable.friends );
                                                             markerView = mapboxMap.addMarker( new MarkerOptions()
                                                                     .position( point )
                                                                     .icon( icon )
-                                                                    .title( object.getString( "note" ) ) );
+                                                                    .title( jb.getString( "id" ) ) );
                                                         }
-                                                        else if (object.getInt( "notificationType" ) == 2) {
-                                                            icon = iconFactory.fromResource( R.drawable.notifi_road );
-                                                            markerView = mapboxMap.addMarker( new MarkerOptions()
-                                                                    .position( point )
-                                                                    .icon( icon )
-                                                                    .title( object.getString( "note" ) ) );
-                                                        }
-
-                                                        else if (object.getInt( "notificationType" ) == 3){
-                                                            if (object.getInt( "speed" ) <= 40 ){
-                                                                icon = iconFactory.fromResource( R.drawable.speed_40 );
-                                                                markerView = mapboxMap.addMarker( new MarkerOptions()
-                                                                        .position( point )
-                                                                        .icon( icon )
-                                                                        .title( object.getString( "note" ) ) );
-                                                            }
-
-                                                            else if (object.getInt( "speed" ) <= 60 ){
-                                                                icon = iconFactory.fromResource( R.drawable.speed_60 );
-                                                                markerView = mapboxMap.addMarker( new MarkerOptions()
-                                                                        .position( point )
-                                                                        .icon( icon )
-                                                                        .title( object.getString( "note" ) ) );
-                                                            }
-
-                                                            else if (object.getInt( "speed" ) <= 80 ){
-                                                                icon = iconFactory.fromResource( R.drawable.speed_80 );
-                                                                markerView = mapboxMap.addMarker( new MarkerOptions()
-                                                                        .position( point )
-                                                                        .icon( icon )
-                                                                        .title( object.getString( "note" ) ) );
-                                                            }
-
-                                                        }
-
+                                                        //friends.add(Point.fromLngLat(jb.getDouble( "long" ),jb.getDouble( "lat" )));
                                                     }
+                                                    // curPoint = pointList.get( 0 );
                                                 }
-
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
                                             }
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
+
+
+                                        } else {
+                                            //   Toast.makeText( MapsActivity.this,"GOOODDD",Toast.LENGTH_SHORT ).show();
+                                            //   Log.i("Suggest stoppoint:", response.toString());
                                         }
                                     }
-                                    else {
-                                        Log.e("AAAAAA","false");
+
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
                                     }
-                                }
+                                } );
 
-                                @Override
-                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                call = RetrofitClient
+                                        .getInstance()
+                                        .getApi()
+                                        .getNotification( Authorization, tourId, 1, 200 );
+                                call.enqueue( new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        if (response.code() == 200) {
+                                            try {
+                                                String body = response.body().string();
+                                                // Log.e("AAAAAA",body);
+                                                JSONObject jsonObject = new JSONObject( body );
+                                                JSONArray jsonArray = jsonObject.getJSONArray( "notiList" );
+                                                IconFactory iconFactory = IconFactory.getInstance( maps_follow_thetour.this );
+                                                Icon icon = null;
+                                                LatLng point = null;
+                                                if (jsonArray.length() > 0 && isEndTrip) {
+                                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                                        JSONObject object = jsonArray.getJSONObject( i );
 
-                                }
-                            } );
+                                                        if (!object.getString( "notificationType" ).equals( "null" )) {
+                                                            point = new LatLng( object.getDouble( "lat" ), object.getDouble( "long" ) );
+
+                                                            if (object.getInt( "notificationType" ) == 1) {
+                                                                icon = iconFactory.fromResource( R.drawable.police );
+                                                                markerView = mapboxMap.addMarker( new MarkerOptions()
+                                                                        .position( point )
+                                                                        .icon( icon )
+                                                                        .title( object.getString( "note" ) ) );
+                                                            } else if (object.getInt( "notificationType" ) == 2) {
+                                                                icon = iconFactory.fromResource( R.drawable.notifi_road );
+                                                                markerView = mapboxMap.addMarker( new MarkerOptions()
+                                                                        .position( point )
+                                                                        .icon( icon )
+                                                                        .title( object.getString( "note" ) ) );
+                                                            } else if (object.getInt( "notificationType" ) == 3) {
+                                                                if (object.getInt( "speed" ) <= 40) {
+                                                                    icon = iconFactory.fromResource( R.drawable.speed_40 );
+                                                                    markerView = mapboxMap.addMarker( new MarkerOptions()
+                                                                            .position( point )
+                                                                            .icon( icon )
+                                                                            .title( object.getString( "note" ) ) );
+                                                                } else if (object.getInt( "speed" ) <= 60) {
+                                                                    icon = iconFactory.fromResource( R.drawable.speed_60 );
+                                                                    markerView = mapboxMap.addMarker( new MarkerOptions()
+                                                                            .position( point )
+                                                                            .icon( icon )
+                                                                            .title( object.getString( "note" ) ) );
+                                                                } else if (object.getInt( "speed" ) <= 80) {
+                                                                    icon = iconFactory.fromResource( R.drawable.speed_80 );
+                                                                    markerView = mapboxMap.addMarker( new MarkerOptions()
+                                                                            .position( point )
+                                                                            .icon( icon )
+                                                                            .title( object.getString( "note" ) ) );
+                                                                }
+
+                                                            }
+
+                                                        }
+                                                    }
+
+                                                }
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        } else {
+                                            Log.e( "AAAAAA", "false" );
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                                    }
+                                } );
 
                             }
                             sleep( 10000 );
 
                         }
+
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                        return;
                     }
                 }
             } ).start();
@@ -1046,6 +1131,7 @@ public class maps_follow_thetour extends AppCompatActivity implements OnMapReady
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        isEndTrip = false;
         mapView.onDestroy();
     }
 
@@ -1054,4 +1140,11 @@ public class maps_follow_thetour extends AppCompatActivity implements OnMapReady
         super.onLowMemory();
         mapView.onLowMemory();
     }
+    @Override
+    public void onBackPressed() {
+       // super.onBackPressed();
+        isEndTrip = false;
+        finish();
+    }
+
 }

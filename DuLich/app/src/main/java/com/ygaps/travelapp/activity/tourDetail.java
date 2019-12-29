@@ -106,6 +106,8 @@ public class tourDetail extends AppCompatActivity {
     String check;
     Button rate;
     Button editSP;
+    Button buttonFollow;
+    Button buttonChat;
     SharedPreferences.Editor editor;
     SharedPreferences preferences;
 
@@ -124,14 +126,36 @@ public class tourDetail extends AppCompatActivity {
         child = findViewById(R.id.textViewChild);
         min = findViewById(R.id.textViewMin);
         max = findViewById(R.id.textViewMax);
-            buttonFriend = findViewById( R.id.buttonFriend );
-
+        buttonFriend = findViewById( R.id.buttonFriend );
+        buttonFollow = findViewById( R.id.buttonFollowTour );
+        buttonChat = findViewById( R.id.buttonChatFriend );
 
         rate = findViewById(R.id.buttonRate);
         Intent intent = getIntent();
         token = intent.getStringExtra("token");
         id = intent.getStringExtra( "tourId") ;
 
+        if (status==2) buttonChat.setVisibility( View.INVISIBLE );
+
+
+        buttonChat.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentChat = new Intent(getBaseContext(), chat_tour.class);
+                intentChat.putExtra("tourId", id);
+                startActivity(intentChat);
+            }
+        } );
+
+        buttonFollow.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentFollow = new Intent(getBaseContext(), maps_follow_thetour.class);
+                intentFollow.putExtra("tourId", id);
+
+                startActivity(intentFollow);
+            }
+        } );
 
         final Dialog dialogInvite = new Dialog( tourDetail.this );
         dialogInvite.setTitle( "Thành viên" );
@@ -315,7 +339,6 @@ public class tourDetail extends AppCompatActivity {
 
         dialog.getWindow().setLayout((9*width)/10,(9*height)/10);
     }
-
 
 
     void readJson(){
@@ -765,8 +788,6 @@ public class tourDetail extends AppCompatActivity {
             case R.id.itemDelete:
 
 
-
-                Toast.makeText( getBaseContext(),id,Toast.LENGTH_SHORT ).show();
                 editor = preferences.edit();
                 editor.putInt( "id", Integer.parseInt(id));
                 editor.commit();

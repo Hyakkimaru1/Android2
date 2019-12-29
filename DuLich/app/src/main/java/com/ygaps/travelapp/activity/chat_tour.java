@@ -2,6 +2,7 @@ package com.ygaps.travelapp.activity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
@@ -77,10 +78,14 @@ public class chat_tour extends AppCompatActivity   {
         token = preferences.getString( "token","" );
         Id_Login = preferences.getInt( "userID",-1 );
         textView.setText(preferences.getString( "nameTour","" ));
+        Intent intent = getIntent();
+        String tour = intent.getStringExtra( "tourId") ;
+        tourID = Integer.valueOf( tour );
+        //Log.e("TourID", tour );
 
         //get tourID from Intent
         //
-        tourID = 3874;
+
 
         listView = findViewById( R.id.messages_view );
         editText = findViewById( R.id.comment_of_user );

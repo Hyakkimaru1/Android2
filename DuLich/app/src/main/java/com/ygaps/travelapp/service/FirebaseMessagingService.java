@@ -21,9 +21,15 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.ygaps.travelapp.R;
 import com.ygaps.travelapp.RetrofitClient;
 import com.ygaps.travelapp.activity.MainActivity;
+import com.ygaps.travelapp.activity.chat_tour;
+import com.ygaps.travelapp.activity.maps_follow_thetour;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -36,20 +42,44 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
 
-        Log.d( TAG, "onMessageReceived: Nhận" );
+        Log.e(TAG, "From: " + remoteMessage.getFrom());
+        //Log.e(TAG, "Message data payload: " + remoteMessage.getData().toString());
+        // Check if message contains a notification payload.
+
         if (remoteMessage.getData().size() > 0) {
             Map data=remoteMessage.getData();
-            Log.d(TAG, "Key Data : " +  remoteMessage.getData().get("key")); //Get specific key data
+
             if (data.isEmpty()) { // message type is notification.
-                Log.e("data", "isNull");
-                //  sendNotification(remoteMessage.getNotification().getBody());
                 sendNotification(remoteMessage.getNotification().getBody());
+
             } else { // message type is data.
                 StringBuilder temp = new StringBuilder();
-                temp.append(data.get("From ")).append(" invites you to Tour: ").append(data.get("name"));
-                String body = temp.toString();
-                sendNotification( body);
+                int type = Integer.valueOf((String) data.get("type")) ;
+                Log.e("TYPE",String.valueOf(type));
+                switch (type){
+                    case 1: case 2: case 3:
+                        temp.append("Bạn có tin nhắn mới từ chuyến đi");
+                        sendNotificationMoving(temp.toString(),Integer.valueOf((String)data.get("id")));
+                        break;
+                    case 4:
+                        temp.append("Bạn có tin nhắn mới từ chuyến đi");
+                        sendNotificationMoving(temp.toString(),Integer.valueOf((String)data.get("id")));
+                        break;
+                    case 5:
+                        temp.append("Bạn có tin nhắn mới");
+                        sendNotificationComment(temp.toString(),Integer.valueOf((String)data.get("id")));
+                        break;
+                    case 6:
+                        temp.append(data.get("From ")).append(" invites you to Tour  ").append(data.get("name"));
+                        String body = temp.toString();
+                        sendNotification( body);
+                        break;
+                }
+
             }
+        }
+        if (remoteMessage.getNotification() != null) {
+            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
 
         super.onMessageReceived( remoteMessage );
@@ -59,7 +89,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     public void onNewToken(String token) {
         Log.d(TAG, "Refreshed token: " + token);
 
-//        sendRegistrationToServer(token);
+        sendRegistrationToServer(token);
     }
 
     private void sendRegistrationToServer(String token) {
@@ -100,19 +130,22 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         // TODO: Implement this method to send token to your app server.
     }
 
-    private void sendNotification(String messageBody) {
-        Intent intent = new Intent(this, MainActivity.class);
+
+    private void sendNotificationComment(String messageBody,int tourId) {
+        Log.e("BOdy",messageBody);
+        Intent intent = new Intent(this, chat_tour.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("tourId",tourId);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
-        String channelId = getString( R.string.project_id);
+        String channelId = "Du lịch";
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(R.drawable.ic_launcher_background)
                         .setLargeIcon( BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_background))
-                        .setContentTitle(getString(R.string.project_id))
+                        .setContentTitle(channelId)
                         .setContentText(messageBody)
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
@@ -127,6 +160,80 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                                 android.R.drawable.sym_call_outgoing,
                                 "OK",
                                 PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)));
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService( Context.NOTIFICATION_SERVICE);
+
+        // Since android Oreo notification channel is needed.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    channelId,
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        notificationManager.notify(0, notificationBuilder.build());
+    }
+
+    private void sendNotificationMoving(String messageBody,int tourId) {
+        Log.e("BOdy",messageBody);
+        Intent intent = new Intent(this, maps_follow_thetour.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("tourId",tourId);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+
+        String channelId = "Du lịch";
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(this, channelId)
+                        .setSmallIcon(R.drawable.ic_launcher_background)
+                        .setLargeIcon( BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_background))
+                        .setContentTitle(channelId)
+                        .setContentText(messageBody)
+                        .setAutoCancel(true)
+                        .setSound(defaultSoundUri)
+                        .setContentIntent(pendingIntent)
+                        .setDefaults( Notification.DEFAULT_ALL)
+                        .setPriority( NotificationManager.IMPORTANCE_HIGH);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService( Context.NOTIFICATION_SERVICE);
+
+        // Since android Oreo notification channel is needed.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    channelId,
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        notificationManager.notify(0, notificationBuilder.build());
+    }
+
+
+    private void sendNotification(String messageBody) {
+        Log.e("BOdy",messageBody);
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+
+        String channelId = "Du lịch";
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(this, channelId)
+                        .setSmallIcon(R.drawable.person)
+                        .setLargeIcon( BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_background))
+                        .setContentTitle(channelId)
+                        .setContentText(messageBody)
+                        .setAutoCancel(true)
+                        .setSound(defaultSoundUri)
+                        .setContentIntent(pendingIntent)
+                        .setDefaults( Notification.DEFAULT_ALL)
+                        .setPriority( NotificationManager.IMPORTANCE_HIGH);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService( Context.NOTIFICATION_SERVICE);
 

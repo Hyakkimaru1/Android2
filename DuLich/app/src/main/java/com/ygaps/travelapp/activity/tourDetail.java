@@ -317,8 +317,6 @@ public class tourDetail extends AppCompatActivity {
     }
 
 
-    }
-
 
     void readJson(){
 

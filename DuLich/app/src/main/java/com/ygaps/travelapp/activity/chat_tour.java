@@ -44,7 +44,7 @@ import retrofit2.Response;
 public class chat_tour extends AppCompatActivity   {
 
     ListView listView;
-    ArrayList<Message> messages;
+    ArrayList<Message>  messages = new ArrayList<>( );;
     MessageAdapter messageAdapter;
     SharedPreferences preferences;
     String token;
@@ -108,7 +108,13 @@ public class chat_tour extends AppCompatActivity   {
                             {
 
                                 messages.add(new Message( finalComment,"","",Id_Login,true ));
-                                messageAdapter.notifyDataSetChanged();
+                                if (messageAdapter!=null){
+                                    messageAdapter.notifyDataSetChanged();
+                                }
+                                else {
+                                messageAdapter = new MessageAdapter( chat_tour.this,R.layout.friends_chat, messages );
+                                listView.setAdapter( messageAdapter );
+                                }
                                 listView.setSelection(listView.getCount() - 1);
                             }
                             else {
@@ -240,12 +246,27 @@ public class chat_tour extends AppCompatActivity   {
     }
 
     private void stopRecording() {
-        recorder.stop();
-        recorder.release();
-        recorder = null;
-        messages.add(new Message( fileName,"","",Id_Login,true,true ));
-        messageAdapter.notifyDataSetChanged();
-        listView.setSelection(listView.getCount() - 1);
+
+        try{
+            recorder.stop();
+            recorder.release();
+            recorder = null;
+            Log.e("FILE NAME",fileName);
+            messages.add(new Message( fileName,"","",Id_Login,true,true ));
+            if (messageAdapter == null){
+                messageAdapter = new MessageAdapter( chat_tour.this,R.layout.my_message, messages );
+                listView.setAdapter( messageAdapter );
+            }
+            else {
+                messageAdapter.notifyDataSetChanged();
+            }
+
+            listView.setSelection(listView.getCount() - 1);
+
+        }catch(RuntimeException stopException){
+            //handle cleanup here
+        }
+
     }
 
 
@@ -261,7 +282,7 @@ public class chat_tour extends AppCompatActivity   {
                 {
                     try {
                         String body = response.body().string();
-                        messages = new ArrayList<>( );
+
                         JSONObject object = new JSONObject( body );
 
                         JSONArray jsonArr = object.getJSONArray( "commentList" );;

@@ -115,8 +115,8 @@ public class maps_follow_thetour extends AppCompatActivity implements OnMapReady
     ImageButton recordFile_in_map;
     EditText comment_of_user_in_map;
     ImageButton send_comment_in_map;
-    ArrayList<Message> messages;
-    MessageAdapter messageAdapter;
+    ArrayList<Message> messages ;
+    MessageAdapter messageAdapter = null;
     String storeComment;
 
     int leadTour;
@@ -191,7 +191,8 @@ public class maps_follow_thetour extends AppCompatActivity implements OnMapReady
                     Call<ResponseBody> call = RetrofitClient
                             .getInstance()
                             .getApi()
-                            .sendChatChat( Authorization,tourId,Id_Login,comment);
+                            .sendChatChat( Authorization,tourId,userId,comment);
+
                     final String finalComment = comment;
                     call.enqueue( new Callback<ResponseBody>() {
                         @Override
@@ -200,7 +201,13 @@ public class maps_follow_thetour extends AppCompatActivity implements OnMapReady
                             {
 
                                 messages.add(new Message( finalComment,"","",Id_Login,true ));
-                                messageAdapter.notifyDataSetChanged();
+                                if (messageAdapter == null){
+                                    messageAdapter = new MessageAdapter( maps_follow_thetour.this,R.layout.my_message, messages );
+                                    messages_in_map.setAdapter( messageAdapter );
+                                }
+                                else {
+                                    messageAdapter.notifyDataSetChanged();
+                                }
                                 messages_in_map.setSelection(messages_in_map.getCount() - 1);
                             }
                             else {
@@ -423,6 +430,7 @@ public class maps_follow_thetour extends AppCompatActivity implements OnMapReady
 
     }
     private void getChat(){
+        messages = new ArrayList<>( );
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
                 .getApi()
@@ -434,7 +442,7 @@ public class maps_follow_thetour extends AppCompatActivity implements OnMapReady
                 {
                     try {
                         String body = response.body().string();
-                        messages = new ArrayList<>( );
+
                         JSONObject object = new JSONObject( body );
 
                         JSONArray jsonArr = object.getJSONArray( "notiList" );
@@ -543,12 +551,26 @@ public class maps_follow_thetour extends AppCompatActivity implements OnMapReady
     }
 
     private void stopRecording() {
-        recorder.stop();
-        recorder.release();
-        recorder = null;
-        messages.add(new Message( fileName,"","",Id_Login,true,true ));
-        messageAdapter.notifyDataSetChanged();
-        messages_in_map.setSelection(messages_in_map.getCount() - 1);
+        try{
+            recorder.stop();
+            recorder.release();
+            recorder = null;
+            Log.e("FILE NAME",fileName);
+            messages.add(new Message( fileName,"","",Id_Login,true,true ));
+            if (messageAdapter == null){
+                messageAdapter = new MessageAdapter( maps_follow_thetour.this,R.layout.my_message, messages );
+                messages_in_map.setAdapter( messageAdapter );
+            }
+            else {
+                messageAdapter.notifyDataSetChanged();
+            }
+
+            messages_in_map.setSelection(messages_in_map.getCount() - 1);
+
+        }catch(RuntimeException stopException){
+            //handle cleanup here
+        }
+
     }
 
     @Override
@@ -581,7 +603,7 @@ public class maps_follow_thetour extends AppCompatActivity implements OnMapReady
                         //    Log.i("Suggest Length:", String.valueOf(responseArray.length()));
                         IconFactory iconFactory = IconFactory.getInstance( maps_follow_thetour.this );
                         Icon icon = null;
-                        messages = new ArrayList<>( );
+
                         LatLng point = null;
                         if (responseArray.length() > 0){
                             for (int i = 0;i<responseArray.length();i++){

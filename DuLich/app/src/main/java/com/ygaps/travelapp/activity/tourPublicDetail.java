@@ -62,6 +62,8 @@ public class tourPublicDetail extends AppCompatActivity {
     Button button2;
     Button inviteFriends;
     Button cancel;
+    Button buttonChat;
+    Button buttonFollow;
     ListView listFriend;
 
     ListView list_review_SP;
@@ -106,7 +108,8 @@ public class tourPublicDetail extends AppCompatActivity {
         listViewRV = findViewById( R.id.ListViewSP );
         buttonFriend = findViewById( R.id.buttonFriend );
         buttonRate = findViewById(R.id.buttonRate);
-
+        buttonChat = findViewById( R.id.buttonChatFriend );
+        buttonFollow = findViewById( R.id.buttonFollowTour );
 
 
         Intent intent = getIntent();
@@ -124,6 +127,23 @@ public class tourPublicDetail extends AppCompatActivity {
         listFriend = dialogInvite.findViewById( R.id.listFriend );
 
         readJson();
+
+        if (Host != id_user)
+        {
+            buttonChat.setVisibility( View.INVISIBLE );
+            buttonFollow.setVisibility( View.INVISIBLE );
+        }
+    buttonFollow.setOnClickListener( new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        Intent intent = new Intent(getBaseContext(), maps_follow_thetour.class);
+        intent.putExtra("tourId", id);
+
+        startActivity(intent);
+    }
+} );
+
+
         buttonRate.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {

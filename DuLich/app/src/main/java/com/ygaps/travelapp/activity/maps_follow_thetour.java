@@ -139,9 +139,13 @@ public class maps_follow_thetour extends AppCompatActivity implements OnMapReady
         Authorization = sharedPreferences.getString( "token","" );
         Id_Login = sharedPreferences.getInt( "userID",-1 );
         //Get tourID
-        tourId = 4698;
+        Intent intent = getIntent();
+        tourId = intent.getIntExtra( "tourId",0) ;
+
+
+
         //Get userID
-        userId = 295;
+        userId = Id_Login;
         chatChat = findViewById( R.id.chatChat );
         linearLayout = findViewById( R.id.chatInMap );
         nameTourMoving = findViewById( R.id.nameTourMoving );

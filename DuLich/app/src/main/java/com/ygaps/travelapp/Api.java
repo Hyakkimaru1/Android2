@@ -3,6 +3,7 @@ package com.ygaps.travelapp;
 import java.io.File;
 import java.util.Map;
 
+import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -11,7 +12,9 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
@@ -352,5 +355,49 @@ public interface Api<I extends Number> {
             @Field( "isInvited" ) boolean isInvited
     );
 
+    @GET("user/info")
+    Call<ResponseBody> getUserInfo(
+            @Header("Authorization") String Authorization
+    );
 
+    @FormUrlEncoded
+    @POST("user/edit-info")
+    Call<ResponseBody> update_profile(
+            @Header("Authorization") String Authorization,
+            @Field( "fullName" ) String fullName,
+            @Field( "email" ) String email,
+            @Field( "gender" ) int gender,
+            @Field( "dob" ) String dob
+    );
+
+    @Multipart
+    @POST("user/update-avatar")
+    Call<ResponseBody> update_avatar(
+            @Header("Authorization") String Authorization,
+            @Part MultipartBody.Part file
+    );
+
+    @FormUrlEncoded
+    @POST("user/update-password")
+    Call<ResponseBody> update_password(
+            @Header("Authorization") String Authorization,
+            @Field( "userId" ) int userId,
+            @Field( "currentPassword" ) String currentPassword,
+            @Field( "newPassword" ) String newPassword
+    );
+
+    @FormUrlEncoded
+    @POST("user/request-otp-recovery")
+    Call<ResponseBody> Request_OTP(
+            @Field( "type" ) String type,
+            @Field( "value" ) String value
+    );
+
+    @FormUrlEncoded
+    @POST("user/verify-otp-recovery")
+    Call<ResponseBody> Verify_OTP(
+            @Field( "userId" ) int userId,
+            @Field( "newPassword" ) String newPassword,
+            @Field( "verifyCode" ) String verifyCode
+    );
 }
